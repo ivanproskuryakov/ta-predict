@@ -10,14 +10,14 @@ for i in collection:
     if i['quoteAsset'] not in pairs:
         pairs[i['quoteAsset']] = []
 
-    pairs[i['quoteAsset']].append(i['baseAsset'] + '\n')
+    pairs[i['quoteAsset']].append(i['baseAsset'])
 
 for p in pairs:
     file = open('out/' + p + '.txt', 'w')
     lines = []
 
     for a in pairs.get(p):
-        lines.append(p + '\\' + a)
+        lines.append(a + '/' + p + '\n')
 
     file.writelines(lines)
     file.close()
