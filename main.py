@@ -17,7 +17,10 @@ for p in pairs:
     lines = []
 
     for a in pairs.get(p):
-        lines.append(a + '/' + p + '\n')
+        lines.append('"{a}/{p}",\n'.format(
+            a=a,
+            p=p
+        ))
 
     file.writelines(lines)
     file.close()
