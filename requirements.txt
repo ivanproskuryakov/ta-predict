@@ -2,3 +2,4 @@ requests
 numpy
 TA-Lib
 python-binance
+yachalk

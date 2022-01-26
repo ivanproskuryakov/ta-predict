@@ -1,6 +1,6 @@
 from binance import Client
 from service import klines
-from datetime import datetime
+import json
 
 k = klines.KLines()
 pairs = [
@@ -27,33 +27,23 @@ pairs = [
     "KSM",
     "MATIC",
     "ONE",
+    "ROSE",
 ]
 interval = Client.KLINE_INTERVAL_1DAY
 start_at = '30 days ago UTC'
 market = 'BTC'
 
-collections = []
-
 for p in pairs:
-    collection = k.build_klines(
+    sequence = k.build_klines(
         p + market,
         interval,
         start_at
     )
-    collections.append(collection)
 
-line = f' -- date -- \t'
+    text = json.dumps(sequence)
 
-for p in pairs:
-    line += f'{p} \t'
+    file = open('out_klines/' + p + '.json', 'w')
+    file.write(text)
+    file.close()
 
-print(line)
-
-for c in collections[0]:
-    line = f'\n ' \
-           f'{datetime.utcfromtimestamp(c).strftime("%Y-%m-%d")} \t'
-
-    for i in range(len(pairs)):
-        line += f'{collections[i][c][0]:.1f} \t'
-
-    print(line)
+    # print(sequence)
