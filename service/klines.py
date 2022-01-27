@@ -39,6 +39,7 @@ class KLines:
             item = {
                 'time_open': time_open,
                 'price_open': price_open,
+                'price_close': price_close,
                 'avg_current': avg_current,
                 'avg_percentage': self.round(avg_diff * 100 / avg_current, 2),
                 'trades': trades,

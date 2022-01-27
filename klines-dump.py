@@ -29,7 +29,7 @@ pairs = [
     "ONE",
     "ROSE",
 ]
-interval = Client.KLINE_INTERVAL_1DAY
+interval = Client.KLINE_INTERVAL_12HOUR
 start_at = '30 days ago UTC'
 market = 'BTC'
 
@@ -45,5 +45,3 @@ for p in pairs:
     file = open('out_klines/' + p + '.json', 'w')
     file.write(text)
     file.close()
-
-    # print(sequence)
