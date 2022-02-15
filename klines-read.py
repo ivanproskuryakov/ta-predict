@@ -1,35 +1,42 @@
-import numpy as np
-import talib
+from datetime import datetime
+from yachalk import chalk
+from parameters import assets
 import json
-from talib import MA_Type
 
-p = 'BNB'
+start_at = '20 days ago UTC'
+market = 'BTC'
+collections = []
 
-with open('out_klines/' + p + '.json') as f:
-    data = f.read()
-    collection = json.loads(data)
-    f.close()
+for p in assets:
+    with open('out_klines/' + p + '.json') as f:
+        data = f.read()
+        collection = json.loads(data)
+        f.close()
+        collections.append(collection)
 
-prices = []
+line = f' -- date -- \t'
 
-for item in collection:
-    prices.append(item['price_close'])
-    # print(item['price_open'])
+for p in assets:
+    line += f'{p} \t'
 
-a = np.array(prices)
+print(line)
 
-print(a)
-print(prices)
+threshold = 2
 
-# close = numpy.random.random(100)
-#
-# output = talib.SMA(a)
-#
-#
-# print(close)
-# print(prices)
-# print(output)
-# output = talib.MOM(a, timeperiod=5)
+for i in range(len(collections[0])):
+    time = collections[0][i]['time_open']
+    line = f'\n ' \
+           f'{datetime.utcfromtimestamp(time).strftime("%Y-%m-%d")} \t'
 
-# print(a)
-# print(output)
+    for p in range(len(assets)):
+        value = float(collections[p][i]['avg_percentage'])
+        text = f'{value:.1f}'
+
+        if value > threshold:
+            text = chalk.green(f'{value:.1f}')
+        if value < -threshold:
+            text = chalk.red(f'{value:.1f}')
+
+        line += f'{text} \t'
+
+    print(line)

@@ -1,4 +1,6 @@
-out
+out_markets
 out_klines
+datasets
+__pycache__
 .env
 .idea

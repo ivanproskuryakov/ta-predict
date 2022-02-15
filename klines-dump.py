@@ -1,44 +1,22 @@
 from binance import Client
 from service import klines
+from parameters import assets
 import json
 
 k = klines.KLines()
-pairs = [
-    "BNB",
-    "ETH",
-    "ADA",
-    "SOL",
-    "XRP",
-    "DOT",
-    "ATOM",
-    "HBAR",
-    "IOTA",
-    "AVAX",
 
-    "COTI",
-    "NEAR",
-    "BAT",
-    "WAVES",
-    "MINA",
-    "EGLD",
-    "XTZ",
-    "ALGO",
-    "LUNA",
-    "KSM",
-    "MATIC",
-    "ONE",
-    "ROSE",
-]
-interval = Client.KLINE_INTERVAL_12HOUR
+interval = Client.KLINE_INTERVAL_1HOUR
 start_at = '30 days ago UTC'
 market = 'BTC'
 
-for p in pairs:
+for p in assets:
     sequence = k.build_klines(
         p + market,
         interval,
         start_at
     )
+
+    print(f'{p}')
 
     text = json.dumps(sequence)
 
