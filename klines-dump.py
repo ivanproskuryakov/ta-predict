@@ -1,14 +1,13 @@
 from binance import Client
 from service import klines
-from parameters import assets
+from parameters import assets, market
 import json
 
 
 k = klines.KLines()
 
-interval = Client.KLINE_INTERVAL_15MINUTE
-start_at = '1 days ago UTC'
-market = 'BTC'
+interval = Client.KLINE_INTERVAL_1MINUTE
+start_at = '1 hour ago UTC'
 
 for p in assets:
     sequence = k.build_klines(

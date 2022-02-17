@@ -1,7 +1,7 @@
 assets = [
     # "BNB",
     # "ETH",
-    # "ADA",
+    "ADA",
     "ROSE",
     # "SOL", "XRP",
     # "DOT", "ATOM", "HBAR", "IOTA", "AVAX",
@@ -12,3 +12,5 @@ assets = [
     # "ETC", "BCH", "LINK", "FIL", "UNI",
     # "GTC", "NU", "POND", "CELO"
 ]
+
+market = 'BTC'
