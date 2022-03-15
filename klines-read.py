@@ -15,7 +15,7 @@ for a in assets:
         f.close()
         collections.append(collection)
 
-threshold = 0
+threshold = 1
 total = len(collections[0])
 
 line = f' -- date -- \t'
@@ -23,7 +23,8 @@ line = f' -- date -- \t'
 for i in range(len(assets)):
     price_start = np.round(collections[i][0]['price_open'], 10)
     price_end = np.round(collections[i][total - 1]['price_open'], 10)
-    line += f'{assets[i]} {price_start:.9f}{price_end:9f} \t'
+    line += f'{assets[i]} \t'
+    # line += f'{assets[i]} {price_start:.9f}{price_end:9f} \t'
 
 print(line)
 
@@ -48,6 +49,7 @@ for i in range(total):
         if percentage < -threshold:
             change = chalk.red(f'{percentage:.1f}')
 
-        line += f'{change} {volume}|{volume_taker}|{volume_maker}|{trades} \t'
+        line += f'{change} \t'
+        # line += f'{change} {volume}+{volume_taker}-{volume_maker},{trades} \t'
 
     print(line)
