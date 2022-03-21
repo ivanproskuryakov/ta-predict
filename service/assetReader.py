@@ -3,7 +3,7 @@ import numpy as np
 from datetime import datetime
 import json
 
-asset = 'ROSE'
+asset = 'ADA'
 interval = '5m'
 
 with open(f'out_klines/{asset}_{interval}.json') as f:
@@ -57,41 +57,3 @@ for i in range(1, total):
         append(negative, item)
 
     overall += f'{change} '
-
-print('Positive')
-print('-------------------------------------------------------------------------------------------------')
-for sequence in positive:
-    time_open = sequence[0]['time_open']
-    time = datetime.utcfromtimestamp(time_open)
-
-    sum = 0
-    percentage = []
-    for item in sequence:
-        sum = sum + item['avg_percentage']
-        percentage.append(item['avg_percentage'])
-
-    print(
-        time,
-        percentage,
-        chalk.green(f'{np.round(sum, 2):.1f}'),
-    )
-#
-# print('Negative')
-# print('-------------------------------------------------------------------------------------------------')
-# for sequence in negative:
-#     time_open = sequence[0]['time_open']
-#     time = datetime.utcfromtimestamp(time_open)
-#
-#     sum = 0
-#     percentage = []
-#     for item in sequence:
-#         sum = sum + item['avg_percentage']
-#         percentage.append(item['avg_percentage'])
-#
-#     print(
-#         time,
-#         percentage,
-#         chalk.red(f'{np.round(sum, 2):.1f}'),
-#     )
-
-# print(overall)
