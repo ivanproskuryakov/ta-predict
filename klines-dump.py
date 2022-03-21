@@ -6,8 +6,8 @@ import json
 
 k = klines.KLines()
 
-interval = Client.KLINE_INTERVAL_6HOUR
-start_at = '12 day ago UTC'
+interval = Client.KLINE_INTERVAL_1HOUR
+start_at = '30 day ago UTC'
 
 for p in assets:
     sequence = k.build_klines(
