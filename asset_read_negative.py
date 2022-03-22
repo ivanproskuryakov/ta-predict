@@ -4,7 +4,12 @@ from yachalk import chalk
 from datetime import datetime
 from service import reader
 
-negative = reader.negative
+asset = 'ADA'
+interval = '1m'
+
+reader = reader.Reader()
+split = reader.read(asset, interval)
+negative = split[0]
 
 print('Negative')
 print('-------------------------------------------------------------------------------------------------')
