@@ -4,7 +4,7 @@ from yachalk import chalk
 from datetime import datetime
 import numpy as np
 
-interval = Client.KLINE_INTERVAL_1HOUR
+interval = Client.KLINE_INTERVAL_5MINUTE
 asset = 'ETH'
 
 reader = reader.Reader()
@@ -17,12 +17,18 @@ percentage_negative = 0
 negative = 0
 median = len(collection) / 2
 
+last_hour = 0
+
 for sequence in collection:
     if len(sequence[1]):
         is_positive = sequence[0]
         sum = 0
         percentage = []
         time = datetime.utcfromtimestamp(sequence[1][0]['time_open'])
+
+        if last_hour != time.hour:
+            last_hour = time.hour
+            print('')
 
         for item in sequence[1]:
             sum = sum + item['avg_percentage']
