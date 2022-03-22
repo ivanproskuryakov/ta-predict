@@ -16,12 +16,9 @@ class Reader:
             f.close()
 
         total = len(collection)
-
-        item_first = collection[0]
-        is_positive = float(item_first['avg_percentage']) >= 0
+        first = collection[0]
+        is_positive = float(first['avg_percentage']) >= 0
         self.items.append([is_positive, []])
-
-        # ---------
 
         for i in range(1, total):
             item = collection[i]

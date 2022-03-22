@@ -4,7 +4,7 @@ from yachalk import chalk
 from datetime import datetime
 import numpy as np
 
-interval = Client.KLINE_INTERVAL_5MINUTE
+interval = Client.KLINE_INTERVAL_1HOUR
 asset = 'ETH'
 
 reader = reader.Reader()
@@ -18,31 +18,32 @@ negative = 0
 median = len(collection) / 2
 
 for sequence in collection:
-    is_positive = sequence[0]
-    time = datetime.utcfromtimestamp(sequence[1][0]['time_open'])
-    sum = 0
-    percentage = []
+    if len(sequence[1]):
+        is_positive = sequence[0]
+        sum = 0
+        percentage = []
+        time = datetime.utcfromtimestamp(sequence[1][0]['time_open'])
 
-    for item in sequence[1]:
-        sum = sum + item['avg_percentage']
-        percentage.append(item['avg_percentage'])
+        for item in sequence[1]:
+            sum = sum + item['avg_percentage']
+            percentage.append(item['avg_percentage'])
 
-    if is_positive:
-        magnitude_positive = magnitude_positive + (len(sequence[1]))
-        percentage_positive = percentage_positive + sum
-        print(
-            time,
-            percentage,
-            chalk.green(f'{np.round(sum, 2):.2f}'),
-        )
-    else:
-        magnitude_negative = magnitude_negative + (len(sequence[1]))
-        percentage_negative = percentage_negative + sum
-        print(
-            time,
-            percentage,
-            chalk.red(f'{np.round(sum, 2):.2f}'),
-        )
+        if is_positive:
+            magnitude_positive = magnitude_positive + (len(sequence[1]))
+            percentage_positive = percentage_positive + sum
+            print(
+                time,
+                percentage,
+                chalk.green(f'{np.round(sum, 2):.2f}'),
+            )
+        else:
+            magnitude_negative = magnitude_negative + (len(sequence[1]))
+            percentage_negative = percentage_negative + sum
+            print(
+                time,
+                percentage,
+                chalk.red(f'{np.round(sum, 2):.2f}'),
+            )
 
 print(
     magnitude_positive,
