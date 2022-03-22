@@ -1,13 +1,14 @@
-from yachalk import chalk
 import numpy as np
+
+from yachalk import chalk
 from datetime import datetime
-from service import assetReader
+from service import reader
 
-positive = assetReader.positive
+negative = reader.negative
 
-print('Positive')
+print('Negative')
 print('-------------------------------------------------------------------------------------------------')
-for sequence in positive:
+for sequence in negative:
     time_open = sequence[0]['time_open']
     time = datetime.utcfromtimestamp(time_open)
 
@@ -20,7 +21,7 @@ for sequence in positive:
     print(
         time,
         percentage,
-        chalk.green(f'{np.round(sum, 2):.1f}'),
+        chalk.red(f'{np.round(sum, 2):.1f}'),
     )
 
-print(len(positive))
+print(len(negative))

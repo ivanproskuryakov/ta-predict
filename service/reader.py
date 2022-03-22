@@ -1,6 +1,4 @@
 from yachalk import chalk
-import numpy as np
-from datetime import datetime
 import json
 
 asset = 'ADA'
