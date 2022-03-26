@@ -37,11 +37,11 @@ last_hour_minus = 0
 
 for sequence in collection:
     sequence_len = len(sequence[1])
+    sum = 0
+    percentage = []
 
     if sequence_len:
         is_positive = sequence[0]
-        sum = 0
-        percentage = []
         time = datetime.utcfromtimestamp(sequence[1][0]['time_open'])
 
         for item in sequence[1]:
@@ -49,44 +49,45 @@ for sequence in collection:
             percentage.append(item['avg_percentage'])
 
             if is_positive:
-                positive["magnitude"] = positive["magnitude"] + sequence_len
-                positive["percentage"] = positive["percentage"] + sum
-                last_hour_plus = last_hour_plus + sum
-
                 if positive["percentage_max"] < item['avg_percentage']:
                     positive["percentage_max"] = item['avg_percentage']
                 if positive["magnitude_max"] < sequence_len:
                     positive["magnitude_max"] = sequence_len
-
-                print(
-                    time,
-                    percentage,
-                    chalk.green(f'{np.round(sum, 2):.2f}'),
-                )
             else:
-                negative["magnitude"] = negative["magnitude"] + sequence_len
-                negative["percentage"] = negative["percentage"] + sum
-                last_hour_minus = last_hour_minus + sum
-
                 if negative["percentage_max"] > item['avg_percentage']:
                     negative["percentage_max"] = item['avg_percentage']
                 if negative["magnitude_max"] < sequence_len:
                     negative["magnitude_max"] = sequence_len
 
-                print(
-                    time,
-                    percentage,
-                    chalk.red(f'{np.round(sum, 2):.2f}'),
-                )
+        if is_positive:
+            positive["magnitude"] = positive["magnitude"] + sequence_len
+            positive["percentage"] = positive["percentage"] + sum
+            last_hour_plus = last_hour_plus + sum
 
-            if reader.is_last_hour(last_hour, time.hour):
-                print(f'{last_hour_plus:.2f} {last_hour_minus:.2f}')
-                print(f'{last_hour_plus - (abs(last_hour_minus)):.2f}')
-                print('')
-                print('')
-                last_hour = time.hour
-                last_hour_plus = 0
-                last_hour_minus = 0
+            print(
+                time,
+                percentage,
+                chalk.green(f'{np.round(sum, 2):.2f}'),
+            )
+        else:
+            negative["magnitude"] = negative["magnitude"] + sequence_len
+            negative["percentage"] = negative["percentage"] + sum
+            last_hour_minus = last_hour_minus + sum
+
+            print(
+                time,
+                percentage,
+                chalk.red(f'{np.round(sum, 2):.2f}'),
+            )
+
+        if reader.is_last_hour(last_hour, time.hour):
+            print(f'{last_hour_plus:.2f} {last_hour_minus:.2f}')
+            print(f'{last_hour_plus - (abs(last_hour_minus)):.2f}')
+            print('')
+            print('')
+            last_hour = time.hour
+            last_hour_plus = 0
+            last_hour_minus = 0
 
 print('\n')
 print(asset, interval)
@@ -98,4 +99,3 @@ print('\n')
 print('Negative')
 print('-----------------')
 print(negative)
-
