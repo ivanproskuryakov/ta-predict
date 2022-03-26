@@ -9,6 +9,16 @@ class Reader:
         l = len(self.items) - 1
         self.items[l][1].append(item)
 
+    def is_last_hour(self, last_hour: int, hour):
+        h = hour
+
+        if hour == 0:
+            h = 24
+
+        diff = abs(last_hour - h)
+
+        return diff == 4
+
     def read(self, asset: str, interval: str):
         with open(f'out_klines/{asset}_{interval}.json') as f:
             data = f.read()

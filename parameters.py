@@ -19,6 +19,7 @@ market = 'BTC'
 
 intervals = [
     Client.KLINE_INTERVAL_1MINUTE,
+    Client.KLINE_INTERVAL_3MINUTE,
     Client.KLINE_INTERVAL_5MINUTE,
     Client.KLINE_INTERVAL_15MINUTE,
     Client.KLINE_INTERVAL_30MINUTE,
