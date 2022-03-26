@@ -4,11 +4,14 @@ from yachalk import chalk
 from datetime import datetime
 import numpy as np
 
-interval = Client.KLINE_INTERVAL_5MINUTE
 asset = 'ROSE'
+interval = Client.KLINE_INTERVAL_5MINUTE
 
 reader = reader.Reader()
-collection = reader.read(asset, interval)
+collection = reader.read(
+    asset,
+    interval
+)
 
 positive = {
     "percentage": 0,
@@ -85,11 +88,14 @@ for sequence in collection:
                 last_hour_plus = 0
                 last_hour_minus = 0
 
-print('\n\n')
+print('\n')
+print(asset, interval)
+print('\n')
 print('Positive')
 print('-----------------')
 print(positive)
-print('\n\n')
+print('\n')
 print('Negative')
 print('-----------------')
 print(negative)
+
