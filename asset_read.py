@@ -44,7 +44,7 @@ trade = None
 
 for sequence in collection:
     seq_len = len(sequence[1])
-    sum = 0
+    percentage_sum = 0
     percentage = []
 
     if seq_len:
@@ -54,7 +54,7 @@ for sequence in collection:
         # -----------------------------------
 
         for item in sequence[1]:
-            sum = sum + item['avg_percentage']
+            percentage_sum = percentage_sum + item['avg_percentage']
             percentage.append(item['avg_percentage'])
 
             if is_positive:
@@ -72,47 +72,50 @@ for sequence in collection:
 
         if is_positive:
             positive["magnitude"] = positive["magnitude"] + seq_len
-            positive["percentage"] = positive["percentage"] + sum
-            last_hour_plus = last_hour_plus + sum
+            positive["percentage"] = positive["percentage"] + percentage_sum
+            last_hour_plus = last_hour_plus + percentage_sum
 
             print(
                 time,
                 percentage,
-                chalk.green(f'{np.round(sum, 2):.2f}'),
+                chalk.green(f'{np.round(percentage_sum, 2):.2f}'),
             )
 
             if trade:
-                trade[0] = trade[0] + sum
+                trade["percentage"] = trade["percentage"] + percentage_sum
 
-                if trade[0] >= 2:
+                if trade["percentage"] >= trade["percentage_sell"]:
                     print(chalk.green(
                         '\t\t\t\t -------------------- SELL --------------------- \t',
-                        trade[0],
-                        f'{trade[1]:.10f}',
+                        f'{trade["percentage"]:.2f}',
+                        f'{trade["percentage_sell"]:.2f}',
+                        f'{trade["price_open"]:.10f}',
                         f'{item["price_open"]:.10f}',
                     ))
                     trade = None
 
         else:
             negative["magnitude"] = negative["magnitude"] + seq_len
-            negative["percentage"] = negative["percentage"] + sum
-            last_hour_minus = last_hour_minus + sum
+            negative["percentage"] = negative["percentage"] + percentage_sum
+            last_hour_minus = last_hour_minus + percentage_sum
 
             print(
                 time,
                 percentage,
-                chalk.red(f'{np.round(sum, 2):.2f}')
+                chalk.red(f'{np.round(percentage_sum, 2):.2f}')
             )
 
             if seq_len >= NEGATIVE_PEAK:
-                trades.append([sum, item["price_open"]])
-                trade = [
-                    sum,
-                    item["price_open"]
-                ]
+                trades.append([percentage_sum, item["price_open"]])
+                trade = {
+                    "percentage": percentage_sum,
+                    "percentage_sell": abs(percentage_sum * 1),
+                    "price_open": item['price_open'],
+                }
 
                 print(chalk.red(
                     '\t\t\t\t -------------------- BUY --------------------- \t',
+                    f'{percentage_sum:.2}',
                     f'{item["price_open"]:.10f}',
                 ))
 
