@@ -4,10 +4,9 @@ from service import reader
 from binance import Client
 from yachalk import chalk
 from datetime import datetime
-from parameters import NEGATIVE_PEAK
 
 asset = 'ROSE'
-interval = Client.KLINE_INTERVAL_5MINUTE
+interval = Client.KLINE_INTERVAL_1MINUTE
 
 reader = reader.Reader()
 collection = reader.read(
@@ -44,7 +43,10 @@ trade = None
 
 for sequence in collection:
     seq_len = len(sequence[1])
-    percentage_sum = 0
+    totals = {
+        "trades": 0,
+        "percentage": 0,
+    }
     percentage = []
 
     if seq_len:
@@ -54,7 +56,8 @@ for sequence in collection:
         # -----------------------------------
 
         for item in sequence[1]:
-            percentage_sum = percentage_sum + item['avg_percentage']
+            totals["percentage"] = totals["percentage"] + item['avg_percentage']
+            totals["trades"] = totals["trades"] + item['trades']
             percentage.append(item['avg_percentage'])
 
             if is_positive:
@@ -70,52 +73,57 @@ for sequence in collection:
 
         # -----------------------------------
 
+        if trade:
+            trade["percentage"] = trade["percentage"] + totals["percentage"]
+            print(f'\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{trade["percentage"]:.2f}')
+
+            if trade["percentage"] > 0:
+                print(chalk.green(
+                    '\t\t\t\t -------------------- SELL --------------------- \t',
+                    f'{trade["percentage"]:.2f}',
+                    f'{trade["percentage_sell"]:.2f}',
+                    f'{trade["price_open"]:.10f}',
+                    f'{item["price_open"]:.10f}',
+                ))
+                trade = None
+
+        # -----------------------------------
+
         if is_positive:
             positive["magnitude"] = positive["magnitude"] + seq_len
-            positive["percentage"] = positive["percentage"] + percentage_sum
-            last_hour_plus = last_hour_plus + percentage_sum
+            positive["percentage"] = positive["percentage"] + totals["percentage"]
+            last_hour_plus = last_hour_plus + totals["percentage"]
 
             print(
                 time,
                 percentage,
-                chalk.green(f'{np.round(percentage_sum, 2):.2f}'),
+                chalk.green(f'{np.round(totals["percentage"], 2):.2f}'),
+                f'{totals["trades"]:.0f}',
             )
-
-            if trade:
-                trade["percentage"] = trade["percentage"] + percentage_sum
-
-                if trade["percentage"] >= trade["percentage_sell"]:
-                    print(chalk.green(
-                        '\t\t\t\t -------------------- SELL --------------------- \t',
-                        f'{trade["percentage"]:.2f}',
-                        f'{trade["percentage_sell"]:.2f}',
-                        f'{trade["price_open"]:.10f}',
-                        f'{item["price_open"]:.10f}',
-                    ))
-                    trade = None
 
         else:
             negative["magnitude"] = negative["magnitude"] + seq_len
-            negative["percentage"] = negative["percentage"] + percentage_sum
-            last_hour_minus = last_hour_minus + percentage_sum
+            negative["percentage"] = negative["percentage"] + totals["percentage"]
+            last_hour_minus = last_hour_minus + totals["percentage"]
 
             print(
                 time,
                 percentage,
-                chalk.red(f'{np.round(percentage_sum, 2):.2f}')
+                chalk.red(f'{np.round(totals["percentage"], 2):.2f}'),
+                f'{totals["trades"]:.0f}',
             )
 
-            if seq_len >= NEGATIVE_PEAK:
-                trades.append([percentage_sum, item["price_open"]])
+            if not trade and seq_len > 5 and totals["trades"] > 600:
+                trades.append([totals["percentage"], item["price_open"]])
                 trade = {
-                    "percentage": percentage_sum,
-                    "percentage_sell": abs(percentage_sum * 1),
+                    "percentage": totals["percentage"],
+                    "percentage_sell": abs(totals["percentage"]),
                     "price_open": item['price_open'],
                 }
 
                 print(chalk.red(
                     '\t\t\t\t -------------------- BUY --------------------- \t',
-                    f'{percentage_sum:.2}',
+                    f'{totals["percentage"]:.2}',
                     f'{item["price_open"]:.10f}',
                 ))
 
@@ -144,4 +152,4 @@ print('\n')
 print('Tades')
 print('-----------------')
 print(len(trades))
-print(len(trades) / 180)
+# print(len(trades) / 180)

@@ -29,5 +29,4 @@ intervals = [
     Client.KLINE_INTERVAL_1DAY,
 ]
 
-NEGATIVE_PEAK = 6
-POSITIVE_PEAK = 5
+# NEGATIVE_PEAK = 8
