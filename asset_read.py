@@ -46,6 +46,9 @@ for sequence in collection:
     totals = {
         "trades": 0,
         "percentage": 0,
+        "volume": 0,
+        "volume_taker": 0,
+        "volume_maker": 0,
     }
     percentage = []
 
@@ -56,8 +59,11 @@ for sequence in collection:
         # -----------------------------------
 
         for item in sequence[1]:
-            totals["percentage"] = totals["percentage"] + item['avg_percentage']
             totals["trades"] = totals["trades"] + item['trades']
+            totals["volume"] = totals["volume"] + item['volume']
+            totals["volume_taker"] = totals["volume_taker"] + item['volume_taker']
+            totals["volume_maker"] = totals["volume_maker"] + item['volume_maker']
+            totals["percentage"] = totals["percentage"] + item['avg_percentage']
             percentage.append(item['avg_percentage'])
 
             if is_positive:
@@ -99,6 +105,9 @@ for sequence in collection:
                 percentage,
                 chalk.green(f'{np.round(totals["percentage"], 2):.2f}'),
                 f'{totals["trades"]:.0f}',
+                f'{totals["volume"]:.0f}',
+                f'{totals["volume_taker"]:.0f}',
+                f'{totals["volume_maker"]:.0f}',
             )
 
         else:
@@ -111,6 +120,9 @@ for sequence in collection:
                 percentage,
                 chalk.red(f'{np.round(totals["percentage"], 2):.2f}'),
                 f'{totals["trades"]:.0f}',
+                f'{totals["volume"]:.0f}',
+                f'{totals["volume_taker"]:.0f}',
+                f'{totals["volume_maker"]:.0f}',
             )
 
             if not trade and seq_len > 5 and totals["trades"] > 600:
