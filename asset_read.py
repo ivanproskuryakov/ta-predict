@@ -6,7 +6,7 @@ from yachalk import chalk
 from datetime import datetime
 
 asset = 'ROSE'
-interval = Client.KLINE_INTERVAL_1MINUTE
+interval = Client.KLINE_INTERVAL_5MINUTE
 
 reader = reader.Reader()
 collection = reader.read(
@@ -18,8 +18,6 @@ positive = {
     "peak": 5,
     "percentage": 0,
     "percentage_max": 0,
-    "magnitude": 0,
-    "magnitude_max": 0,
     "sequence": 0,
     "sequence_max": 0,
 }
@@ -27,8 +25,6 @@ negative = {
     "peak": 6,
     "percentage": 0,
     "percentage_max": 0,
-    "magnitude": 0,
-    "magnitude_max": 0,
     "sequence": 0,
     "sequence_max": 0,
 }
@@ -49,6 +45,7 @@ for sequence in collection:
         "volume": 0,
         "volume_taker": 0,
         "volume_maker": 0,
+        "volume_ratio": 0,
     }
     percentage = []
 
@@ -60,22 +57,25 @@ for sequence in collection:
 
         for item in sequence[1]:
             totals["trades"] = totals["trades"] + item['trades']
+            totals["percentage"] = totals["percentage"] + item['avg_percentage']
             totals["volume"] = totals["volume"] + item['volume']
             totals["volume_taker"] = totals["volume_taker"] + item['volume_taker']
             totals["volume_maker"] = totals["volume_maker"] + item['volume_maker']
-            totals["percentage"] = totals["percentage"] + item['avg_percentage']
+            totals["volume_ratio"] = reader.volume_ratio(totals)
             percentage.append(item['avg_percentage'])
 
-            if is_positive:
-                if positive["percentage_max"] < item['avg_percentage']:
-                    positive["percentage_max"] = item['avg_percentage']
-                if positive["magnitude_max"] < seq_len:
-                    positive["magnitude_max"] = seq_len
-            else:
-                if negative["percentage_max"] > item['avg_percentage']:
-                    negative["percentage_max"] = item['avg_percentage']
-                if negative["magnitude_max"] < seq_len:
-                    negative["magnitude_max"] = seq_len
+        # -----------------------------------
+        
+        if is_positive:
+            if positive["percentage_max"] < item['avg_percentage']:
+                positive["percentage_max"] = item['avg_percentage']
+            if positive["sequence_max"] < seq_len:
+                positive["sequence_max"] = seq_len
+        else:
+            if negative["percentage_max"] > item['avg_percentage']:
+                negative["percentage_max"] = item['avg_percentage']
+            if negative["sequence_max"] < seq_len:
+                negative["sequence_max"] = seq_len
 
         # -----------------------------------
 
@@ -96,7 +96,7 @@ for sequence in collection:
         # -----------------------------------
 
         if is_positive:
-            positive["magnitude"] = positive["magnitude"] + seq_len
+            positive["sequence"] = positive["sequence"] + seq_len
             positive["percentage"] = positive["percentage"] + totals["percentage"]
             last_hour_plus = last_hour_plus + totals["percentage"]
 
@@ -108,10 +108,11 @@ for sequence in collection:
                 f'{totals["volume"]:.0f}',
                 f'{totals["volume_taker"]:.0f}',
                 f'{totals["volume_maker"]:.0f}',
+                f'{totals["volume_ratio"]:.2f}',
             )
 
         else:
-            negative["magnitude"] = negative["magnitude"] + seq_len
+            negative["sequence"] = negative["sequence"] + seq_len
             negative["percentage"] = negative["percentage"] + totals["percentage"]
             last_hour_minus = last_hour_minus + totals["percentage"]
 
@@ -123,6 +124,7 @@ for sequence in collection:
                 f'{totals["volume"]:.0f}',
                 f'{totals["volume_taker"]:.0f}',
                 f'{totals["volume_maker"]:.0f}',
+                f'{totals["volume_ratio"]:.2f}',
             )
 
             if not trade and seq_len > 5 and totals["trades"] > 600:
@@ -164,4 +166,3 @@ print('\n')
 print('Tades')
 print('-----------------')
 print(len(trades))
-# print(len(trades) / 180)
