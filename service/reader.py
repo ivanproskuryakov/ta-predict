@@ -9,7 +9,7 @@ class Reader:
         l = len(self.items) - 1
         self.items[l][1].append(item)
 
-    def volume_ratio(self, totals: []):
+    def volume_taken(self, totals: []):
         r = 0
 
         if totals["volume"]:

@@ -20,7 +20,8 @@ conda env remove --name tensorflow
 conda activate tensorflow   
 conda deactivate
 
-python klines-dump.py && python klines-read.py 
+python asset_read.py
+
 python markets-dump.py
 
 ```

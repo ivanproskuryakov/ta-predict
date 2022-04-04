@@ -5,7 +5,7 @@ from binance import Client
 from yachalk import chalk
 from datetime import datetime
 
-asset = 'ROSE'
+asset = 'ADA'
 interval = Client.KLINE_INTERVAL_5MINUTE
 
 reader = reader.Reader()
@@ -45,7 +45,7 @@ for sequence in collection:
         "volume": 0,
         "volume_taker": 0,
         "volume_maker": 0,
-        "volume_ratio": 0,
+        "volume_taken": 0,
     }
     percentage = []
 
@@ -61,7 +61,7 @@ for sequence in collection:
             totals["volume"] = totals["volume"] + item['volume']
             totals["volume_taker"] = totals["volume_taker"] + item['volume_taker']
             totals["volume_maker"] = totals["volume_maker"] + item['volume_maker']
-            totals["volume_ratio"] = reader.volume_ratio(totals)
+            totals["volume_taken"] = reader.volume_taken(totals)
             percentage.append(item['avg_percentage'])
 
         # -----------------------------------
@@ -105,10 +105,8 @@ for sequence in collection:
                 percentage,
                 chalk.green(f'{np.round(totals["percentage"], 2):.2f}'),
                 f'{totals["trades"]:.0f}',
-                f'{totals["volume"]:.0f}',
-                f'{totals["volume_taker"]:.0f}',
-                f'{totals["volume_maker"]:.0f}',
-                f'{totals["volume_ratio"]:.2f}',
+                f'{totals["volume"]:.0f} = T{totals["volume_taker"]:.0f} + M{totals["volume_maker"]:.0f}',
+                f'{totals["volume_taken"]:.2f}',
             )
 
         else:
@@ -121,10 +119,8 @@ for sequence in collection:
                 percentage,
                 chalk.red(f'{np.round(totals["percentage"], 2):.2f}'),
                 f'{totals["trades"]:.0f}',
-                f'{totals["volume"]:.0f}',
-                f'{totals["volume_taker"]:.0f}',
-                f'{totals["volume_maker"]:.0f}',
-                f'{totals["volume_ratio"]:.2f}',
+                f'{totals["volume"]:.0f} = T{totals["volume_taker"]:.0f} + M{totals["volume_maker"]:.0f}',
+                f' T{totals["volume_taken"]:.2f}',
             )
 
             if not trade and seq_len > 5 and totals["trades"] > 600:
