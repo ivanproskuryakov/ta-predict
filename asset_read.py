@@ -1,14 +1,19 @@
 import numpy as np
+import sys
 
-from service import reader
-from binance import Client
 from yachalk import chalk
 from datetime import datetime
+from binance import Client
 
-asset = 'ADA'
+from service import reader, estimator
+
+# ----
+asset = sys.argv[1]
 interval = Client.KLINE_INTERVAL_5MINUTE
+# ----
 
 reader = reader.Reader()
+estimator = estimator.Estimator()
 collection = reader.read(
     asset,
     interval
@@ -65,7 +70,7 @@ for sequence in collection:
             percentage.append(item['avg_percentage'])
 
         # -----------------------------------
-        
+
         if is_positive:
             if positive["percentage_max"] < item['avg_percentage']:
                 positive["percentage_max"] = item['avg_percentage']
@@ -81,9 +86,10 @@ for sequence in collection:
 
         if trade:
             trade["percentage"] = trade["percentage"] + totals["percentage"]
+
             print(f'\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{trade["percentage"]:.2f}')
 
-            if trade["percentage"] > 0:
+            if trade["percentage"] > 1:
                 print(chalk.green(
                     '\t\t\t\t -------------------- SELL --------------------- \t',
                     f'{trade["percentage"]:.2f}',
@@ -91,6 +97,10 @@ for sequence in collection:
                     f'{trade["price_open"]:.10f}',
                     f'{item["price_open"]:.10f}',
                 ))
+                trades.append({
+                    "buy": trade["price_open"],
+                    "sell": item["price_open"],
+                })
                 trade = None
 
         # -----------------------------------
@@ -102,11 +112,11 @@ for sequence in collection:
 
             print(
                 time,
+                f'{totals["volume_taken"]:.0f}%',
                 percentage,
                 chalk.green(f'{np.round(totals["percentage"], 2):.2f}'),
                 f'{totals["trades"]:.0f}',
-                f'{totals["volume"]:.0f} = T{totals["volume_taker"]:.0f} + M{totals["volume_maker"]:.0f}',
-                f'{totals["volume_taken"]:.2f}',
+                f'V{totals["volume"]:.0f} = T{totals["volume_taker"]:.0f} + M{totals["volume_maker"]:.0f}',
             )
 
         else:
@@ -116,21 +126,19 @@ for sequence in collection:
 
             print(
                 time,
+                f'{totals["volume_taken"]:.0f}%',
                 percentage,
                 chalk.red(f'{np.round(totals["percentage"], 2):.2f}'),
                 f'{totals["trades"]:.0f}',
-                f'{totals["volume"]:.0f} = T{totals["volume_taker"]:.0f} + M{totals["volume_maker"]:.0f}',
-                f' T{totals["volume_taken"]:.2f}',
+                f'V{totals["volume"]:.0f} = T{totals["volume_taker"]:.0f} + M{totals["volume_maker"]:.0f}',
             )
 
-            if not trade and seq_len > 5 and totals["trades"] > 600:
-                trades.append([totals["percentage"], item["price_open"]])
+            if not trade and totals["volume_taken"] < 10 and totals["trades"] > 100:
                 trade = {
                     "percentage": totals["percentage"],
-                    "percentage_sell": abs(totals["percentage"]),
+                    "percentage_sell": 0,
                     "price_open": item['price_open'],
                 }
-
                 print(chalk.red(
                     '\t\t\t\t -------------------- BUY --------------------- \t',
                     f'{totals["percentage"]:.2}',
@@ -161,4 +169,4 @@ print(negative)
 print('\n')
 print('Tades')
 print('-----------------')
-print(len(trades))
+print(len(trades), f'{estimator.trades_diff_total(trades):.20f}')

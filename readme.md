@@ -17,11 +17,10 @@ conda env remove --name tensorflow
 
 ### Commands
 ```
-conda activate tensorflow   
-conda deactivate
-
-python asset_read.py
+conda activate tensorflow
 
 python markets-dump.py
+python asset_dump.py
+python asset_read.py ETC
 
 ```

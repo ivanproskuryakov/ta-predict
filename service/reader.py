@@ -13,7 +13,7 @@ class Reader:
         r = 0
 
         if totals["volume"]:
-            r = totals["volume_taker"] / totals["volume"]
+            r = (totals["volume_taker"] / totals["volume"]) * 100
 
         return r
 
