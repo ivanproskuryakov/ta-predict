@@ -1,5 +1,6 @@
 import sys
 import pandas as pd
+import vendor.indicators as qtpylib
 
 from binance import Client
 from service.reader_ta import ReaderTA
@@ -13,7 +14,6 @@ interval = Client.KLINE_INTERVAL_5MINUTE
 
 reader = ReaderTA()
 collection = reader.read(asset, interval)
-
 prepared = []
 
 for i in range(0, len(collection)):
@@ -26,10 +26,14 @@ for i in range(0, len(collection)):
         collection[i]['volume'],
     ])
 
-
 df = pd.DataFrame(prepared, None, ['date', 'open', 'high', 'low', 'close', 'volume'])
-ta = ta.MACD(df)
 
 
-print(len(df))
-print(len(ta))
+adx = ta.ADX(df, timeperiod=14)
+macd = ta.MACD(df)
+rsi = ta.RSI(df, timeperiod=14)
+bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(df), window=20, stds=2)
+
+print(adx)
+print(macd)
+print(rsi)
