@@ -1,12 +1,20 @@
-### Install
-Install conda or miniconda and after
+### Install Conda
 ```
 conda create --name tensorflow
 conda activate tensorflow
+
+conda install -c conda-forge ta-lib
 conda install --file requirements.txt
 
 mkdir out_klines
 mkdir markets
+```
+
+### Install PIP
+```
+mkdir out_klines
+mkdir markets
+pip install -r requirements.txt
 ```
 
 ### Uninstall

@@ -5,19 +5,17 @@ from yachalk import chalk
 from datetime import datetime
 from binance import Client
 
-from service import reader, estimator
+from service.reader import Reader
+from service.estimator import Estimator
 
 # ----
 asset = sys.argv[1]
 interval = Client.KLINE_INTERVAL_5MINUTE
 # ----
 
-reader = reader.Reader()
-estimator = estimator.Estimator()
-collection = reader.read(
-    asset,
-    interval
-)
+reader = Reader()
+estimator = Estimator()
+collection = reader.read(asset, interval)
 
 positive = {
     "peak": 5,
@@ -89,7 +87,7 @@ for sequence in collection:
 
             print(f'\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{trade["percentage"]:.2f}')
 
-            if trade["percentage"] > 1:
+            if trade["percentage"] > 0:
                 print(chalk.green(
                     '\t\t\t\t -------------------- SELL --------------------- \t',
                     f'{trade["percentage"]:.2f}',
@@ -100,6 +98,8 @@ for sequence in collection:
                 trades.append({
                     "buy": trade["price_open"],
                     "sell": item["price_open"],
+                    "start": trade["time_open"],
+                    "end": item["time_open"],
                 })
                 trade = None
 
@@ -133,11 +133,12 @@ for sequence in collection:
                 f'V{totals["volume"]:.0f} = T{totals["volume_taker"]:.0f} + M{totals["volume_maker"]:.0f}',
             )
 
-            if not trade and totals["volume_taken"] < 10 and totals["trades"] > 100:
+            if not trade and totals["volume_taken"] < 15 and totals["trades"] > 100:
                 trade = {
                     "percentage": totals["percentage"],
                     "percentage_sell": 0,
                     "price_open": item['price_open'],
+                    "time_open": item['time_open'],
                 }
                 print(chalk.red(
                     '\t\t\t\t -------------------- BUY --------------------- \t',

@@ -1,15 +1,15 @@
-from service import klines
+from service.klines import KLines
 from parameters import market
 import json
 
 
 class AssetDumper:
     def dumpMany(self, assets: [], intervals: [], start_at: str):
-        k = klines.KLines()
+        klines = KLines()
 
         for interval in intervals:
             for asset in assets:
-                sequence = k.build_klines(
+                sequence = klines.build_klines(
                     asset + market,
                     interval,
                     start_at

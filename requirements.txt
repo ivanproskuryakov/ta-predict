@@ -3,3 +3,5 @@ numpy
 TA-Lib
 python-binance
 yachalk
+arrow
+pandas
