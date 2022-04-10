@@ -26,9 +26,16 @@ for i in range(0, len(collection)):
         collection[i]['price_low'],
         collection[i]['price_close'],
         collection[i]['volume'],
+
+        collection[i]['avg_percentage'],
+        collection[i]['trades'],
+        collection[i]['volume_taker'],
     ])
 
-df = pd.DataFrame(prepared, None, ['date', 'open', 'high', 'low', 'close', 'volume'])
+df = pd.DataFrame(prepared, None, [
+    'date', 'open', 'high', 'low', 'close', 'volume',
+    'avg_percentage', 'trades', 'volume_taker'
+])
 pd.options.display.precision = 12
 
 macd = ta.MACD(df)
