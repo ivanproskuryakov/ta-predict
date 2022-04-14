@@ -6,3 +6,5 @@ yachalk
 arrow
 pandas
 tensorflow-macos
+matplotlib
+sklearn

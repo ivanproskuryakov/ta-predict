@@ -7,7 +7,7 @@ import talib.abstract as ta
 from binance import Client
 from service.reader_ta import ReaderTA
 from datetime import datetime
-
+import matplotlib.pyplot as plt
 
 # ----
 asset = sys.argv[1]
@@ -89,6 +89,11 @@ tadf = {
 for key in tadf.keys():
     df[key] = tadf[key]
 
-for i, row in df.iterrows():
-    print(row)
-    print('\n')
+df['macd'].plot()
+# for i, row in df.iterrows():
+    # print(row)
+    # print('\n')
+
+plt.show()
+
+# print(ta)
