@@ -318,7 +318,7 @@ model.summary()
 # TensorBoard so we create the appropriate callbacks for Keras.
 # This is the callback for writing checkpoints during training.
 
-path_checkpoint = '23_checkpoint.keras'
+path_checkpoint = './data/checkpoint.keras'
 callback_checkpoint = ModelCheckpoint(filepath=path_checkpoint,
                                       monitor='val_loss',
                                       verbose=1,
@@ -330,7 +330,7 @@ callback_early_stopping = EarlyStopping(monitor='val_loss',
                                         patience=5, verbose=1)
 
 # This is the callback for writing the TensorBoard log during training.
-callback_tensorboard = TensorBoard(log_dir='./23_logs/',
+callback_tensorboard = TensorBoard(log_dir='../data/',
                                    histogram_freq=0,
                                    write_graph=False)
 
