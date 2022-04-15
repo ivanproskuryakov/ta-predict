@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import tensorflow as tf
 
 from keras.models import Sequential
 from keras.layers import Input, Dense, GRU, Embedding
@@ -14,7 +15,6 @@ import weather
 # weather.maybe_download_and_extract()
 #
 # cities = weather.cities
-
 
 # Load Data
 # ------------------------------------------------------------
@@ -318,7 +318,7 @@ model.summary()
 # TensorBoard so we create the appropriate callbacks for Keras.
 # This is the callback for writing checkpoints during training.
 
-path_checkpoint = './data/checkpoint.keras'
+path_checkpoint = '../data/checkpoint.keras'
 callback_checkpoint = ModelCheckpoint(filepath=path_checkpoint,
                                       monitor='val_loss',
                                       verbose=1,
@@ -371,8 +371,8 @@ callbacks = [callback_early_stopping,
 
 # %%time
 model.fit(x=generator,
-          epochs=20,
-          steps_per_epoch=100,
+          epochs=1,
+          steps_per_epoch=1,
           validation_data=validation_data,
           callbacks=callbacks)
 
