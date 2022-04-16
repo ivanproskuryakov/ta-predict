@@ -61,6 +61,13 @@ df[target_city][target_names].head(shift_steps + 5)
 # print(df.index.hour)
 # plt.show()
 
+# df['Aalborg']['Temp'].plot()
+# df['Esbjerg']['Temp'].plot()
+# df['Roskilde']['Temp'].plot()
+
+# df_targets.plot()
+# plt.show()
+
 
 # NumPy Arrays
 # ------------------------------------------------------------
@@ -104,6 +111,12 @@ num_x_signals = x_data.shape[1]
 
 # This is the number of output-signals:
 num_y_signals = y_data.shape[1]
+
+
+
+print(x_data.shape)
+exit()
+
 
 # Scaled Data
 # ------------------------------------------------------------

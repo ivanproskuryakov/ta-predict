@@ -10,7 +10,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 
 # ----
-asset = sys.argv[1]
+asset = 'ROSE'
 interval = Client.KLINE_INTERVAL_5MINUTE
 # ----
 
@@ -89,11 +89,11 @@ tadf = {
 for key in tadf.keys():
     df[key] = tadf[key]
 
-df['macd'].plot()
+# df['macd'].plot()
 # for i, row in df.iterrows():
     # print(row)
     # print('\n')
 
-plt.show()
+# plt.show()
 
-# print(ta)
+# print(df['open'])
