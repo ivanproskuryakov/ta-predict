@@ -165,12 +165,12 @@ x_batch, y_batch = next(generator)
 batch = 0   # First sequence in the batch.
 signal = 0  # First signal from the 20 input-signals.
 
-seq = x_batch[batch, :, signal]
-plt.plot(seq)
-seq = y_batch[batch, :, signal]
-plt.plot(seq)
-
-plt.show()
+# seq = x_batch[batch, :, signal]
+# plt.plot(seq)
+# seq = y_batch[batch, :, signal]
+# plt.plot(seq)
+#
+# plt.show()
 
 
 # Validation Set
@@ -265,8 +265,8 @@ callbacks = [callback_early_stopping,
 # Train the Recurrent Neural Network
 # ------------------------------------------------------------------------
 model.fit(x=generator,
-          epochs=2,
-          steps_per_epoch=10,
+          epochs=20,
+          steps_per_epoch=100,
           validation_data=validation_data,
           callbacks=callbacks)
 
@@ -297,7 +297,7 @@ if False:
 # Generate Predictions
 # ------------------------------------------------------------------------
 
-def plot_comparison(start_idx, length=100, train=True):
+def plot_comparison(start_idx = 0, length=100, train=True):
     """
     Plot the predicted and true output-signals.
 
@@ -358,4 +358,4 @@ def plot_comparison(start_idx, length=100, train=True):
         plt.show()
 
 
-plot_comparison(start_idx=100000, length=1000, train=True)
+plot_comparison(start_idx=0, length=10000, train=True)

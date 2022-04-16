@@ -384,8 +384,8 @@ callbacks = [callback_early_stopping,
 
 # %%time
 model.fit(x=generator,
-          epochs=1,
-          steps_per_epoch=1,
+          epochs=20,
+          steps_per_epoch=100,
           validation_data=validation_data,
           callbacks=callbacks)
 
