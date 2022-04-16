@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from sklearn.preprocessing import MinMaxScaler
 from binance import Client
@@ -38,6 +39,7 @@ df = pd.DataFrame(prepared, None, [
 pd.options.display.precision = 12
 
 
+# Sets preparation
 # ------------------------------------------------------------------------
 
 shift_steps = int(24 * 60 / 5)
@@ -60,33 +62,113 @@ num_test = num_data - num_train
 x_train = x_data[0:num_train]
 x_test = x_data[num_train:]
 
+y_train = y_data[0:num_train]
+y_test = y_data[num_train:]
+
 num_x_signals = x_data.shape[1]
 num_y_signals = y_data.shape[1]
 
-print('-----------------------------')
+
+# Scaling
+# ------------------------------------------------------------------------
+
 print('num train', num_train)
 print('num test', num_test)
 print('num all', len(x_train) + len(x_test))
 
-print(num_x_signals)
-print(num_y_signals)
-
-# ------------------------------------------------------------------------
-
-print("Min:", np.min(x_train))
-print("Max:", np.max(x_train))
+print('signals', num_x_signals, num_y_signals)
 
 x_scaler = MinMaxScaler()
 x_train_scaled = x_scaler.fit_transform(x_train)
 x_test_scaled = x_scaler.transform(x_test)
 
-# print("Min scaled train:", np.min(x_train_scaled))
-# print("Max scaled train:", np.max(x_train_scaled))
-#
-# print("Min text train:", np.min(x_test_scaled))
-# print("Max text train:", np.max(x_test_scaled))
+y_scaler = MinMaxScaler()
+y_train_scaled = y_scaler.fit_transform(y_train)
+y_test_scaled = y_scaler.transform(y_test)
+
+print("X Min:", np.min(x_train))
+print("X Max:", np.max(x_train))
+
+print("X Min scaled train:", np.min(x_train_scaled))
+print("X Max scaled train:", np.max(x_train_scaled))
+
+print("X Min text train:", np.min(x_test_scaled))
+print("X Max text train:", np.max(x_test_scaled))
+
+print("Y Min:", np.min(y_train))
+print("Y Max:", np.max(y_train))
+
+print("Y Min scaled train:", np.min(y_train_scaled))
+print("Y Max scaled train:", np.max(y_train_scaled))
+
+print("Y Min text train:", np.min(y_train_scaled))
+print("Y Max text train:", np.max(y_train_scaled))
 
 
-# y_scaler = MinMaxScaler()
-# y_train_scaled = y_scaler.fit_transform(y_train)
-# y_test_scaled = y_scaler.transform(y_test)
+# Data Generator
+# ------------------------------------------------------------------------
+
+print('X shape trained', x_train_scaled.shape)
+print('Y shape trained', y_train_scaled.shape)
+
+
+def batch_generator(batch_size, sequence_length):
+    """
+    Generator function for creating random batches of training-data.
+    """
+
+    # Infinite loop.
+    while True:
+        # Allocate a new array for the batch of input-signals.
+        x_shape = (batch_size, sequence_length, num_x_signals)
+        x_batch = np.zeros(shape=x_shape, dtype=np.float16)
+
+        # Allocate a new array for the batch of output-signals.
+        y_shape = (batch_size, sequence_length, num_y_signals)
+        y_batch = np.zeros(shape=y_shape, dtype=np.float16)
+
+        # Fill the batch with random sequences of data.
+        for i in range(batch_size):
+            # Get a random start-index.
+            # This points somewhere into the training-data.
+            idx = np.random.randint(num_train - sequence_length)
+
+            # Copy the sequences of data starting at this index.
+            x_batch[i] = x_train_scaled[idx:idx + sequence_length]
+            y_batch[i] = y_train_scaled[idx:idx + sequence_length]
+
+        yield (x_batch, y_batch)
+
+
+
+batch_size = 256
+sequence_length = int(24 * 60 / 5) # 1 day
+
+generator = batch_generator(batch_size=batch_size, sequence_length=sequence_length)
+
+x_batch, y_batch = next(generator)
+
+# print(sequence_length)
+# print(len(x_batch))
+# print(len(y_batch))
+# print(x_batch)
+
+# print(x_batch.shape)
+# print(y_batch.shape)
+
+
+batch = 0   # First sequence in the batch.
+signal = 0  # First signal from the 20 input-signals.
+
+seq = x_batch[batch, :, signal]
+plt.plot(seq)
+seq = y_batch[batch, :, signal]
+plt.plot(seq)
+
+plt.show()
+
+
+# Validation Set
+# ------------------------------------------------------------------------
+
+validation_data = (np.expand_dims(x_test_scaled, axis=0), np.expand_dims(y_test_scaled, axis=0))
