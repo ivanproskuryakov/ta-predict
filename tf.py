@@ -11,7 +11,7 @@ from keras.layers import Input, Dense, GRU, Embedding
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, ReduceLROnPlateau
 from keras.backend import square, mean
 
-# Load data
+    # Load data
 # ------------------------------------------------------------------------
 
 asset = 'ROSE'
@@ -47,8 +47,8 @@ pd.options.display.precision = 12
 # ------------------------------------------------------------------------
 
 target_names = ['open', 'high', 'low', 'close', 'volume']
-shift_steps = int(24 * 60 / 5)
-# shift_steps = 10
+# shift_steps = int(24 * 60 / 5)
+shift_steps = 1000
 
 # Create a new data-frame with the time-shifted data.
 df_targets = df.shift(-shift_steps)
@@ -58,6 +58,11 @@ x_data = df.values[0:-shift_steps]
 
 # These are the output-signals (or target-signals):
 y_data = df_targets.values[:-shift_steps]
+
+# print(len(df))
+# print(len(x_data))
+# print(len(y_data))
+# exit()
 
 num_data = len(x_data)
 train_split = 0.9
@@ -145,33 +150,10 @@ def batch_generator(batch_size, sequence_length):
         yield (x_batch, y_batch)
 
 
-
 batch_size = 256
 sequence_length = int(24 * 60 / 5) # 1 day
 
 generator = batch_generator(batch_size=batch_size, sequence_length=sequence_length)
-
-x_batch, y_batch = next(generator)
-
-# print(sequence_length)
-# print(len(x_batch))
-# print(len(y_batch))
-# print(x_batch)
-
-# print(x_batch.shape)
-# print(y_batch.shape)
-
-
-batch = 0   # First sequence in the batch.
-signal = 0  # First signal from the 20 input-signals.
-
-# seq = x_batch[batch, :, signal]
-# plt.plot(seq)
-# seq = y_batch[batch, :, signal]
-# plt.plot(seq)
-#
-# plt.show()
-
 
 # Validation Set
 # ------------------------------------------------------------------------
@@ -180,7 +162,6 @@ validation_data = (
     np.expand_dims(x_test_scaled, axis=0),
     np.expand_dims(y_test_scaled, axis=0)
 )
-
 
 # Create the Recurrent Neural Network
 # ------------------------------------------------------------------------
@@ -192,7 +173,6 @@ model.add(
     )
 )
 model.add(Dense(num_y_signals, activation='sigmoid'))
-
 
 # Loss Function
 # ------------------------------------------------------------------------
@@ -270,16 +250,6 @@ model.fit(x=generator,
           validation_data=validation_data,
           callbacks=callbacks)
 
-
-# Load Checkpoint
-# ------------------------------------------------------------------------
-try:
-    model.load_weights(path_checkpoint)
-except Exception as error:
-    print("Error trying to load checkpoint.")
-    print(error)
-
-
 # Performance on Test-Set
 # ------------------------------------------------------------------------
 
@@ -287,12 +257,6 @@ result = model.evaluate(x=np.expand_dims(x_test_scaled, axis=0),
                         y=np.expand_dims(y_test_scaled, axis=0))
 
 print("loss (test-set):", result)
-
-# If you have several metrics you can use this instead.
-if False:
-    for res, metric in zip(result, model.metrics_names):
-        print("{0}: {1:.3e}".format(metric, res))
-
 
 # Generate Predictions
 # ------------------------------------------------------------------------
@@ -349,13 +313,10 @@ def plot_comparison(start_idx = 0, length=100, train=True):
         plt.plot(signal_true, label='true')
         plt.plot(signal_pred, label='pred')
 
-        # Plot grey box for warmup-period.
-        p = plt.axvspan(0, warmup_steps, facecolor='black', alpha=0.15)
-
         # Plot labels etc.
         plt.ylabel(target_names[signal])
         plt.legend()
         plt.show()
 
 
-plot_comparison(start_idx=0, length=10000, train=True)
+plot_comparison(start_idx=0, length=50000, train=True)
