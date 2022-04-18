@@ -11,7 +11,7 @@ from keras.layers import Input, Dense, GRU, Embedding
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, ReduceLROnPlateau
 from keras.backend import square, mean
 
-    # Load data
+# Load data
 # ------------------------------------------------------------------------
 
 asset = 'ROSE'
@@ -43,31 +43,24 @@ df = pd.DataFrame(prepared, None, [
 pd.options.display.precision = 12
 
 
-# Sets preparation
+target_names = [
+    'open',
+    # 'high', 'low', 'close', 'volume'
+]
+
+
+# Data preparation and scaling
 # ------------------------------------------------------------------------
 
-target_names = ['open', 'high', 'low', 'close', 'volume']
-# shift_steps = int(24 * 60 / 5)
-shift_steps = 1000
+shift_steps = 100
 
-# Create a new data-frame with the time-shifted data.
-df_targets = df.shift(-shift_steps)
+x_data = df.values[:-shift_steps]
+y_data = df.values[shift_steps:]
 
-# These are the input-signals:
-x_data = df.values[0:-shift_steps]
-
-# These are the output-signals (or target-signals):
-y_data = df_targets.values[:-shift_steps]
-
-# print(len(df))
-# print(len(x_data))
-# print(len(y_data))
-# exit()
-
-num_data = len(x_data)
 train_split = 0.9
+num_data = len(x_data)
 num_train = int(train_split * num_data)
-num_test = num_data - num_train
+num_signals = x_data.shape[1]
 
 x_train = x_data[0:num_train]
 x_test = x_data[num_train:]
@@ -75,18 +68,6 @@ x_test = x_data[num_train:]
 y_train = y_data[0:num_train]
 y_test = y_data[num_train:]
 
-num_x_signals = x_data.shape[1]
-num_y_signals = y_data.shape[1]
-
-
-# Scaling
-# ------------------------------------------------------------------------
-
-print('num train', num_train)
-print('num test', num_test)
-print('num all', len(x_train) + len(x_test))
-
-print('signals', num_x_signals, num_y_signals)
 
 x_scaler = MinMaxScaler()
 x_train_scaled = x_scaler.fit_transform(x_train)
@@ -96,31 +77,9 @@ y_scaler = MinMaxScaler()
 y_train_scaled = y_scaler.fit_transform(y_train)
 y_test_scaled = y_scaler.transform(y_test)
 
-print("X Min:", np.min(x_train))
-print("X Max:", np.max(x_train))
-
-print("X Min scaled train:", np.min(x_train_scaled))
-print("X Max scaled train:", np.max(x_train_scaled))
-
-print("X Min text train:", np.min(x_test_scaled))
-print("X Max text train:", np.max(x_test_scaled))
-
-print("Y Min:", np.min(y_train))
-print("Y Max:", np.max(y_train))
-
-print("Y Min scaled train:", np.min(y_train_scaled))
-print("Y Max scaled train:", np.max(y_train_scaled))
-
-print("Y Min text train:", np.min(y_train_scaled))
-print("Y Max text train:", np.max(y_train_scaled))
-
 
 # Data Generator
 # ------------------------------------------------------------------------
-
-print('X shape trained', x_train_scaled.shape)
-print('Y shape trained', y_train_scaled.shape)
-
 
 def batch_generator(batch_size, sequence_length):
     """
@@ -130,11 +89,11 @@ def batch_generator(batch_size, sequence_length):
     # Infinite loop.
     while True:
         # Allocate a new array for the batch of input-signals.
-        x_shape = (batch_size, sequence_length, num_x_signals)
+        x_shape = (batch_size, sequence_length, num_signals)
         x_batch = np.zeros(shape=x_shape, dtype=np.float16)
 
         # Allocate a new array for the batch of output-signals.
-        y_shape = (batch_size, sequence_length, num_y_signals)
+        y_shape = (batch_size, sequence_length, num_signals)
         y_batch = np.zeros(shape=y_shape, dtype=np.float16)
 
         # Fill the batch with random sequences of data.
@@ -152,8 +111,8 @@ def batch_generator(batch_size, sequence_length):
 
 batch_size = 256
 sequence_length = int(24 * 60 / 5) # 1 day
-
 generator = batch_generator(batch_size=batch_size, sequence_length=sequence_length)
+
 
 # Validation Set
 # ------------------------------------------------------------------------
@@ -163,16 +122,18 @@ validation_data = (
     np.expand_dims(y_test_scaled, axis=0)
 )
 
+
 # Create the Recurrent Neural Network
 # ------------------------------------------------------------------------
 model = Sequential()
 model.add(
     GRU(units=512,
       return_sequences=True,
-      input_shape=(None, num_x_signals,)
+      input_shape=(None, num_signals,)
     )
 )
-model.add(Dense(num_y_signals, activation='sigmoid'))
+model.add(Dense(num_signals, activation='sigmoid'))
+
 
 # Loss Function
 # ------------------------------------------------------------------------
@@ -189,7 +150,7 @@ def loss_mse_warmup(y_true, y_pred):
     """
 
     # The shape of both input tensors are:
-    # [batch_size, sequence_length, num_y_signals].
+    # [batch_size, sequence_length, num_signals].
 
     # Ignore the "warmup" parts of the sequences
     # by taking slices of the tensors.
@@ -197,9 +158,9 @@ def loss_mse_warmup(y_true, y_pred):
     y_pred_slice = y_pred[:, warmup_steps:, :]
 
     # These sliced tensors both have this shape:
-    # [batch_size, sequence_length - warmup_steps, num_y_signals]
+    # [batch_size, sequence_length - warmup_steps, num_signals]
 
-    # Calculat the Mean Squared Error and use it as loss.
+    # Calculate the Mean Squared Error and use it as loss.
     mse = mean(square(y_true_slice - y_pred_slice))
 
     return mse
@@ -208,7 +169,7 @@ def loss_mse_warmup(y_true, y_pred):
 # Compile Model
 # ------------------------------------------------------------------------
 
-optimizer = RMSprop(lr=1e-3)
+optimizer = RMSprop(learning_rate=1e-3)
 model.compile(loss=loss_mse_warmup, optimizer=optimizer)
 model.summary()
 
@@ -216,8 +177,7 @@ model.summary()
 # Callback Functions
 # ------------------------------------------------------------------------
 
-path_checkpoint = 'data/checkpoint_ta.keras'
-callback_checkpoint = ModelCheckpoint(filepath=path_checkpoint,
+callback_checkpoint = ModelCheckpoint(filepath='data/checkpoint_ta.keras',
                                       monitor='val_loss',
                                       verbose=1,
                                       save_weights_only=True,
@@ -244,9 +204,10 @@ callbacks = [callback_early_stopping,
 
 # Train the Recurrent Neural Network
 # ------------------------------------------------------------------------
+
 model.fit(x=generator,
           epochs=20,
-          steps_per_epoch=100,
+          steps_per_epoch=1,
           validation_data=validation_data,
           callbacks=callbacks)
 
