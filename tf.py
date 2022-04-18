@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from datetime import datetime
+
 from sklearn.preprocessing import MinMaxScaler
 from binance import Client
 from service.reader_ta import ReaderTA
@@ -23,24 +25,26 @@ prepared = []
 
 for i in range(0, len(collection)):
     prepared.append([
-        # datetime.utcfromtimestamp(collection[i]['time_open']),
+        datetime.utcfromtimestamp(collection[i]['time_open']),
         collection[i]['price_open'],
-        collection[i]['price_high'],
-        collection[i]['price_low'],
-        collection[i]['price_close'],
-        collection[i]['volume'],
-
-        collection[i]['avg_percentage'],
-        collection[i]['trades'],
-        collection[i]['volume_taker'],
+        # collection[i]['price_high'],
+        # collection[i]['price_low'],
+        # collection[i]['price_close'],
+        # collection[i]['volume'],
+        #
+        # collection[i]['avg_percentage'],
+        # collection[i]['trades'],
+        # collection[i]['volume_taker'],
     ])
 
 df = pd.DataFrame(prepared, None, [
-    # 'date',
-    'open', 'high', 'low', 'close', 'volume',
-    'avg_percentage', 'trades', 'volume_taker'
+    'date',
+    'open',
+    # 'high', 'low', 'close', 'volume',
+    # 'avg_percentage', 'trades', 'volume_taker'
 ])
 pd.options.display.precision = 12
+np.set_printoptions(precision=12, suppress=True)
 
 
 target_names = [
@@ -52,10 +56,34 @@ target_names = [
 # Data preparation and scaling
 # ------------------------------------------------------------------------
 
-shift_steps = 100
+shift_steps = 5
 
-x_data = df.values[:-shift_steps]
-y_data = df.values[shift_steps:]
+x_data = df.values[:-shift_steps] # cut tail, array size - 5
+# y_data = df.shift(-shift_steps).values[:-shift_steps]
+y_data = df.values[shift_steps:] # cut head
+
+print('---------------------------------')
+print('HEAD')
+print('df')
+print(df.head(10))
+print('x')
+print(x_data[:10])
+print('y')
+print(y_data[:10])
+
+print('TAIL')
+print('df')
+print(df.tail(10))
+print('x')
+print(x_data[-shift_steps:])
+print('y')
+print(y_data[-shift_steps:])
+
+print(len(df))
+print(len(x_data))
+print(len(y_data))
+exit()
+
 
 train_split = 0.9
 num_data = len(x_data)
@@ -169,7 +197,7 @@ def loss_mse_warmup(y_true, y_pred):
 # Compile Model
 # ------------------------------------------------------------------------
 
-optimizer = RMSprop(learning_rate=1e-3)
+optimizer = RMSprop(learning_rate=0.001)
 model.compile(loss=loss_mse_warmup, optimizer=optimizer)
 model.summary()
 
@@ -206,8 +234,8 @@ callbacks = [callback_early_stopping,
 # ------------------------------------------------------------------------
 
 model.fit(x=generator,
-          epochs=20,
-          steps_per_epoch=1,
+          epochs=10,
+          steps_per_epoch=50,
           validation_data=validation_data,
           callbacks=callbacks)
 
@@ -222,7 +250,7 @@ print("loss (test-set):", result)
 # Generate Predictions
 # ------------------------------------------------------------------------
 
-def plot_comparison(start_idx = 0, length=100, train=True):
+def plot_comparison(start_idx, length, train=True):
     """
     Plot the predicted and true output-signals.
 
