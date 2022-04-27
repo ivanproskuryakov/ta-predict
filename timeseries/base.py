@@ -59,21 +59,9 @@ df['Day cos'] = np.cos(timestamp_s * (2 * np.pi / day))
 df['Year sin'] = np.sin(timestamp_s * (2 * np.pi / year))
 df['Year cos'] = np.cos(timestamp_s * (2 * np.pi / year))
 
-fft = tf.signal.rfft(df['T (degC)'])
-f_per_dataset = np.arange(0, len(fft))
-
-n_samples_h = len(df['T (degC)'])
-hours_per_year = 24 * 365.2524
-years_per_dataset = n_samples_h / (hours_per_year)
-
-f_per_year = f_per_dataset / years_per_dataset
-
 
 # Split the data
 # --------------
-
-column_indices = {name: i for i, name in enumerate(df.columns)}
-
 n = len(df)
 train_df = df[0:int(n * 0.7)]
 val_df = df[int(n * 0.7):int(n * 0.9)]
@@ -92,37 +80,3 @@ train_df = (train_df - train_mean) / train_std
 val_df = (val_df - train_mean) / train_std
 test_df = (test_df - train_mean) / train_std
 
-
-# WindowGenerator
-# ------------------------------------------------------------------
-
-wide_window = WindowGenerator(
-    input_width=24,
-    label_width=24,
-    shift=1,
-    label_columns=['T (degC)'],
-    train_df=train_df,
-    val_df=val_df,
-    test_df=test_df,
-)
-
-
-def compile_and_fit(model, window, patience=2):
-    early_stopping = tf.keras.callbacks.EarlyStopping(
-        monitor='val_loss',
-        patience=patience,
-        mode='min'
-    )
-    model.compile(
-        loss=tf.losses.MeanSquaredError(),
-        optimizer=tf.optimizers.Adam(),
-        metrics=[tf.metrics.MeanAbsoluteError()]
-    )
-    history = model.fit(
-        window.train,
-        epochs=20,
-        validation_data=window.val,
-        callbacks=[early_stopping]
-    )
-
-    return history
