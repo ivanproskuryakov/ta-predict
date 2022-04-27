@@ -53,7 +53,7 @@ target_names = [
 ]
 
 
-# Data preparation and scaling
+# Data preparation
 # ------------------------------------------------------------------------
 
 shift_steps = 5
@@ -96,6 +96,9 @@ x_test = x_data[num_train:]
 y_train = y_data[0:num_train]
 y_test = y_data[num_train:]
 
+
+# Data Scaling
+# ------------------------------------------------------------------------
 
 x_scaler = MinMaxScaler()
 x_train_scaled = x_scaler.fit_transform(x_train)

@@ -5,7 +5,8 @@ import pandas as pd
 from binance import Client
 from service.window_generator import WindowGenerator
 from service.reader_ta import ReaderTA
-from service.ta_estimator import estimate_ta
+from service.scaler import scale_data
+from service.estimator import estimate_ta
 
 # Data load
 # ------------------------------------------------------------------------
@@ -43,7 +44,11 @@ df = pd.DataFrame(prepared, None, [
     'volume_taker'
 ])
 
-df = estimate_ta(df)
+df_ta = estimate_ta(df)
+df_scaled = scale_data(df_ta)
+
+df = df.fillna(0)
+
 
 # Data split
 # --------------------------------------------------------
@@ -62,6 +67,7 @@ train_df = (train_df - train_mean) / train_std
 val_df = (val_df - train_mean) / train_std
 test_df = (test_df - train_mean) / train_std
 
+
 # Generator function
 # --------------------------------------------------------
 
@@ -78,7 +84,7 @@ window = WindowGenerator(
 
 model = tf.keras.models.Sequential([
     # Shape [batch, time, features] => [batch, time, lstm_units]
-    tf.keras.layers.LSTM(32, return_sequences=True),
+    tf.keras.layers.LSTM(64, return_sequences=True),
     # Shape => [batch, time, features]
     tf.keras.layers.Dense(units=1)
 ])

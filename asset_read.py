@@ -6,7 +6,7 @@ from datetime import datetime
 from binance import Client
 
 from service.reader import Reader
-from service.estimator import Estimator
+from service.estimator import trades_diff_total
 
 # ----
 asset = sys.argv[1]
@@ -14,7 +14,6 @@ interval = Client.KLINE_INTERVAL_5MINUTE
 # ----
 
 reader = Reader()
-estimator = Estimator()
 collection = reader.read(asset, interval)
 
 positive = {
@@ -170,4 +169,4 @@ print(negative)
 print('\n')
 print('Tades')
 print('-----------------')
-print(len(trades), f'{estimator.trades_diff_total(trades):.20f}')
+print(len(trades), f'{trades_diff_total(trades):.20f}')
