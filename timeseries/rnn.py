@@ -3,13 +3,36 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-from base import train_df, val_df, test_df
+from base import df
 from window_generator import WindowGenerator
+
+
+# Split the data
+# --------------
+n = len(df)
+train_df = df[0:int(n * 0.7)]
+val_df = df[int(n * 0.7):int(n * 0.9)]
+test_df = df[int(n * 0.9):]
+
+
+# Normalize the data
+# ------------------
+
+train_mean = train_df.mean()
+train_std = train_df.std()
+
+train_df = (train_df - train_mean) / train_std
+val_df = (val_df - train_mean) / train_std
+test_df = (test_df - train_mean) / train_std
+
+
+# Generator function
+# ------------------
 
 window = WindowGenerator(
     input_width=24,
     label_width=24,
-    shift=3,
+    shift=6,
     label_columns=['T (degC)'],
     train_df=train_df,
     val_df=val_df,

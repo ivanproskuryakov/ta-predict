@@ -125,10 +125,3 @@ class WindowGenerator:
         ds = ds.map(self.split_window)
 
         return ds
-
-    def __repr__(self):
-        return '\n'.join([
-            f'Total window size: {self.total_window_size}',
-            f'Input indices: {self.input_indices}',
-            f'Label indices: {self.label_indices}',
-            f'Label column name(s): {self.label_columns}'])
