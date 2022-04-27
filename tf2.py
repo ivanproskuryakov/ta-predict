@@ -1,10 +1,9 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
-import pandas as pd
 
 from binance import Client
 from service.window_generator import WindowGenerator
-from service.reader_ta import ReaderTA
+from service.reader_ta import read
 from service.scaler import scale_data
 from service.estimator import estimate_ta
 
@@ -13,41 +12,15 @@ from service.estimator import estimate_ta
 asset = 'ROSE'
 interval = Client.KLINE_INTERVAL_5MINUTE
 
-reader = ReaderTA()
-collection = reader.read(asset, interval)
-prepared = []
+df_raw = read(asset, interval)
+df_ta = estimate_ta(df_raw)
+df_nan = df_ta.fillna(0)
+df = scale_data(df_nan)
 
-for i in range(0, len(collection)):
-    prepared.append([
-        # datetime.utcfromtimestamp(collection[i]['time_open']),
-        collection[i]['price_open'],
-        collection[i]['price_high'],
-        collection[i]['price_low'],
-        collection[i]['price_close'],
 
-        collection[i]['volume'],
-        collection[i]['avg_percentage'],
-        collection[i]['trades'],
-        collection[i]['volume_taker'],
-    ])
-
-df = pd.DataFrame(prepared, None, [
-    # 'date',
-    'open',
-    'high',
-    'low',
-    'close',
-
-    'volume',
-    'avg_percentage',
-    'trades',
-    'volume_taker'
-])
-
-df_ta = estimate_ta(df)
-df_scaled = scale_data(df_ta)
-
-df = df.fillna(0)
+# print(df_raw)
+# print(df)
+# exit()
 
 
 # Data split
@@ -106,6 +79,6 @@ history = model.fit(
     callbacks=[early_stopping]
 )
 
-window.plot(model, 'open', 3)
+window.plot(model, 'open', 4)
 
 plt.show()
