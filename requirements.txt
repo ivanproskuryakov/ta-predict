@@ -8,3 +8,4 @@ pandas
 tensorflow-macos
 matplotlib
 sklearn
+IPython
