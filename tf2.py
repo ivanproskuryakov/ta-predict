@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from binance import Client
-
 from service.window_generator import WindowGenerator
 from service.reader_ta import ReaderTA
+from service.ta_estimator import estimate_ta
 
 # Data load
 # ------------------------------------------------------------------------
@@ -43,7 +43,7 @@ df = pd.DataFrame(prepared, None, [
     'volume_taker'
 ])
 
-print(len(df))
+df = estimate_ta(df)
 
 # Data split
 # --------------------------------------------------------
@@ -69,7 +69,7 @@ window = WindowGenerator(
     input_width=30,
     label_width=30,
     shift=1,
-    batch_size=256,
+    batch_size=56,
     label_columns=['open'],
     train_df=train_df,
     val_df=val_df,
@@ -100,6 +100,6 @@ history = model.fit(
     callbacks=[early_stopping]
 )
 
-window.plot(model, 'open', 5)
+window.plot(model, 'open', 3)
 
 plt.show()
