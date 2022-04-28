@@ -18,11 +18,13 @@ class KLines:
         # Maker - an order that goes on the order book partially or fully
 
         # 0 Open time,
+
         # 1 Open,
         # 2 High,
         # 3 Low,
         # 4 Close,
         # 5 Volume,
+
         # 6 Close time,
 
         # 7 Quote asset volume,

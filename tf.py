@@ -25,7 +25,7 @@ prepared = []
 
 for i in range(0, len(collection)):
     prepared.append([
-        datetime.utcfromtimestamp(collection[i]['time_open']),
+        # datetime.utcfromtimestamp(collection[i]['time_open']),
         collection[i]['price_open'],
         # collection[i]['price_high'],
         # collection[i]['price_low'],
@@ -38,7 +38,7 @@ for i in range(0, len(collection)):
     ])
 
 df = pd.DataFrame(prepared, None, [
-    'date',
+    # 'date',
     'open',
     # 'high', 'low', 'close', 'volume',
     # 'avg_percentage', 'trades', 'volume_taker'
@@ -82,7 +82,7 @@ print(y_data[-shift_steps:])
 print(len(df))
 print(len(x_data))
 print(len(y_data))
-exit()
+# exit()
 
 
 train_split = 0.9
