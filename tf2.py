@@ -4,7 +4,6 @@ import tensorflow as tf
 from keras.layers import Dense, GRU, LSTM
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
 
-
 from binance import Client
 from service.window_generator import WindowGenerator
 from service.reader_ta import read
@@ -17,7 +16,7 @@ asset = 'ROSE'
 # interval = Client.KLINE_INTERVAL_1MINUTE
 # interval = Client.KLINE_INTERVAL_3MINUTE
 # interval = Client.KLINE_INTERVAL_5MINUTE
-interval = Client.KLINE_INTERVAL_30MINUTE
+interval = Client.KLINE_INTERVAL_12HOUR
 
 df_raw = read(asset, interval)
 df_ta = estimate_ta(df_raw)
@@ -47,10 +46,10 @@ test_df = (test_df - train_mean) / train_std
 # --------------------------------------------------------
 
 window = WindowGenerator(
-    input_width=50,
-    label_width=50,
-    shift=1,
-    batch_size=64,
+    input_width=30,
+    label_width=30,
+    shift=4,
+    batch_size=10,
     label_columns=['open'],
     train_df=train_df,
     val_df=val_df,
@@ -59,19 +58,19 @@ window = WindowGenerator(
 
 model = tf.keras.models.Sequential([
     GRU(
-        units=50,
+        units=200,
         return_sequences=True,
         input_shape=(None, df_num_signals,)
     ),
-    # LSTM(50, return_sequences=True),
+    LSTM(200, return_sequences=True),
     Dense(units=1),
 ])
 
 callback_early_stopping = EarlyStopping(
     monitor='val_loss',
     patience=5,
-    # mode='min',
-    # verbose=1
+    mode='min',
+    verbose=1
 )
 callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
@@ -81,7 +80,6 @@ callback_reduce_lr = ReduceLROnPlateau(
     verbose=1
 )
 
-
 model.compile(
     loss=tf.losses.MeanSquaredError(),
     optimizer=tf.optimizers.Adam(),
@@ -90,10 +88,10 @@ model.compile(
 
 history = model.fit(
     window.train,
-    epochs=20,
+    epochs=100,
     validation_data=window.val,
     callbacks=[
-        callback_early_stopping,
+        # callback_early_stopping,
         callback_reduce_lr,
     ]
 )
