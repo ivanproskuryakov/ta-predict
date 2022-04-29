@@ -2,45 +2,25 @@ import matplotlib.pyplot as plt
 
 import tensorflow as tf
 from keras.layers import Dense, GRU, LSTM
-from keras.callbacks import ReduceLROnPlateau, EarlyStopping
+from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 from binance import Client
+from service.dataset import build_dataset
 from service.window_generator import WindowGenerator
-from service.reader_ta import read
-from service.scaler import scale_data
-from service.estimator import estimate_ta
 
 # Data load
 # ------------------------------------------------------------------------
-asset = 'ROSE'
+asset = 'SOL'
 # interval = Client.KLINE_INTERVAL_1MINUTE
 # interval = Client.KLINE_INTERVAL_3MINUTE
 # interval = Client.KLINE_INTERVAL_5MINUTE
-interval = Client.KLINE_INTERVAL_12HOUR
+interval = Client.KLINE_INTERVAL_1HOUR
+# interval = Client.KLINE_INTERVAL_4HOUR
+# interval = Client.KLINE_INTERVAL_12HOUR
 
-df_raw = read(asset, interval)
-df_ta = estimate_ta(df_raw)
-df_nan = df_ta.fillna(0)
-df = scale_data(df_nan)
+filepath_weights = f'data/ta_{asset}_{interval}.keras'
 
-df_num_signals = df.shape[1]
-
-# Data split
-# --------------------------------------------------------
-n = len(df)
-train_df = df[0:int(n * 0.7)]
-val_df = df[int(n * 0.7):int(n * 0.9)]
-test_df = df[int(n * 0.9):]
-
-# Normalize the data
-# --------------------------------------------------------
-
-train_mean = train_df.mean()
-train_std = train_df.std()
-
-train_df = (train_df - train_mean) / train_std
-val_df = (val_df - train_mean) / train_std
-test_df = (test_df - train_mean) / train_std
+[train_df, val_df, test_df, df_num_signals] = build_dataset(asset=asset, interval=interval)
 
 # Generator function
 # --------------------------------------------------------
@@ -48,7 +28,7 @@ test_df = (test_df - train_mean) / train_std
 window = WindowGenerator(
     input_width=30,
     label_width=30,
-    shift=4,
+    shift=8,
     batch_size=10,
     label_columns=['open'],
     train_df=train_df,
@@ -58,11 +38,11 @@ window = WindowGenerator(
 
 model = tf.keras.models.Sequential([
     GRU(
-        units=200,
+        units=20,
         return_sequences=True,
         input_shape=(None, df_num_signals,)
     ),
-    LSTM(200, return_sequences=True),
+    LSTM(20, return_sequences=True),
     Dense(units=1),
 ])
 
@@ -86,16 +66,30 @@ model.compile(
     metrics=[tf.metrics.MeanAbsoluteError()]
 )
 
-history = model.fit(
+callback_checkpoint = ModelCheckpoint(
+    filepath=filepath_weights,
+    monitor='val_loss',
+    verbose=1,
+    save_weights_only=True,
+    save_best_only=True
+)
+
+model.fit(
     window.train,
-    epochs=100,
+    epochs=2,
     validation_data=window.val,
     callbacks=[
         # callback_early_stopping,
         callback_reduce_lr,
+        callback_checkpoint,
     ]
 )
 
-window.plot(model, 'open', 4)
+model.save_weights(f'data/ta_{asset}.keras')
 
-plt.show()
+
+# print(model.summary())
+
+# window.plot(model, 'open', 4)
+#
+# plt.show()

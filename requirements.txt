@@ -5,6 +5,7 @@ python-binance
 yachalk
 arrow
 pandas
+binance
 tensorflow-macos
 matplotlib
 sklearn

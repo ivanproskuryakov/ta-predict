@@ -94,6 +94,6 @@ for key in tadf.keys():
     # print(row)
     # print('\n')
 
-# plt.show()
-
-# print(df['open'])
+plt.show()
+#
+print(df['open'])

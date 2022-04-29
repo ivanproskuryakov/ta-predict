@@ -9,7 +9,8 @@ pip install --force-reinstall -r requirements.txt
 
 ### Commands
 ```
-source ./venv/bin/activate
+python -m venv .env
+source .env/bin/activate
 
 python markets-dump.py
 python asset_dump.py
