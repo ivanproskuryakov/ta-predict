@@ -12,12 +12,13 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, ReduceL
 from keras.backend import square, mean
 
 from service.dataset_builder import build_dataset
+from service.generator_batch import batch_generator
 
 # Load data
 # ------------------------------------------------------------------------
 
-pd.options.display.precision = 12
-np.set_printoptions(precision=12, suppress=True)
+pd.options.display.precision = 30
+np.set_printoptions(precision=30, suppress=True)
 
 asset = 'ROSE'
 interval = Client.KLINE_INTERVAL_5MINUTE
@@ -33,36 +34,11 @@ target_names = [
 shift_steps = 5
 
 x_data = df.values[:-shift_steps]  # cut tail, array size - 5
-# y_data = df.shift(-shift_steps).values[:-shift_steps]
 y_data = df.values[shift_steps:]  # cut head
 
-print('---------------------------------')
-print('HEAD')
-print('df')
-print(df.head(10))
-print('x')
-print(x_data[:10])
-print('y')
-print(y_data[:10])
-
-print('TAIL')
-print('df')
-print(df.tail(10))
-print('x')
-print(x_data[-shift_steps:])
-print('y')
-print(y_data[-shift_steps:])
-
-# print(len(df))
-# print(len(x_data))
-# print(len(y_data))
-# exit()
-
-
-train_split = 0.9
 num_data = len(x_data)
-num_train = int(train_split * num_data)
-num_signals = x_data.shape[1]
+num_train = int(0.9 * num_data)
+df_num_signals = x_data.shape[1]
 
 x_train = x_data[0:num_train]
 x_test = x_data[num_train:]
@@ -81,41 +57,26 @@ y_scaler = MinMaxScaler()
 y_train_scaled = y_scaler.fit_transform(y_train)
 y_test_scaled = y_scaler.transform(y_test)
 
+print('------')
+print(y_train_scaled)
+print('------')
+print(y_train_scaled[0])
+
+exit()
 
 # Data Generator
 # ------------------------------------------------------------------------
 
-def batch_generator(batch_size, sequence_length):
-    """
-    Generator function for creating random batches of training-data.
-    """
-
-    # Infinite loop.
-    while True:
-        # Allocate a new array for the batch of input-signals.
-        x_shape = (batch_size, sequence_length, num_signals)
-        x_batch = np.zeros(shape=x_shape, dtype=np.float16)
-
-        # Allocate a new array for the batch of output-signals.
-        y_shape = (batch_size, sequence_length, num_signals)
-        y_batch = np.zeros(shape=y_shape, dtype=np.float16)
-
-        # Fill the batch with random sequences of data.
-        for i in range(batch_size):
-            # Get a random start-index.
-            # This points somewhere into the training-data.
-            idx = np.random.randint(num_train - sequence_length)
-
-            # Copy the sequences of data starting at this index.
-            x_batch[i] = x_train_scaled[idx:idx + sequence_length]
-            y_batch[i] = y_train_scaled[idx:idx + sequence_length]
-
-        yield (x_batch, y_batch)
-
 
 batch_size = 256
 sequence_length = int(24 * 60 / 5)  # 1 day
-generator = batch_generator(batch_size=batch_size, sequence_length=sequence_length)
+
+generator = batch_generator(
+    x_data=x_train_scaled,
+    y_data=y_train_scaled,
+    batch_size=batch_size,
+    sequence_length=sequence_length,
+)
 
 # Validation Set
 # ------------------------------------------------------------------------
@@ -131,10 +92,10 @@ model = Sequential()
 model.add(
     GRU(units=50,
         return_sequences=True,
-        input_shape=(None, num_signals,)
+        input_shape=(None, df_num_signals,)
         )
 )
-model.add(Dense(num_signals, activation='sigmoid'))
+model.add(Dense(df_num_signals, activation='sigmoid'))
 
 
 # Loss Function

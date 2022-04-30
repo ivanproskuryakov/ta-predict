@@ -1,11 +1,12 @@
 import tensorflow as tf
+import matplotlib.pyplot as plt
 
 from keras.layers import Dense, GRU, LSTM
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 from binance import Client
-from service.data_analyser import build_dataset
-from service.window_generator import WindowGenerator
+from service.dataset_builder import build_dataset_prepared
+from service.generator_window import WindowGenerator
 
 # Data load
 # ------------------------------------------------------------------------
@@ -19,7 +20,7 @@ interval = Client.KLINE_INTERVAL_1HOUR
 # interval = Client.KLINE_INTERVAL_12HOUR
 filepath_model = f'data/ta_{asset}_{interval}.keras'
 
-[train_df, val_df, test_df, df_num_signals] = build_dataset(asset=asset, interval=interval)
+[df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(asset=asset, interval=interval)
 
 # Generator function
 # --------------------------------------------------------
@@ -27,7 +28,7 @@ filepath_model = f'data/ta_{asset}_{interval}.keras'
 window = WindowGenerator(
     input_width=30,
     label_width=30,
-    shift=8,
+    shift=24,
     batch_size=10,
     label_columns=['open'],
     train_df=train_df,
@@ -75,7 +76,7 @@ callback_checkpoint = ModelCheckpoint(
 
 model.fit(
     window.train,
-    epochs=2,
+    epochs=20,
     validation_data=window.val,
     callbacks=[
         # callback_early_stopping,
@@ -88,6 +89,6 @@ model.save(filepath_model)
 
 # print(model.summary())
 
-# window.plot(model, 'open', 4)
-#
-# plt.show()
+window.plot(model, 'open', 1)
+
+plt.show()
