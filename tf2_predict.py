@@ -1,7 +1,4 @@
-import matplotlib.pyplot as plt
-
 import tensorflow as tf
-from keras.layers import Dense, GRU, LSTM
 
 from binance import Client
 from service.window_generator import WindowGenerator
@@ -14,10 +11,13 @@ asset = 'SOL'
 interval = Client.KLINE_INTERVAL_1HOUR
 filepath_model = f'data/ta_{asset}_{interval}.keras'
 
-[train_df, val_df, test_df, df_num_signals] = build_dataset(
-    asset=asset,
-    interval=interval
-)
+[train_df, val_df, test_df, df_num_signals] = build_dataset(asset=asset, interval=interval)
+
+df = val_df[-30:]
+
+# print(df)
+# print(len(df))
+# exit()
 
 # Generator function
 # --------------------------------------------------------
@@ -32,21 +32,10 @@ window = WindowGenerator(
     val_df=val_df,
     test_df=test_df,
 )
+model = tf.keras.models.load_model(filepath_model)
 
-model = tf.keras.models.Sequential([
-    GRU(
-        units=20,
-        return_sequences=True,
-        input_shape=(None, df_num_signals,)
-    ),
-    LSTM(20, return_sequences=True),
-    Dense(units=1),
-])
-
-model.load_weights(filepath_model)
 
 print(model.summary())
+# model.predict(val_df)
 
-window.plot(model, 'open', 10)
-
-plt.show()
+# plt.show()

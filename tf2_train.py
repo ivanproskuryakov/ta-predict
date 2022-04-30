@@ -1,6 +1,5 @@
-import matplotlib.pyplot as plt
-
 import tensorflow as tf
+
 from keras.layers import Dense, GRU, LSTM
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
@@ -10,6 +9,7 @@ from service.window_generator import WindowGenerator
 
 # Data load
 # ------------------------------------------------------------------------
+
 asset = 'SOL'
 # interval = Client.KLINE_INTERVAL_1MINUTE
 # interval = Client.KLINE_INTERVAL_3MINUTE
@@ -17,8 +17,7 @@ asset = 'SOL'
 interval = Client.KLINE_INTERVAL_1HOUR
 # interval = Client.KLINE_INTERVAL_4HOUR
 # interval = Client.KLINE_INTERVAL_12HOUR
-
-filepath_weights = f'data/ta_{asset}_{interval}.keras'
+filepath_model = f'data/ta_{asset}_{interval}.keras'
 
 [train_df, val_df, test_df, df_num_signals] = build_dataset(asset=asset, interval=interval)
 
@@ -67,7 +66,7 @@ model.compile(
 )
 
 callback_checkpoint = ModelCheckpoint(
-    filepath=filepath_weights,
+    filepath=filepath_model,
     monitor='val_loss',
     verbose=1,
     save_weights_only=True,
@@ -81,12 +80,11 @@ model.fit(
     callbacks=[
         # callback_early_stopping,
         callback_reduce_lr,
-        callback_checkpoint,
+        # callback_checkpoint,
     ]
 )
 
-model.save_weights(f'data/ta_{asset}.keras')
-
+model.save(filepath_model)
 
 # print(model.summary())
 
