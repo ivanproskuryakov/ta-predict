@@ -2,7 +2,7 @@ import tensorflow as tf
 
 from binance import Client
 from service.window_generator import WindowGenerator
-from service.dataset import build_dataset
+from service.dataset_builder import build_dataset
 
 # Data load
 # ------------------------------------------------------------------------
@@ -26,7 +26,7 @@ window = WindowGenerator(
     input_width=30,
     label_width=30,
     shift=8,
-    batch_size=10,
+    batch_size=3,
     label_columns=['open'],
     train_df=train_df,
     val_df=val_df,

@@ -1,14 +1,18 @@
-from service.reader_ta import read
-from service.scaler import scale_data
+from service.asset_reader import read_asset_file
+from service.normalizer import scale_data
 from service.estimator import estimate_ta
 
 
 def build_dataset(asset, interval):
-    df_raw = read(asset, interval)
-    df_ta = estimate_ta(df_raw)
+    df_ohlc = read_asset_file(asset, interval)
+    df_ta = estimate_ta(df_ohlc)
     df_nan = df_ta.fillna(0)
     df = scale_data(df_nan)
 
+    return df
+
+def build_dataset_prepared(asset, interval):
+    df = build_dataset(asset, interval)
     df_num_signals = df.shape[1]
 
     # Data split
@@ -18,7 +22,7 @@ def build_dataset(asset, interval):
     val_df = df[int(n * 0.7):int(n * 0.9)]
     test_df = df[int(n * 0.9):]
 
-    # Normalize the data
+    # Sets preparation
     # --------------------------------------------------------
 
     train_mean = train_df.mean()
@@ -29,8 +33,9 @@ def build_dataset(asset, interval):
     test_df = (test_df - train_mean) / train_std
 
     return [
+        df,
         train_df,
         val_df,
         test_df,
-        train_df.shape[1]
+        df_num_signals
     ]

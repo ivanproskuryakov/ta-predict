@@ -1,7 +1,4 @@
-from service.dumper import AssetDumper
-from parameters import assets, intervals
+from service.asset_dumper import dump_many
+from parameters import assets, intervals, start_at
 
-start_at = '6 month ago UTC'
-
-dumper = AssetDumper()
-dumper.dumpMany(assets, intervals, start_at)
+dump_many(assets, intervals, start_at)

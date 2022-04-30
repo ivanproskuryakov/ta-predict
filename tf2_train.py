@@ -4,7 +4,7 @@ from keras.layers import Dense, GRU, LSTM
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 from binance import Client
-from service.dataset import build_dataset
+from service.data_analyser import build_dataset
 from service.window_generator import WindowGenerator
 
 # Data load

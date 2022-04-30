@@ -29,4 +29,6 @@ intervals = [
     Client.KLINE_INTERVAL_1DAY,
 ]
 
+start_at = '6 month ago UTC'
+
 # NEGATIVE_PEAK = 8

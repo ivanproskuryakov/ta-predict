@@ -2,65 +2,39 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from datetime import datetime
-
 from sklearn.preprocessing import MinMaxScaler
 from binance import Client
-from service.reader_ta import ReaderTA
+
 from keras.models import Sequential
 from keras.optimizer_v2.rmsprop import RMSprop
-from keras.layers import Input, Dense, GRU, Embedding
+from keras.layers import Dense, GRU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, ReduceLROnPlateau
 from keras.backend import square, mean
+
+from service.dataset_builder import build_dataset
 
 # Load data
 # ------------------------------------------------------------------------
 
-asset = 'ROSE'
-interval = Client.KLINE_INTERVAL_5MINUTE
-
-reader = ReaderTA()
-collection = reader.read(asset, interval)
-prepared = []
-
-for i in range(0, len(collection)):
-    prepared.append([
-        # datetime.utcfromtimestamp(collection[i]['time_open']),
-        collection[i]['price_open'],
-        # collection[i]['price_high'],
-        # collection[i]['price_low'],
-        # collection[i]['price_close'],
-        # collection[i]['volume'],
-        #
-        # collection[i]['avg_percentage'],
-        # collection[i]['trades'],
-        # collection[i]['volume_taker'],
-    ])
-
-df = pd.DataFrame(prepared, None, [
-    # 'date',
-    'open',
-    # 'high', 'low', 'close', 'volume',
-    # 'avg_percentage', 'trades', 'volume_taker'
-])
 pd.options.display.precision = 12
 np.set_printoptions(precision=12, suppress=True)
 
+asset = 'ROSE'
+interval = Client.KLINE_INTERVAL_5MINUTE
+df = build_dataset(asset=asset, interval=interval)
 
 target_names = [
     'open',
-    # 'high', 'low', 'close', 'volume'
 ]
-
 
 # Data preparation
 # ------------------------------------------------------------------------
 
 shift_steps = 5
 
-x_data = df.values[:-shift_steps] # cut tail, array size - 5
+x_data = df.values[:-shift_steps]  # cut tail, array size - 5
 # y_data = df.shift(-shift_steps).values[:-shift_steps]
-y_data = df.values[shift_steps:] # cut head
+y_data = df.values[shift_steps:]  # cut head
 
 print('---------------------------------')
 print('HEAD')
@@ -79,9 +53,9 @@ print(x_data[-shift_steps:])
 print('y')
 print(y_data[-shift_steps:])
 
-print(len(df))
-print(len(x_data))
-print(len(y_data))
+# print(len(df))
+# print(len(x_data))
+# print(len(y_data))
 # exit()
 
 
@@ -95,7 +69,6 @@ x_test = x_data[num_train:]
 
 y_train = y_data[0:num_train]
 y_test = y_data[num_train:]
-
 
 # Data Scaling
 # ------------------------------------------------------------------------
@@ -141,9 +114,8 @@ def batch_generator(batch_size, sequence_length):
 
 
 batch_size = 256
-sequence_length = int(24 * 60 / 5) # 1 day
+sequence_length = int(24 * 60 / 5)  # 1 day
 generator = batch_generator(batch_size=batch_size, sequence_length=sequence_length)
-
 
 # Validation Set
 # ------------------------------------------------------------------------
@@ -153,15 +125,14 @@ validation_data = (
     np.expand_dims(y_test_scaled, axis=0)
 )
 
-
 # Create the Recurrent Neural Network
 # ------------------------------------------------------------------------
 model = Sequential()
 model.add(
-    GRU(units=512,
-      return_sequences=True,
-      input_shape=(None, num_signals,)
-    )
+    GRU(units=50,
+        return_sequences=True,
+        input_shape=(None, num_signals,)
+        )
 )
 model.add(Dense(num_signals, activation='sigmoid'))
 
@@ -169,9 +140,8 @@ model.add(Dense(num_signals, activation='sigmoid'))
 # Loss Function
 # ------------------------------------------------------------------------
 
-warmup_steps = 50
-
 def loss_mse_warmup(y_true, y_pred):
+    warmup_steps = 50
     """
     Calculate the Mean Squared Error between y_true and y_pred,
     but ignore the beginning "warmup" part of the sequences.
@@ -204,51 +174,62 @@ optimizer = RMSprop(learning_rate=0.001)
 model.compile(loss=loss_mse_warmup, optimizer=optimizer)
 model.summary()
 
-
 # Callback Functions
 # ------------------------------------------------------------------------
 
-callback_checkpoint = ModelCheckpoint(filepath='data/checkpoint_ta.keras',
-                                      monitor='val_loss',
-                                      verbose=1,
-                                      save_weights_only=True,
-                                      save_best_only=True)
+callback_checkpoint = ModelCheckpoint(
+    filepath='data/checkpoint_ta.keras',
+    monitor='val_loss',
+    verbose=1,
+    save_weights_only=True,
+    save_best_only=True
+)
+callback_early_stopping = EarlyStopping(
+    monitor='val_loss',
+    patience=5,
+    verbose=1
+)
+callback_tensorboard = TensorBoard(
+    log_dir='data',
+    histogram_freq=0,
+    write_graph=False
+)
+callback_reduce_lr = ReduceLROnPlateau(
+    monitor='val_loss',
+    factor=0.1,
+    min_lr=1e-4,
+    patience=0,
+    verbose=1
+)
 
-callback_early_stopping = EarlyStopping(monitor='val_loss',
-                                        patience=5, verbose=1)
-
-callback_tensorboard = TensorBoard(log_dir='data',
-                                   histogram_freq=0,
-                                   write_graph=False)
-
-callback_reduce_lr = ReduceLROnPlateau(monitor='val_loss',
-                                       factor=0.1,
-                                       min_lr=1e-4,
-                                       patience=0,
-                                       verbose=1)
-
-callbacks = [callback_early_stopping,
-             callback_checkpoint,
-             callback_tensorboard,
-             callback_reduce_lr]
-
+callbacks = [
+    callback_early_stopping,
+    callback_checkpoint,
+    callback_tensorboard,
+    callback_reduce_lr
+]
 
 # Train the Recurrent Neural Network
 # ------------------------------------------------------------------------
 
-model.fit(x=generator,
-          epochs=10,
-          steps_per_epoch=50,
-          validation_data=validation_data,
-          callbacks=callbacks)
+model.fit(
+    x=generator,
+    epochs=10,
+    steps_per_epoch=50,
+    validation_data=validation_data,
+    callbacks=callbacks
+)
 
 # Performance on Test-Set
 # ------------------------------------------------------------------------
 
-result = model.evaluate(x=np.expand_dims(x_test_scaled, axis=0),
-                        y=np.expand_dims(y_test_scaled, axis=0))
+result = model.evaluate(
+    x=np.expand_dims(x_test_scaled, axis=0),
+    y=np.expand_dims(y_test_scaled, axis=0)
+)
 
 print("loss (test-set):", result)
+
 
 # Generate Predictions
 # ------------------------------------------------------------------------

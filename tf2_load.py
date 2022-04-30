@@ -5,7 +5,7 @@ from keras.layers import Dense, GRU, LSTM
 
 from binance import Client
 from service.window_generator import WindowGenerator
-from service.dataset import build_dataset
+from service.dataset_builder import build_dataset
 
 # Data load
 # ------------------------------------------------------------------------
