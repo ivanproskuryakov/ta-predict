@@ -148,6 +148,12 @@ class WindowGenerator:
             batch_size=self.batch_size,
         )
 
+        print(ds)
+        exit()
         ds = ds.map(self.split_window)
+
+
+        print(ds)
+        exit()
 
         return ds
