@@ -4,8 +4,8 @@ import tensorflow as tf
 from keras.layers import Dense, GRU, LSTM
 
 from binance import Client
-from service.window_generator import WindowGenerator
-from service.dataset_builder import build_dataset
+from service.generator_window import WindowGenerator
+from service.dataset_builder import build_dataset_prepared
 
 # Data load
 # ------------------------------------------------------------------------
@@ -14,7 +14,7 @@ asset = 'SOL'
 interval = Client.KLINE_INTERVAL_1HOUR
 filepath_model = f'data/ta_{asset}_{interval}.keras'
 
-[train_df, val_df, test_df, df_num_signals] = build_dataset(
+[df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(
     asset=asset,
     interval=interval
 )

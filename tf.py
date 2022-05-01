@@ -9,10 +9,10 @@ from keras.models import Sequential
 from keras.optimizer_v2.rmsprop import RMSprop
 from keras.layers import Dense, GRU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, ReduceLROnPlateau
-from keras.backend import square, mean
 
 from service.dataset_builder import build_dataset
 from service.generator_batch import batch_generator
+from service.loss import loss_mse_warmup
 
 # Load data
 # ------------------------------------------------------------------------
@@ -62,7 +62,7 @@ print(y_train_scaled)
 print('------')
 print(y_train_scaled[0])
 
-exit()
+# exit()
 
 # Data Generator
 # ------------------------------------------------------------------------
@@ -86,57 +86,21 @@ validation_data = (
     np.expand_dims(y_test_scaled, axis=0)
 )
 
-# Create the Recurrent Neural Network
+# Model
 # ------------------------------------------------------------------------
-model = Sequential()
-model.add(
-    GRU(units=50,
+model = Sequential([
+    GRU(
+        units=50,
         return_sequences=True,
         input_shape=(None, df_num_signals,)
-        )
+    ),
+    Dense(df_num_signals, activation='sigmoid'),
+])
+
+model.compile(
+    loss=loss_mse_warmup,
+    optimizer=RMSprop(learning_rate=0.001)
 )
-model.add(Dense(df_num_signals, activation='sigmoid'))
-
-
-# Loss Function
-# ------------------------------------------------------------------------
-
-def loss_mse_warmup(y_true, y_pred):
-    warmup_steps = 50
-    """
-    Calculate the Mean Squared Error between y_true and y_pred,
-    but ignore the beginning "warmup" part of the sequences.
-
-    y_true is the desired output.
-    y_pred is the model's output.
-    """
-
-    # The shape of both input tensors are:
-    # [batch_size, sequence_length, num_signals].
-
-    # Ignore the "warmup" parts of the sequences
-    # by taking slices of the tensors.
-    y_true_slice = y_true[:, warmup_steps:, :]
-    y_pred_slice = y_pred[:, warmup_steps:, :]
-
-    # These sliced tensors both have this shape:
-    # [batch_size, sequence_length - warmup_steps, num_signals]
-
-    # Calculate the Mean Squared Error and use it as loss.
-    mse = mean(square(y_true_slice - y_pred_slice))
-
-    return mse
-
-
-# Compile Model
-# ------------------------------------------------------------------------
-
-optimizer = RMSprop(learning_rate=0.001)
-model.compile(loss=loss_mse_warmup, optimizer=optimizer)
-model.summary()
-
-# Callback Functions
-# ------------------------------------------------------------------------
 
 callback_checkpoint = ModelCheckpoint(
     filepath='data/checkpoint_ta.keras',
@@ -175,8 +139,8 @@ callbacks = [
 
 model.fit(
     x=generator,
-    epochs=10,
-    steps_per_epoch=50,
+    epochs=2,
+    steps_per_epoch=2,
     validation_data=validation_data,
     callbacks=callbacks
 )
@@ -190,10 +154,6 @@ result = model.evaluate(
 )
 
 print("loss (test-set):", result)
-
-
-# Generate Predictions
-# ------------------------------------------------------------------------
 
 def plot_comparison(start_idx, length, train=True):
     """

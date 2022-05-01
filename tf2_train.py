@@ -87,8 +87,6 @@ model.fit(
 
 model.save(filepath_model)
 
-# print(model.summary())
-
 window.plot(model, 'open', 1)
 
 plt.show()
