@@ -20,11 +20,11 @@ x = np.expand_dims(test_df, axis=0)
 model = tf.keras.models.load_model(filepath_model)
 model.predict(x)
 
-# plot
+
+# plot vars
 # ------
 
 
-# ---
 input_width = 30
 label_width = 30
 shift = 8
@@ -46,25 +46,19 @@ input_indices = np.arange(total_window_size)[input_slice]
 label_indices = np.arange(total_window_size)[labels_slice]
 label_col_index = 0
 
-# example
-# --------
 
+# plot data
+# --------
 
 def split_window(features):
     inputs = features[:, input_slice, :]
     labels = features[:, labels_slice, :]
 
-    if label_columns is not None:
-        labels = tf.stack(
-            [labels[:, :, column_indices[name]] for name in label_columns],
-            axis=-1)
-
-
-    # manually. This way the `tf.data.Datasets` are easier to inspect.
     inputs.set_shape([None, input_width, None])
     labels.set_shape([None, label_width, None])
 
     return inputs, labels
+
 
 data = np.array(train_df, dtype=np.float32)
 
@@ -77,53 +71,45 @@ ds = tf.keras.utils.timeseries_dataset_from_array(
     batch_size=batch_size,
 )
 
-
 ds = ds.map(split_window)
+
 
 inputs, labels = next(iter(ds))
 
-# print(inputs, labels)
-# exit()
-# ---
-
-
-
+# render
+# -------
 
 plt.figure(figsize=(12, 8))
-plot_col_index = column_indices[plot_col]
-max_n = min(max_subplots, len(inputs))
 
-for n in range(max_n):
-    plt.subplot(max_n, 1, n + 1)
+for n in range(max_subplots):
+    predictions = model(inputs)
+
+    plt.subplot(max_subplots, 1, n + 1)
     plt.ylabel(f'{plot_col} [normed]')
     plt.plot(
         input_indices,
-        inputs[n, :, plot_col_index],
+        inputs[n, :, 0],
         label='Inputs',
         marker='.',
         zorder=-10
     )
-
     plt.scatter(
         label_indices,
-        labels[n, :, label_col_index],
+        labels[n, :, 0],
         edgecolors='k',
         label='Labels',
         c='#2ca02c',
         s=64
     )
-
-    if model is not None:
-        predictions = model(inputs)
-        plt.scatter(
-            label_indices,
-            predictions[n, :, label_col_index],
-            marker='X',
-            edgecolors='k',
-            label='Predictions',
-            c='#ff7f0e',
-            s=64
-        )
+    plt.scatter(
+        label_indices,
+        predictions[n, :, 0],
+        marker='X',
+        edgecolors='k',
+        label='Predictions',
+        c='#ff7f0e',
+        s=64
+    )
 
     if n == 0:
         plt.legend()
