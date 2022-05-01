@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from binance import Client
-from service.generator_window import WindowGenerator
 from service.dataset_builder import build_dataset_prepared
 
 # Data
@@ -17,9 +16,11 @@ filepath_model = f'data/ta_{asset}_{interval}.keras'
 
 x = np.expand_dims(test_df, axis=0)
 
+# Model
+# ------
+
 model = tf.keras.models.load_model(filepath_model)
 model.predict(x)
-
 
 # plot vars
 # ------
@@ -29,28 +30,29 @@ input_width = 30
 label_width = 30
 shift = 8
 batch_size = 3
-label_columns = ['open']
 train_df = train_df
-val_df = val_df
-test_df = test_df
-plot_col = 'open'
 max_subplots = 3
 
-input_slice = slice(0, input_width)
+
 
 total_window_size = input_width + shift
-label_start = total_window_size - label_width
-labels_slice = slice(label_start, None)
-column_indices = {name: i for i, name in enumerate(train_df.columns)}
-input_indices = np.arange(total_window_size)[input_slice]
-label_indices = np.arange(total_window_size)[labels_slice]
-label_col_index = 0
+input_indices = np.arange(0, input_width)
+label_indices = np.arange(shift, total_window_size)
+
+# print(input_indices)
+# print(label_indices)
+# exit()
 
 
 # plot data
 # --------
 
 def split_window(features):
+    label_start = total_window_size - label_width
+
+    input_slice = slice(0, input_width)
+    labels_slice = slice(label_start, None)
+
     inputs = features[:, input_slice, :]
     labels = features[:, labels_slice, :]
 
@@ -73,7 +75,6 @@ ds = tf.keras.utils.timeseries_dataset_from_array(
 
 ds = ds.map(split_window)
 
-
 inputs, labels = next(iter(ds))
 
 # render
@@ -85,7 +86,7 @@ for n in range(max_subplots):
     predictions = model(inputs)
 
     plt.subplot(max_subplots, 1, n + 1)
-    plt.ylabel(f'{plot_col} [normed]')
+    plt.ylabel(f'open [normed]')
     plt.plot(
         input_indices,
         inputs[n, :, 0],
