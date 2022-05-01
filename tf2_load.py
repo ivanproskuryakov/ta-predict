@@ -1,7 +1,5 @@
-import matplotlib.pyplot as plt
-
 import tensorflow as tf
-from keras.layers import Dense, GRU, LSTM
+import matplotlib.pyplot as plt
 
 from binance import Client
 from service.generator_window import WindowGenerator
@@ -33,17 +31,7 @@ window = WindowGenerator(
     test_df=test_df,
 )
 
-model = tf.keras.models.Sequential([
-    GRU(
-        units=20,
-        return_sequences=True,
-        input_shape=(None, df_num_signals,)
-    ),
-    LSTM(20, return_sequences=True),
-    Dense(units=1),
-])
-
-model.load_weights(filepath_model)
+model = tf.keras.models.load_model(filepath_model)
 
 print(model.summary())
 

@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 from sklearn.preprocessing import MinMaxScaler
 from binance import Client
@@ -133,13 +132,15 @@ callbacks = [
 
 model.fit(
     x=generator,
-    epochs=10,
-    steps_per_epoch=10,
+    epochs=20,
+    steps_per_epoch=20,
     validation_data=validation_data,
     callbacks=callbacks
 )
 
-# Performance on Test-Set
+model.save('data/tf.keras')
+
+# Performance test
 # ------------------------------------------------------------------------
 
 result = model.evaluate(
@@ -148,33 +149,3 @@ result = model.evaluate(
 )
 
 print("loss (test-set):", result)
-
-# Rendering and Predicting
-# ------------------------------------------------------------------------
-
-x = x_train_scaled[0:500000]  # x_test_scaled[0:500000]
-y_true = y_train[0:500000]  # y_test[0:500000]
-
-# Input-signals for the model.
-x = np.expand_dims(x, axis=0)
-
-y_pred = model.predict(x)
-
-y_pred_rescaled = y_scaler.inverse_transform(y_pred[0])  # first column
-
-signal_pred = y_pred_rescaled[:, 0]
-signal_true = y_true[:, 0]
-
-# ----------------------------------------------------------------------------------
-
-# Make the plotting-canvas bigger.
-plt.figure(figsize=(15, 5))
-
-# Plot and compare the two signals.
-plt.plot(signal_true, label='true')
-plt.plot(signal_pred, label='pred')
-
-# Plot labels etc.
-plt.ylabel('open')
-plt.legend()
-plt.show()
