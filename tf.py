@@ -20,13 +20,9 @@ from service.loss import loss_mse_warmup
 pd.options.display.precision = 30
 np.set_printoptions(precision=30, suppress=True)
 
-asset = 'ROSE'
+asset = 'ETH'
 interval = Client.KLINE_INTERVAL_5MINUTE
 df = build_dataset(asset=asset, interval=interval)
-
-target_names = [
-    'open',
-]
 
 # Data preparation
 # ------------------------------------------------------------------------
@@ -57,12 +53,10 @@ y_scaler = MinMaxScaler()
 y_train_scaled = y_scaler.fit_transform(y_train)
 y_test_scaled = y_scaler.transform(y_test)
 
-print('------')
-print(y_train_scaled)
-print('------')
-print(y_train_scaled[0])
-
-# exit()
+# print('------')
+# print(y_train_scaled)
+# print('------')
+# print(y_train_scaled[0])
 
 # Data Generator
 # ------------------------------------------------------------------------
@@ -139,8 +133,8 @@ callbacks = [
 
 model.fit(
     x=generator,
-    epochs=2,
-    steps_per_epoch=2,
+    epochs=10,
+    steps_per_epoch=10,
     validation_data=validation_data,
     callbacks=callbacks
 )
@@ -155,62 +149,32 @@ result = model.evaluate(
 
 print("loss (test-set):", result)
 
-def plot_comparison(start_idx, length, train=True):
-    """
-    Plot the predicted and true output-signals.
+# Rendering and Predicting
+# ------------------------------------------------------------------------
 
-    :param start_idx: Start-index for the time-series.
-    :param length: Sequence-length to process and plot.
-    :param train: Boolean whether to use training- or test-set.
-    """
+x = x_train_scaled[0:500000]  # x_test_scaled[0:500000]
+y_true = y_train[0:500000]  # y_test[0:500000]
 
-    if train:
-        # Use training-data.
-        x = x_train_scaled
-        y_true = y_train
-    else:
-        # Use test-data.
-        x = x_test_scaled
-        y_true = y_test
+# Input-signals for the model.
+x = np.expand_dims(x, axis=0)
 
-    # End-index for the sequences.
-    end_idx = start_idx + length
+y_pred = model.predict(x)
 
-    # Select the sequences from the given start-index and
-    # of the given length.
-    x = x[start_idx:end_idx]
-    y_true = y_true[start_idx:end_idx]
+y_pred_rescaled = y_scaler.inverse_transform(y_pred[0])  # first column
 
-    # Input-signals for the model.
-    x = np.expand_dims(x, axis=0)
+signal_pred = y_pred_rescaled[:, 0]
+signal_true = y_true[:, 0]
 
-    # Use the model to predict the output-signals.
-    y_pred = model.predict(x)
+# ----------------------------------------------------------------------------------
 
-    # The output of the model is between 0 and 1.
-    # Do an inverse map to get it back to the scale
-    # of the original data-set.
-    y_pred_rescaled = y_scaler.inverse_transform(y_pred[0])
+# Make the plotting-canvas bigger.
+plt.figure(figsize=(15, 5))
 
-    # For each output-signal.
-    for signal in range(len(target_names)):
-        # Get the output-signal predicted by the model.
-        signal_pred = y_pred_rescaled[:, signal]
+# Plot and compare the two signals.
+plt.plot(signal_true, label='true')
+plt.plot(signal_pred, label='pred')
 
-        # Get the true output-signal from the data-set.
-        signal_true = y_true[:, signal]
-
-        # Make the plotting-canvas bigger.
-        plt.figure(figsize=(15, 5))
-
-        # Plot and compare the two signals.
-        plt.plot(signal_true, label='true')
-        plt.plot(signal_pred, label='pred')
-
-        # Plot labels etc.
-        plt.ylabel(target_names[signal])
-        plt.legend()
-        plt.show()
-
-
-plot_comparison(start_idx=0, length=50000, train=True)
+# Plot labels etc.
+plt.ylabel('open')
+plt.legend()
+plt.show()
