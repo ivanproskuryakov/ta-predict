@@ -1,5 +1,4 @@
 import tensorflow as tf
-import matplotlib.pyplot as plt
 
 from keras.layers import Dense, GRU, LSTM
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
@@ -38,7 +37,7 @@ window = WindowGenerator(
 
 model = tf.keras.models.Sequential([
     GRU(
-        units=20,
+        units=520,
         return_sequences=True,
         input_shape=(None, df_num_signals,)
     ),
@@ -86,7 +85,3 @@ model.fit(
 )
 
 model.save(filepath_model)
-
-window.plot(model, 'open', 1)
-
-plt.show()
