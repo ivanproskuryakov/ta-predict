@@ -83,7 +83,7 @@ validation_data = (
 # ------------------------------------------------------------------------
 model = Sequential([
     GRU(
-        units=50,
+        units=100,
         return_sequences=True,
         input_shape=(None, df_num_signals,)
     ),
@@ -91,7 +91,7 @@ model = Sequential([
 ])
 
 model.compile(
-    loss=loss_mse_warmup,
+    # loss=loss_mse_warmup,
     optimizer=RMSprop(learning_rate=0.001)
 )
 
@@ -127,7 +127,7 @@ callbacks = [
     callback_reduce_lr
 ]
 
-# Train the Recurrent Neural Network
+# Training
 # ------------------------------------------------------------------------
 
 model.fit(

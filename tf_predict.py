@@ -11,9 +11,8 @@ from binance import Client
 from service.dataset_builder import build_dataset
 from service.loss import loss_mse_warmup
 
-# Load data
+# Load
 # ------------------------------------------------------------------------
-
 pd.options.display.precision = 30
 np.set_printoptions(precision=30, suppress=True)
 
@@ -21,7 +20,7 @@ asset = 'ETH'
 interval = Client.KLINE_INTERVAL_5MINUTE
 df = build_dataset(asset=asset, interval=interval)
 
-# Data preparation
+# Preparation
 # ------------------------------------------------------------------------
 
 shift_steps = 5
@@ -31,7 +30,6 @@ y_data = df.values[shift_steps:]  # cut head
 
 num_data = len(x_data)
 num_train = int(0.9 * num_data)
-df_num_signals = x_data.shape[1]
 
 x_train = x_data[0:num_train]
 x_test = x_data[num_train:]
@@ -39,7 +37,7 @@ x_test = x_data[num_train:]
 y_train = y_data[0:num_train]
 y_test = y_data[num_train:]
 
-# Data Scaling
+# Scaling
 # ------------------------------------------------------------------------
 
 x_scaler = MinMaxScaler()
@@ -61,10 +59,12 @@ model = tf.keras.models.load_model('data/tf.keras', custom_objects={
 # Predicting
 # ------------------------------------------------------------------------
 
-x = x_train_scaled[0:100]  # x_test_scaled[0:500000]
-y_true = y_train[0:100]  # y_test[0:500000]
+# x = x_train_scaled[0:100]
+# y_true = y_train[0:100]
 
-# Input-signals for the model.
+x = x_test_scaled[-50:]
+y_true = y_test[-50:]
+
 x = np.expand_dims(x, axis=0)
 
 y_pred = model.predict(x)

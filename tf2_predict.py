@@ -1,11 +1,12 @@
 import tensorflow as tf
+import numpy as np
 import matplotlib.pyplot as plt
 
 from binance import Client
 from service.generator_window import WindowGenerator
 from service.dataset_builder import build_dataset_prepared
 
-# Data load
+# Data
 # ------------------------------------------------------------------------
 
 asset = 'SOL'
@@ -14,10 +15,8 @@ filepath_model = f'data/ta_{asset}_{interval}.keras'
 
 [df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(asset=asset, interval=interval)
 
-df = val_df[-30:]
+x = np.expand_dims(test_df, axis=0)
 
-# Generator function
-# --------------------------------------------------------
 
 window = WindowGenerator(
     input_width=30,
@@ -29,8 +28,10 @@ window = WindowGenerator(
     val_df=val_df,
     test_df=test_df,
 )
-model = tf.keras.models.load_model(filepath_model)
 
-model.predict(val_df)
+model = tf.keras.models.load_model(filepath_model)
+model.predict(x)
+
+window.plot(model, 'open', 1)
 
 plt.show()
