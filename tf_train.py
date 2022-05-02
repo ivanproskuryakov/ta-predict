@@ -11,7 +11,7 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, ReduceL
 
 from service.dataset_builder import build_dataset
 from service.generator_batch import batch_generator
-from service.loss import loss_mse_warmup
+from service.util import loss_mse_warmup
 
 # Load data
 # ------------------------------------------------------------------------

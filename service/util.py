@@ -1,5 +1,20 @@
 from keras.backend import square, mean
 
+
+def split_window(features, total_window_size, label_width, input_width):
+    label_start = total_window_size - label_width
+
+    input_slice = slice(0, input_width)
+    labels_slice = slice(label_start, None)
+
+    inputs = features[:, input_slice, :]
+    labels = features[:, labels_slice, :]
+
+    inputs.set_shape([None, input_width, None])
+    labels.set_shape([None, label_width, None])
+
+    return inputs, labels
+
 def loss_mse_warmup(y_true, y_pred):
     warmup_steps = 50
     """

@@ -3,16 +3,18 @@ import tensorflow as tf
 from keras.layers import Dense, GRU, LSTM
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
-from binance import Client
 from service.dataset_builder import build_dataset_prepared
 from service.generator_window import WindowGenerator
-from parameters import SIZE_BATCH, SIZE_SHIFT
+
+from parameters import SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL
 
 # Data load
 # ------------------------------------------------------------------------
 
-asset = 'ROSE'
-interval = Client.KLINE_INTERVAL_5MINUTE
+asset = ASSET
+interval = INTERVAL
+shift = SIZE_SHIFT
+batch_size = SIZE_BATCH
 filepath_model = f'data/ta_{asset}_{interval}.keras'
 
 [df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(asset=asset, interval=interval)
@@ -20,8 +22,6 @@ filepath_model = f'data/ta_{asset}_{interval}.keras'
 # Generator function
 # --------------------------------------------------------
 
-shift = SIZE_SHIFT
-batch_size = SIZE_BATCH
 
 window = WindowGenerator(
     input_width=30,
@@ -36,11 +36,11 @@ window = WindowGenerator(
 
 model = tf.keras.models.Sequential([
     GRU(
-        units=520,
+        units=100,
         return_sequences=True,
         input_shape=(None, df_num_signals,)
     ),
-    LSTM(20, return_sequences=True),
+    LSTM(100, return_sequences=True),
     Dense(units=1),
 ])
 
@@ -74,7 +74,7 @@ callback_checkpoint = ModelCheckpoint(
 
 model.fit(
     window.train,
-    epochs=20,
+    epochs=40,
     validation_data=window.val,
     callbacks=[
         # callback_early_stopping,

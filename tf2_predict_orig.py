@@ -2,15 +2,18 @@ import matplotlib.pyplot as plt
 
 import tensorflow as tf
 
-from binance import Client
 from service.generator_window import WindowGenerator
 from service.dataset_builder import build_dataset_prepared
-from parameters import SIZE_BATCH, SIZE_SHIFT
+from parameters import SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL
 
 # Data load
 # ------------------------------------------------------------------------
-asset = 'SOL'
-interval = Client.KLINE_INTERVAL_5MINUTE
+
+asset = ASSET
+interval = INTERVAL
+shift = SIZE_SHIFT
+batch_size = SIZE_BATCH
+
 filepath_model = f'data/ta_{asset}_{interval}.keras'
 
 [df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(asset=asset, interval=interval)
@@ -18,8 +21,6 @@ filepath_model = f'data/ta_{asset}_{interval}.keras'
 # Generator function
 # --------------------------------------------------------
 
-shift = SIZE_SHIFT
-batch_size = SIZE_BATCH
 
 window = WindowGenerator(
     input_width=30,

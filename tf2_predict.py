@@ -1,16 +1,18 @@
-import tensorflow as tf
 import numpy as np
+import tensorflow as tf
 import matplotlib.pyplot as plt
 
-from binance import Client
 from service.dataset_builder import build_dataset_prepared
-from parameters import SIZE_BATCH, SIZE_SHIFT
+from service.util import split_window
+from parameters import SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL
 
 # Data
 # ------------------------------------------------------------------------
 
-asset = 'SOL'
-interval = Client.KLINE_INTERVAL_5MINUTE
+asset = ASSET
+interval = INTERVAL
+shift = SIZE_SHIFT
+batch_size = SIZE_BATCH
 filepath_model = f'data/ta_{asset}_{interval}.keras'
 
 [df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(asset=asset, interval=interval)
@@ -26,8 +28,6 @@ model.predict(y)
 
 # plot vars
 # ------
-shift = SIZE_SHIFT
-batch_size = SIZE_BATCH
 
 input_width = 30
 label_width = 30
@@ -37,24 +37,8 @@ total_window_size = input_width + shift
 input_indices = np.arange(0, input_width)
 label_indices = np.arange(shift, total_window_size)
 
-
 # plot data
 # --------
-
-def split_window(features):
-    label_start = total_window_size - label_width
-
-    input_slice = slice(0, input_width)
-    labels_slice = slice(label_start, None)
-
-    inputs = features[:, input_slice, :]
-    labels = features[:, labels_slice, :]
-
-    inputs.set_shape([None, input_width, None])
-    labels.set_shape([None, label_width, None])
-
-    return inputs, labels
-
 
 data = np.array(x, dtype=np.float32)
 
@@ -64,10 +48,10 @@ ds = tf.keras.utils.timeseries_dataset_from_array(
     sequence_length=total_window_size,
     sequence_stride=1,
     shuffle=True,
-    batch_size=100,
+    batch_size=batch_size,
 )
 
-ds = ds.map(split_window)
+ds = ds.map(lambda x: split_window(x, total_window_size, label_width, input_width))
 
 inputs, labels = next(iter(ds))
 

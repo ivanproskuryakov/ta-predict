@@ -1,11 +1,7 @@
 from binance import Client
 
 assets = [
-    "BNB",
-    "ETH",
-    "ADA",
-    "ROSE",
-    "SOL", "XRP",
+    "BNB", "ETH", "ADA", "ROSE", "SOL", "XRP",
     "DOT", "ATOM", "HBAR", "IOTA", "AVAX",
     "COTI", "NEAR", "BAT", "WAVES", "MINA",
     "EGLD", "XTZ", "ALGO", "LUNA", "KSM",
@@ -31,5 +27,7 @@ intervals = [
 
 start_at = '6 month ago UTC'
 
-SIZE_SHIFT = 2
-SIZE_BATCH = 100
+ASSET = 'ROSE'
+INTERVAL = Client.KLINE_INTERVAL_15MINUTE
+SIZE_SHIFT = 1
+SIZE_BATCH = 50

@@ -11,6 +11,7 @@ def build_dataset(asset, interval):
 
     return df
 
+
 def build_dataset_prepared(asset, interval):
     df = build_dataset(asset, interval)
     df_num_signals = df.shape[1]
