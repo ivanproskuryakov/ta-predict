@@ -10,11 +10,11 @@ from service.dataset_builder import build_dataset_prepared
 
 asset = 'SOL'
 interval = Client.KLINE_INTERVAL_1HOUR
-filepath_model = f'data/ta_{asset}_{interval}.keras'
+filepath_model = f'data/ta_{asset}.keras'
 
 [df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(asset=asset, interval=interval)
 
-x = np.expand_dims(test_df, axis=0)
+x = np.expand_dims(train_df, axis=0)
 
 # Model
 # ------
