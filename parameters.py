@@ -31,4 +31,5 @@ intervals = [
 
 start_at = '6 month ago UTC'
 
-# NEGATIVE_PEAK = 8
+SIZE_SHIFT = 2
+SIZE_BATCH = 100

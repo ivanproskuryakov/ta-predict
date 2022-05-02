@@ -4,42 +4,38 @@ import matplotlib.pyplot as plt
 
 from binance import Client
 from service.dataset_builder import build_dataset_prepared
+from parameters import SIZE_BATCH, SIZE_SHIFT
 
 # Data
 # ------------------------------------------------------------------------
 
 asset = 'SOL'
-interval = Client.KLINE_INTERVAL_1HOUR
-filepath_model = f'data/ta_{asset}.keras'
+interval = Client.KLINE_INTERVAL_5MINUTE
+filepath_model = f'data/ta_{asset}_{interval}.keras'
 
 [df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(asset=asset, interval=interval)
 
-x = np.expand_dims(train_df, axis=0)
+x = test_df
+y = np.expand_dims(x, axis=0)
 
 # Model
 # ------
 
 model = tf.keras.models.load_model(filepath_model)
-model.predict(x)
+model.predict(y)
 
 # plot vars
 # ------
+shift = SIZE_SHIFT
+batch_size = SIZE_BATCH
 
 input_width = 30
 label_width = 30
-shift = 8
-batch_size = 3
-train_df = train_df
 max_subplots = 3
 
 total_window_size = input_width + shift
 input_indices = np.arange(0, input_width)
 label_indices = np.arange(shift, total_window_size)
-
-
-# print(input_indices)
-# print(label_indices)
-# exit()
 
 
 # plot data
@@ -60,7 +56,7 @@ def split_window(features):
     return inputs, labels
 
 
-data = np.array(train_df, dtype=np.float32)
+data = np.array(x, dtype=np.float32)
 
 ds = tf.keras.utils.timeseries_dataset_from_array(
     data=data,
@@ -68,7 +64,7 @@ ds = tf.keras.utils.timeseries_dataset_from_array(
     sequence_length=total_window_size,
     sequence_stride=1,
     shuffle=True,
-    batch_size=batch_size,
+    batch_size=100,
 )
 
 ds = ds.map(split_window)
