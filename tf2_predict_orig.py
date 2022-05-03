@@ -4,7 +4,7 @@ import tensorflow as tf
 
 from service.generator_window import WindowGenerator
 from service.dataset_builder import build_dataset_prepared
-from parameters import SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL
+from parameters import SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL, SIZE_INPUT_LABEL
 
 # Data load
 # ------------------------------------------------------------------------
@@ -13,6 +13,7 @@ asset = ASSET
 interval = INTERVAL
 shift = SIZE_SHIFT
 batch_size = SIZE_BATCH
+width = SIZE_INPUT_LABEL
 
 filepath_model = f'data/ta_{asset}_{interval}.keras'
 
