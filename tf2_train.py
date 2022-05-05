@@ -6,7 +6,7 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 from service.dataset_builder import build_dataset_prepared
 from service.generator_window import WindowGenerator
 
-from parameters import SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL, SIZE_INPUT_LABEL
+from parameters import market, SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL, SIZE_INPUT_LABEL
 
 # Data load
 # ------------------------------------------------------------------------
@@ -16,9 +16,9 @@ interval = INTERVAL
 shift = SIZE_SHIFT
 batch_size = SIZE_BATCH
 width = SIZE_INPUT_LABEL
-filepath_model = f'data/ta_{asset}_{interval}.keras'
+filepath_model = f'data/ta_{market}_{asset}_{interval}.keras'
 
-[df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(asset=asset, interval=interval)
+[df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(market=market, asset=asset, interval=interval)
 
 # Generator function
 # --------------------------------------------------------

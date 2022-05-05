@@ -11,9 +11,9 @@ class KLines:
 
         return self.round(avg)
 
-    def build_klines(self, symbol: str, interval: str, start_str: str):
+    def build_klines(self, market: str, asset: str, interval: str, start_str: str):
         client = Client()
-
+        symbol = asset + market
         # Taker - an order that trades immediately before going on the order book
         # Maker - an order that goes on the order book partially or fully
 

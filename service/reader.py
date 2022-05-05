@@ -27,8 +27,8 @@ class Reader:
 
         return diff == 4
 
-    def read(self, asset: str, interval: str):
-        with open(f'out_klines/{asset}_{interval}.json') as f:
+    def read(self, market: str, asset: str, interval: str):
+        with open(f'out_klines/{market}/{asset}_{interval}.json') as f:
             data = f.read()
             collection = json.loads(data)
             f.close()

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from service.dataset_builder import build_dataset_prepared
 from service.util import split_window
-from parameters import SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL, SIZE_INPUT_LABEL
+from parameters import market,  SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL, SIZE_INPUT_LABEL
 
 # Data
 # ------------------------------------------------------------------------
@@ -15,9 +15,13 @@ shift = SIZE_SHIFT
 batch_size = SIZE_BATCH
 input_width = SIZE_INPUT_LABEL
 label_width = SIZE_INPUT_LABEL
-filepath_model = f'data/ta_{asset}_{interval}.keras'
+filepath_model = f'data/ta_{market}_{asset}_{interval}.keras'
 
-[df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(asset=asset, interval=interval)
+[df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(
+    market=market,
+    asset=asset,
+    interval=interval
+)
 
 x = test_df
 y = np.expand_dims(x, axis=0)

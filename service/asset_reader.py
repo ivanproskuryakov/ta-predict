@@ -1,8 +1,9 @@
 import json
 import pandas as pd
 
-def read_asset_file(asset: str, interval: str):
-    with open(f'out_klines/{asset}_{interval}.json') as f:
+
+def read_asset_file(market: str, asset: str, interval: str):
+    with open(f'out_klines/{market}/{asset}_{interval}.json') as f:
         data = f.read()
         collection = json.loads(data)
         f.close()

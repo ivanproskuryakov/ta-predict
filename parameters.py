@@ -1,17 +1,20 @@
 from binance import Client
 
 assets = [
-    "BNB", "ETH", "ADA", "ROSE", "SOL", "XRP",
-    "DOT", "ATOM", "HBAR", "IOTA", "AVAX",
-    "COTI", "NEAR", "BAT", "WAVES", "MINA",
-    "EGLD", "XTZ", "ALGO", "LUNA", "KSM",
-    "MATIC", "ONE", "1INCH", "KAVA", "OCEAN",
-    "GRT", "ROSE", "CTSI", "ZRX", "TRX",
-    "ETC", "BCH", "LINK", "FIL", "UNI",
-    "GTC", "NU", "POND", "CELO"
+    # "BTC", "ETH",
+
+    "BNB", "ADA", "ROSE", "SOL", "XRP",
+
+    # "DOT", "ATOM", "HBAR", "IOTA", "AVAX",
+    # "COTI", "NEAR", "BAT", "WAVES", "MINA",
+    # "EGLD", "XTZ", "ALGO", "LUNA", "KSM",
+    # "MATIC", "ONE", "1INCH", "KAVA", "OCEAN",
+    # "GRT", "ROSE", "CTSI", "ZRX", "TRX",
+    # "ETC", "BCH", "LINK", "FIL", "UNI",
+    # "GTC", "NU", "POND", "CELO"
 ]
 
-market = 'BTC'
+market = 'USDT'
 
 intervals = [
     Client.KLINE_INTERVAL_1MINUTE,
@@ -27,8 +30,8 @@ intervals = [
 
 start_at = '6 month ago UTC'
 
-ASSET = 'ROSE'
-INTERVAL = Client.KLINE_INTERVAL_3MINUTE
+ASSET = 'ETH'
+INTERVAL = Client.KLINE_INTERVAL_1MINUTE
 SIZE_SHIFT = 1
 SIZE_BATCH = 50
 SIZE_INPUT_LABEL = 30

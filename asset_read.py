@@ -7,6 +7,7 @@ from binance import Client
 
 from service.reader import Reader
 from service.estimator import trades_diff_total
+from parameters import market
 
 # ----
 asset = sys.argv[1]
@@ -14,7 +15,7 @@ interval = Client.KLINE_INTERVAL_5MINUTE
 # ----
 
 reader = Reader()
-collection = reader.read(asset, interval)
+collection = reader.read(market, asset, interval)
 
 positive = {
     "peak": 5,
