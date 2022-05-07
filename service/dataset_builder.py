@@ -3,8 +3,8 @@ from service.normalizer import scale_data
 from service.estimator import estimate_ta
 
 
-def build_dataset(market: str, asset: str, interval: str):
-    df_ohlc = read_asset_file(market, asset, interval)
+def build_dataset(market: str, asset: str, interval: str, test=False):
+    df_ohlc = read_asset_file(market, asset, interval, test)
     df_ta = estimate_ta(df_ohlc)
     df_nan = df_ta.fillna(0)
     df = scale_data(df_nan)
