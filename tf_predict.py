@@ -9,7 +9,7 @@ from sklearn.preprocessing import MinMaxScaler
 from binance import Client
 
 from service.dataset_builder import build_dataset
-from service.loss import loss_mse_warmup
+from service.util import loss_mse_warmup
 
 # Load
 # ------------------------------------------------------------------------

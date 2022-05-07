@@ -41,21 +41,7 @@ model = tf.keras.models.Sequential([
         return_sequences=True,
         input_shape=(None, df_num_signals,)
     ),
-    GRU(
-        units=100,
-        return_sequences=True,
-        input_shape=(None, df_num_signals,)
-    ),
-    GRU(
-        units=100,
-        return_sequences=True,
-        input_shape=(None, df_num_signals,)
-    ),
     LSTM(100, return_sequences=True),
-    LSTM(100, return_sequences=True),
-    LSTM(100, return_sequences=True),
-    Dense(units=100),
-    Dense(units=10),
     Dense(units=1),
 ])
 
