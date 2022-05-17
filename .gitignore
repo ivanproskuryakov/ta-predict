@@ -2,6 +2,8 @@
 out_markets
 out_klines
 data
+test
+trained
 
 __pycache__
 .env

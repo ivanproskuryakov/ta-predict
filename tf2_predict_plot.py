@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-from service.dataset_builder import build_dataset_prepared
+from service.dataset_builder import build_dataset_prepared, build_dataset
 from service.util import split_window
 from parameters import market, SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL, SIZE_INPUT_LABEL
 
@@ -22,9 +22,14 @@ filepath_model = f'data/ta_{market}_{asset}_{interval}.keras'
     asset=asset,
     interval=interval
 )
+# df = build_dataset(
+#     market=market,
+#     asset=asset,
+#     interval=interval
+# )
 
-x = test_df
-y = np.expand_dims(x, axis=0)
+x = train_df
+y = np.expand_dims(df, axis=0)
 
 # Model
 # ------
@@ -35,7 +40,7 @@ model.predict(y)
 # plot vars
 # ------
 
-max_subplots = 5
+max_subplots = 1
 
 total_window_size = input_width + shift
 input_indices = np.arange(0, input_width)
@@ -51,7 +56,7 @@ ds = tf.keras.utils.timeseries_dataset_from_array(
     targets=None,
     sequence_length=total_window_size,
     sequence_stride=1,
-    shuffle=True,
+    # shuffle=True,
     batch_size=batch_size,
 )
 
