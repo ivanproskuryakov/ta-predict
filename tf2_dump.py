@@ -1,7 +1,7 @@
 from service.klines import KLines
 import json
 
-from parameters import intervals
+from parameters import INTERVAL
 
 # 1440 - 1 minutes
 # 480 - 3 minutes
@@ -13,22 +13,22 @@ from parameters import intervals
 # 2 - 12 hour
 # 1 - 1 day
 
-for interval in intervals:
-    start_at = '24 hours ago UTC'
-    market = 'USDT'
-    asset = 'BTC'
+interval = INTERVAL
+start_at = '2 month ago UTC'
+market = 'USDT'
+asset = 'BTC'
 
-    klines = KLines()
+klines = KLines()
 
-    sequence = klines.build_klines(
-        market,
-        asset,
-        interval,
-        start_at
-    )
+sequence = klines.build_klines(
+    market,
+    asset,
+    interval,
+    start_at
+)
 
-    text = json.dumps(sequence)
+text = json.dumps(sequence)
 
-    file = open(f'test/{market}_{asset}_{interval}.json', 'w')
-    file.write(text)
-    file.close()
+file = open(f'test/{market}_{asset}_{interval}.json', 'w')
+file.write(text)
+file.close()

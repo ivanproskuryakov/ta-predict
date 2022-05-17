@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-from service.dataset_builder import build_dataset_prepared
+from service.dataset_builder import build_dataset
 from service.util import split_window
 from parameters import market, SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL, SIZE_INPUT_LABEL
 
@@ -17,12 +17,13 @@ input_width = SIZE_INPUT_LABEL
 label_width = SIZE_INPUT_LABEL
 filepath_model = f'data/ta_{market}_{asset}_{interval}.keras'
 
-[df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(
+df = build_dataset(
     market=market,
     asset=asset,
-    interval=interval
+    interval=interval,
+    test=True,
 )
-x = train_df
+x = df
 y = np.expand_dims(df, axis=0)
 
 # Model

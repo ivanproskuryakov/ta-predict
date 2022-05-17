@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-from service.dataset_builder import build_dataset, build_dataset_prepared
+from service.dataset_builder import build_dataset
 from parameters import market, ASSET, INTERVAL
 
 # Data
@@ -11,20 +11,7 @@ from parameters import market, ASSET, INTERVAL
 
 asset = ASSET
 interval = INTERVAL
-filepath_model = f'trained/ta_USDT_BTC_1m.keras'
-
-# [
-#     df,
-#     train_df,
-#     val_df,
-#     test_df,
-#     df_num_signals,
-# ] = build_dataset_prepared(
-#     market=market,
-#     asset=asset,
-#     interval=interval,
-#     # test=True,
-# )
+filepath_model = f'trained/ta_USDT_BTC_30m.keras'
 
 test_df = build_dataset(
     market=market,
@@ -33,7 +20,7 @@ test_df = build_dataset(
     test=True,
 )
 
-df = test_df[:31]
+df = test_df[:1000]
 
 x = np.expand_dims(df, axis=0)
 
