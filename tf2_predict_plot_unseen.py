@@ -4,17 +4,14 @@ import matplotlib.pyplot as plt
 
 from service.dataset_builder import build_dataset_unseen
 from service.util import split_window
-from parameters import market, SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL, SIZE_INPUT_LABEL
+from parameters import market, ASSET, INTERVAL
 
 # Data
 # ------------------------------------------------------------------------
 
 asset = ASSET
 interval = INTERVAL
-shift = SIZE_SHIFT
-batch_size = SIZE_BATCH
-input_width = SIZE_INPUT_LABEL
-label_width = SIZE_INPUT_LABEL
+batch_size = 50
 filepath_model = f'data/ta_{market}_{asset}_{interval}.keras'
 
 df = build_dataset_unseen(
@@ -25,18 +22,15 @@ df = build_dataset_unseen(
 x = df
 y = np.expand_dims(df, axis=0)
 
-# Model
-# ------
-
 model = tf.keras.models.load_model(filepath_model)
 model.predict(y)
 
 # plot vars
 # ------
 
-total_window_size = input_width + shift
-input_indices = np.arange(0, input_width)
-label_indices = np.arange(shift, total_window_size)
+total_window_size = 30 + 1
+input_indices = np.arange(0, 30)
+label_indices = np.arange(1, total_window_size)
 
 # plot data
 # --------
@@ -48,11 +42,10 @@ ds = tf.keras.utils.timeseries_dataset_from_array(
     targets=None,
     sequence_length=total_window_size,
     sequence_stride=1,
-    # shuffle=True,
     batch_size=batch_size,
 )
 
-ds = ds.map(lambda x: split_window(x, total_window_size, label_width, input_width))
+ds = ds.map(lambda x: split_window(x, total_window_size, 30, 30))
 
 inputs, labels = next(iter(ds))
 

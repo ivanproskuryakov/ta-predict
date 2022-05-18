@@ -12,28 +12,12 @@ def build_dataset(market: str, asset: str, interval: str, test=False):
     return df
 
 def build_dataset_unseen(market: str, asset: str, interval: str):
-    # df_ohlc = read_asset_file(market, asset, interval, False)
-    # df_ta = estimate_ta(df_ohlc)
-    # df_nan = df_ta.fillna(0)
-    # df = scale_data(df_nan)
-    #
-    # train_mean = df.mean()
-    # train_std = df.std()
+    df = read_asset_file(market, asset, interval, True)
 
-    # -----
-
-    df = read_asset_file(market, asset, interval, False)
-    # train_mean = df.mean()
-    # train_std = df.std()
-
-
-    df = df[-32:]
+    df = df[-31:]
     df = estimate_ta(df)
     df = df.fillna(0)
     df = scale_data(df)
-
-    # df = (df - train_mean) / train_std
-
 
     return df
 

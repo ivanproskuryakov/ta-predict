@@ -14,7 +14,7 @@ from parameters import INTERVAL
 # 1 - 1 day
 
 interval = INTERVAL
-start_at = '2 month ago UTC'
+start_at = '1 day ago UTC'
 market = 'USDT'
 asset = 'BTC'
 
