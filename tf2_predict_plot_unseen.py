@@ -36,8 +36,8 @@ print(len(y_pred[0]))
 
 plt.figure(figsize=(15, 5))
 
-plt.plot(x['open'].values[-30:], label='true', marker='.')
-plt.plot(y_pred[0][-30:], label='pred', marker='X')
+plt.plot(x['open'].values[-31:], label='true', marker='.')
+plt.plot(y_pred[0][-31:], label='pred', marker='X')
 
 plt.ylabel('open')
 plt.legend()
