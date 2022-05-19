@@ -14,7 +14,6 @@ def build_dataset(market: str, asset: str, interval: str, test=False):
 def build_dataset_unseen(market: str, asset: str, interval: str):
     df = read_asset_file(market, asset, interval, True)
 
-    df = df[-31:]
     df = estimate_ta(df)
     df = df.fillna(0)
     df = scale_data(df)
