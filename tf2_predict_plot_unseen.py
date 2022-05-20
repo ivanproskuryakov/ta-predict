@@ -39,13 +39,15 @@ y = np.expand_dims(df_scaled, axis=0)
 y_pred = model.predict(y)
 
 dummy = pd.DataFrame(np.zeros((len(df), len(df.columns))), columns=df.columns)
-# dummy['open'] = df['open']
 dummy['open'] = y_pred[0][:,0]
 
 df_scaled_inverse = scaler.inverse_transform(dummy)
 
-print(df['open'].values)
-print(df_scaled_inverse[:,0])
+dummy['open'] = df_scaled_inverse[:,0]
+
+print(df['open'])
+print(dummy['open'])
+# print(df_scaled_inverse[:,0])
 
 # exit()
 
@@ -58,8 +60,8 @@ print(df_scaled_inverse[:,0])
 
 plt.figure(figsize=(12, 8))
 
-plt.plot(df['open'].values, label='true', marker='.')
-plt.plot(df_scaled_inverse, label='pred', marker='X')
+plt.plot(df['open'], label='true', marker='.')
+plt.plot(dummy['open'], label='true', marker='.')
 
 plt.ylabel('open')
 plt.legend()
