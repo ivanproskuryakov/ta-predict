@@ -1,13 +1,15 @@
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
+import pandas as pd
 
 from service.dataset_builder import build_dataset_prepared
-from service.util import split_window
 from parameters import market, SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL, SIZE_INPUT_LABEL
 
 # Data
 # ------------------------------------------------------------------------
+
+tail = 20
 
 asset = ASSET
 interval = INTERVAL
@@ -22,21 +24,27 @@ filepath_model = f'data/ta_{market}_{asset}_{interval}.keras'
     asset=asset,
     interval=interval
 )
-x = train_df
-y = np.expand_dims(df, axis=0)
+x = test_df
+x_expanded = np.expand_dims(x, axis=0)
 
 # Model
 # ------
-tail = 30
+
 model = tf.keras.models.load_model(filepath_model)
+y = model.predict(x_expanded)
 
-y_pred = model.predict(y)
+y_df = pd.DataFrame(np.zeros((len(x), len(x.columns))), columns=x.columns)
+y_df['open'] = y[0]
 
-plt.figure(figsize=(12, 8))
+# Plot
+# ------------------------------------------------------------------------
 
-plt.plot(x['open'].values[-tail:], label='true', marker='.')
-plt.plot(y_pred[0][-tail:], label='pred', marker='X')
+plt.figure(figsize=(16, 8))
 
-plt.ylabel('open')
+plt.plot(x['open'].values, label='real', marker='.')
+plt.plot(y_df['open'].values, label='real', marker='.')
+
+plt.ylabel(market)
+plt.xlabel('time')
 plt.legend()
 plt.show()
