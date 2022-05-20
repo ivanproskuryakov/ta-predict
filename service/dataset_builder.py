@@ -16,7 +16,7 @@ def build_dataset_unseen(market: str, asset: str, interval: str):
 
     df = estimate_ta(df)
     df = df.fillna(0)
-    df = scale_data(df)
+    # df = scale_data(df)
 
     return df
 
