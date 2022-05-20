@@ -11,7 +11,7 @@ from parameters import market, ASSET, INTERVAL
 # Data
 # ------------------------------------------------------------------------
 
-tail = 30
+tail = 100
 asset = ASSET
 interval = INTERVAL
 filepath_model = f'data/ta_{market}_{asset}_{interval}.keras'
@@ -52,8 +52,8 @@ y_df['open'] = y_inversed[:, 0]
 
 plt.figure(figsize=(16, 8))
 
-plt.plot(x_df['open'], label='true', marker='.')
-plt.plot(y_df['open'], label='true', marker='.')
+plt.plot(x_df['open'], label='real', marker='.')
+plt.plot(y_df['open'], label='predict', marker='.')
 
 plt.ylabel('open')
 plt.legend()
