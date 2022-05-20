@@ -16,52 +16,44 @@ asset = ASSET
 interval = INTERVAL
 filepath_model = f'data/ta_{market}_{asset}_{interval}.keras'
 
-df = build_dataset_unseen(
+x_df = build_dataset_unseen(
     market=market,
     asset=asset,
     interval=interval,
 )
 
+# Scale
+# ------------------------------------------------------------------------
 
 scaler = MinMaxScaler()
-scaled = scaler.fit_transform(df)
+scaled = scaler.fit_transform(x_df)
 
-df_scaled = pd.DataFrame(scaled, None, df.keys())
+x_df_scaled = pd.DataFrame(scaled, None, x_df.keys())
+x_df_scaled_expanded = np.expand_dims(x_df_scaled, axis=0)
 
-
-# # print(df_scaled)
-# # print(df_scaled_inverse)
-
+# Model
+# ------------------------------------------------------------------------
 
 model = tf.keras.models.load_model(filepath_model)
+y = model.predict(x_df_scaled_expanded)
 
-y = np.expand_dims(df_scaled, axis=0)
-y_pred = model.predict(y)
+# Scale back
+# ------------------------------------------------------------------------
 
-dummy = pd.DataFrame(np.zeros((len(df), len(df.columns))), columns=df.columns)
-dummy['open'] = y_pred[0][:,0]
+y_df = pd.DataFrame(np.zeros((len(x_df), len(x_df.columns))), columns=x_df.columns)
+y_df['open'] = y[0][:, 0]
 
-df_scaled_inverse = scaler.inverse_transform(dummy)
+y_inversed = scaler.inverse_transform(y_df)
 
-dummy['open'] = df_scaled_inverse[:,0]
+y_df['open'] = y_inversed[:, 0]
 
-print(df['open'])
-print(dummy['open'])
-# print(df_scaled_inverse[:,0])
+# Plot
+# ------------------------------------------------------------------------
 
-# exit()
+plt.figure(figsize=(16, 8))
 
-
-
-# x.append(pd.Series(), ignore_index=True)
-#
-
-
-
-plt.figure(figsize=(12, 8))
-
-plt.plot(df['open'], label='true', marker='.')
-plt.plot(dummy['open'], label='true', marker='.')
+plt.plot(x_df['open'], label='true', marker='.')
+plt.plot(y_df['open'], label='true', marker='.')
 
 plt.ylabel('open')
 plt.legend()
