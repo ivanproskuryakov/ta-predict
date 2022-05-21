@@ -33,16 +33,30 @@ x_expanded = np.expand_dims(x, axis=0)
 model = tf.keras.models.load_model(filepath_model)
 y = model.predict(x_expanded)
 
-y_df = pd.DataFrame(np.zeros((len(x), len(x.columns))), columns=x.columns)
-y_df['open'] = y[0]
+# Slice
+# ------------------------------------------------------------------------
+
+y_df = pd.DataFrame(np.zeros((len(x), 1)), columns=['open'])
+y_df['open'] = y[0][:, 0]
+
+x_df = pd.DataFrame(np.zeros((len(x), 1)), columns=['open'])
+x_df['open'] = x['open'].values
+
+y_df.loc[-1] = 0
+y_df = y_df.sort_index().reset_index(drop=True)
+
+val = x_df.loc[len(x)-1]
+print(val)
+x_df = x_df.append(val, ignore_index=True)
+
 
 # Plot
 # ------------------------------------------------------------------------
 
 plt.figure(figsize=(16, 8))
 
-plt.plot(x['open'].values, label='real', marker='.')
-plt.plot(y_df['open'].values, label='real', marker='.')
+plt.plot(x_df['open'].tail(tail).values, label='real', marker='.')
+plt.plot(y_df['open'].tail(tail).values, label='real', marker='.')
 
 plt.ylabel(market)
 plt.xlabel('time')
