@@ -4,20 +4,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from service.dataset_builder import build_dataset_prepared
-from parameters import market, SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL, SIZE_INPUT_LABEL
+from parameters import market, ASSET, INTERVAL
 from sklearn.preprocessing import MinMaxScaler
 
 # Data
 # ------------------------------------------------------------------------
 
 tail = 50
-
 asset = ASSET
 interval = INTERVAL
-shift = SIZE_SHIFT
-batch_size = SIZE_BATCH
-input_width = SIZE_INPUT_LABEL
-label_width = SIZE_INPUT_LABEL
 filepath_model = f'data/ta_{market}_{asset}_{interval}.keras'
 
 [df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(
