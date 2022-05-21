@@ -6,7 +6,14 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 from service.dataset_builder import build_dataset_prepared
 from service.generator_window import WindowGenerator
 
-from parameters import market, SIZE_BATCH, SIZE_SHIFT, ASSET, intervals, SIZE_INPUT_LABEL
+from parameters import market, ASSET, intervals
+
+# Var
+# ------------------------------------------------------------------------
+
+SIZE_SHIFT = 1
+SIZE_BATCH = 50
+SIZE_INPUT_LABEL = 30
 
 # Data load
 # ------------------------------------------------------------------------
