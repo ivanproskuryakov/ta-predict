@@ -6,8 +6,8 @@ from service.estimator import estimate_ta
 def build_dataset(market: str, asset: str, interval: str, test=False):
     df_ohlc = read_asset_file(market, asset, interval, test)
     df_ta = estimate_ta(df_ohlc)
-    df_nan = df_ta.fillna(0)
-    df = scale_data(df_nan)
+    df = df_ta.fillna(0)
+    # df = scale_data(df_nan)
 
     return df
 
@@ -35,12 +35,12 @@ def build_dataset_prepared(market: str, asset: str, interval: str):
     # Sets preparation
     # --------------------------------------------------------
 
-    train_mean = train_df.mean()
-    train_std = train_df.std()
-
-    train_df = (train_df - train_mean) / train_std
-    val_df = (val_df - train_mean) / train_std
-    test_df = (test_df - train_mean) / train_std
+    # train_mean = train_df.mean()
+    # train_std = train_df.std()
+    #
+    # train_df = (train_df - train_mean) / train_std
+    # val_df = (val_df - train_mean) / train_std
+    # test_df = (test_df - train_mean) / train_std
 
     return [
         df,

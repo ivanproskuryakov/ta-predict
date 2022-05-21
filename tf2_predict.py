@@ -20,7 +20,7 @@ test_df = build_dataset(
     test=True,
 )
 
-df = test_df[:1000]
+df = test_df[:20]
 
 x = np.expand_dims(df, axis=0)
 

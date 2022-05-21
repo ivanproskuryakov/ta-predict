@@ -5,11 +5,12 @@ import pandas as pd
 
 from service.dataset_builder import build_dataset_prepared
 from parameters import market, SIZE_BATCH, SIZE_SHIFT, ASSET, INTERVAL, SIZE_INPUT_LABEL
+from sklearn.preprocessing import MinMaxScaler
 
 # Data
 # ------------------------------------------------------------------------
 
-tail = 20
+tail = 50
 
 asset = ASSET
 interval = INTERVAL
@@ -24,41 +25,53 @@ filepath_model = f'data/ta_{market}_{asset}_{interval}.keras'
     asset=asset,
     interval=interval
 )
-x = test_df
-x_expanded = np.expand_dims(x, axis=0)
+x_df = test_df
 
-# Model
-# ------
-
-model = tf.keras.models.load_model(filepath_model)
-y = model.predict(x_expanded)
-
-# Slice
+# Scale
 # ------------------------------------------------------------------------
 
-y_df = pd.DataFrame(np.zeros((len(x), 1)), columns=['open'])
-y_df['open'] = y[0][:, 0]
+scaler = MinMaxScaler()
+scaled = scaler.fit_transform(x_df)
 
-x_df = pd.DataFrame(np.zeros((len(x), 1)), columns=['open'])
-x_df['open'] = x['open'].values
+x_df_scaled = pd.DataFrame(scaled, None, x_df.keys())
+x_df_scaled_expanded = np.expand_dims(x_df_scaled, axis=0)
 
-y_df.loc[-1] = 0
-y_df = y_df.sort_index().reset_index(drop=True)
+# Model
+# -------------------------------------------------------------------------
 
-val = x_df.loc[len(x)-1]
-print(val)
-x_df = x_df.append(val, ignore_index=True)
+model = tf.keras.models.load_model(filepath_model)
+y = model.predict(x_df_scaled_expanded)
 
+# Append
+# ------------------------------------------------------------------------
+
+x_df_open = pd.DataFrame(np.zeros((len(x_df), len(x_df.columns))), columns=x_df.columns)
+x_df_open['open'] = x_df['open'].values
+
+x_val = x_df_open.loc[len(x_df_open) - 1]
+x_df_open = x_df_open.append(x_val, ignore_index=True)
+
+y_df_open = pd.DataFrame(np.zeros((len(x_df), len(x_df.columns))), columns=x_df.columns)
+y_df_open['open'] = y[0][:, 0]
+
+y_df_open.loc[-1] = y_df_open.loc[0]
+y_df_open = y_df_open.sort_index().reset_index(drop=True)
+
+# Inverse
+# ------------------------------------------------------------------------
+
+y_df_open_inversed = scaler.inverse_transform(y_df_open)
+y_df_open['open'] = y_df_open_inversed[:, 0]
 
 # Plot
 # ------------------------------------------------------------------------
 
 plt.figure(figsize=(16, 8))
 
-plt.plot(x_df['open'].tail(tail).values, label='real', marker='.')
-plt.plot(y_df['open'].tail(tail).values, label='real', marker='.')
+plt.plot(x_df_open['open'].tail(tail).values, label='real', marker='.')
+plt.plot(y_df_open['open'].tail(tail).values, label='predict', marker='.')
 
-plt.ylabel(market)
+plt.ylabel('open')
 plt.xlabel('time')
 plt.legend()
 plt.show()
