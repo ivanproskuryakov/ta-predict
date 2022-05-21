@@ -48,9 +48,6 @@ y = model.predict(x_df_scaled_expanded)
 x_df_open = pd.DataFrame(np.zeros((len(x_df), len(x_df.columns))), columns=x_df.columns)
 x_df_open['open'] = x_df['open'].values
 
-x_val = x_df_open.loc[len(x_df_open) - 1]
-x_df_open = x_df_open.append(x_val, ignore_index=True)
-
 y_df_open = pd.DataFrame(np.zeros((len(x_df), len(x_df.columns))), columns=x_df.columns)
 y_df_open['open'] = y[0][:, 0]
 
@@ -68,7 +65,7 @@ y_df_open['open'] = y_df_open_inversed[:, 0]
 
 plt.figure(figsize=(16, 8))
 
-plt.plot(x_df_open['open'].tail(tail).values, label='real', marker='.')
+plt.plot(x_df_open['open'].tail(tail - 1).values, label='real', marker='.')
 plt.plot(y_df_open['open'].tail(tail).values, label='predict', marker='.')
 
 plt.ylabel('open')
