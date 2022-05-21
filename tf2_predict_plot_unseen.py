@@ -37,25 +37,34 @@ x_df_scaled_expanded = np.expand_dims(x_df_scaled, axis=0)
 model = tf.keras.models.load_model(filepath_model)
 y = model.predict(x_df_scaled_expanded)
 
-# Scale back
+
+# Append
 # ------------------------------------------------------------------------
 
-y_df = pd.DataFrame(np.zeros((len(x_df), len(x_df.columns))), columns=x_df.columns)
-y_df['open'] = y[0][:, 0]
+x_df_open = pd.DataFrame(np.zeros((len(x_df), len(x_df.columns))), columns=x_df.columns)
+x_df_open['open'] = x_df['open'].values
 
-y_inversed = scaler.inverse_transform(y_df)
+y_df_open = pd.DataFrame(np.zeros((len(x_df), len(x_df.columns))), columns=x_df.columns)
+y_df_open['open'] = y[0][:, 0]
 
-y_df['open'] = y_inversed[:, 0]
+y_df_open.loc[-1] = y_df_open.loc[0]
+y_df_open = y_df_open.sort_index().reset_index(drop=True)
+
+# Inverse
+# ------------------------------------------------------------------------
+
+y_df_open_inversed = scaler.inverse_transform(y_df_open)
+y_df_open['open'] = y_df_open_inversed[:, 0]
 
 # Plot
 # ------------------------------------------------------------------------
 
 plt.figure(figsize=(16, 8))
 
-plt.plot(x_df['open'][-tail:], label='real', marker='.')
-plt.plot(y_df['open'][-tail:], label='predict', marker='.')
+plt.plot(x_df_open['open'].tail(tail - 1).values, label='real', marker='.')
+plt.plot(y_df_open['open'].tail(tail).values, label='predict', marker='.')
 
-plt.ylabel(market)
+plt.ylabel('open')
 plt.xlabel('time')
 plt.legend()
 plt.show()
