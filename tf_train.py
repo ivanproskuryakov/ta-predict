@@ -9,7 +9,7 @@ from keras.optimizer_v2.rmsprop import RMSprop
 from keras.layers import Dense, GRU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, ReduceLROnPlateau
 
-from service.dataset_builder import build_dataset
+from service.dataset_builder import build_dataset_prepared
 from service.generator_batch import batch_generator
 from service.util import loss_mse_warmup
 
@@ -21,7 +21,7 @@ np.set_printoptions(precision=30, suppress=True)
 
 asset = 'ETH'
 interval = Client.KLINE_INTERVAL_5MINUTE
-df = build_dataset(asset=asset, interval=interval)
+df = build_dataset_prepared(asset=asset, interval=interval)
 
 # Data preparation
 # ------------------------------------------------------------------------

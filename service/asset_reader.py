@@ -2,12 +2,7 @@ import json
 import pandas as pd
 
 
-def read_asset_file(market: str, asset: str, interval: str, test=False):
-    path = f'out_klines/{market}/{asset}_{interval}.json'
-
-    if test:
-        path = f'test/{market}_{asset}_{interval}.json'
-
+def read_asset_file(path: str):
     with open(path) as f:
         data = f.read()
         collection = json.loads(data)

@@ -1,28 +1,44 @@
+import pandas as pd
+
+from deprecated import deprecated
+from sklearn.preprocessing import MinMaxScaler
+
 from service.asset_reader import read_asset_file
-from service.normalizer import scale_data
-from service.estimator import estimate_ta
+from service.estimator import estimate_ta_fill_na
 
 
-def build_dataset(market: str, asset: str, interval: str, test=False):
-    df_ohlc = read_asset_file(market, asset, interval, test)
-    df_ta = estimate_ta(df_ohlc)
-    df = df_ta.fillna(0)
-    # df = scale_data(df_nan)
+@deprecated
+def scale_data(df):
+    scaler = MinMaxScaler()
+
+    scaled = scaler.fit_transform(df)
+    df_scaled = pd.DataFrame(scaled, None, df.keys())
+
+    return df_scaled
+
+
+def build_dataset_prepared_seen(market: str, asset: str, interval: str):
+    path = f'out_klines/{market}/{asset}_{interval}.json'
+
+    df_ohlc = read_asset_file(path)
+
+    df = estimate_ta_fill_na(df_ohlc)
 
     return df
 
-def build_dataset_unseen(market: str, asset: str, interval: str):
-    df = read_asset_file(market, asset, interval, True)
 
-    df = estimate_ta(df)
-    df = df.fillna(0)
-    # df = scale_data(df)
+def build_dataset_prepared_unseen(market: str, asset: str, interval: str):
+    path = f'test/{market}_{asset}_{interval}.json'
+
+    df_ohlc = read_asset_file(path)
+
+    df = estimate_ta_fill_na(df_ohlc)
 
     return df
 
 
 def build_dataset_prepared(market: str, asset: str, interval: str):
-    df = build_dataset(market, asset, interval)
+    df = build_dataset_prepared_seen(market, asset, interval)
     df_num_signals = df.shape[1]
 
     # Data split

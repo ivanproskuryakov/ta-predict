@@ -6,8 +6,17 @@ from datetime import datetime
 from binance import Client
 
 from service.reader import Reader
-from service.estimator import trades_diff_total
 from parameters import market
+
+
+def trades_diff_total(trades: []):
+    total = 0
+
+    for trade in trades:
+        total = total + (trade['sell'] - trade['buy'])
+
+    return total
+
 
 # ----
 asset = sys.argv[1]

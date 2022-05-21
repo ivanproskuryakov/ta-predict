@@ -1,17 +1,7 @@
 import talib.abstract as ta
 import vendor.qtpylib as qtpylib
 
-
-def trades_diff_total(trades: []):
-    total = 0
-
-    for trade in trades:
-        total = total + (trade['sell'] - trade['buy'])
-
-    return total
-
-
-def estimate_ta(df):
+def estimate_ta_fill_na(df):
     macd = ta.MACD(df)
     bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(df), window=20, stds=2)
     stoch_fast = ta.STOCHF(df, 5, 3, 0, 3, 0);
@@ -63,4 +53,6 @@ def estimate_ta(df):
     for key in tadf.keys():
         df[key] = tadf[key]
 
-    return df
+    df_na = df.fillna(0)
+
+    return df_na

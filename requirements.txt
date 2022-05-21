@@ -10,3 +10,4 @@ tensorflow-macos
 matplotlib
 sklearn
 IPython
+deprecated

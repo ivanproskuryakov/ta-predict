@@ -37,7 +37,6 @@ x_df_scaled_expanded = np.expand_dims(x_df_scaled, axis=0)
 model = tf.keras.models.load_model(filepath_model)
 y = model.predict(x_df_scaled_expanded)
 
-
 # Append
 # ------------------------------------------------------------------------
 
