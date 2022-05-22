@@ -3,7 +3,6 @@ import numpy as np
 from src.service.predictor_unseen import make_prediction
 from src.parameters import market, ASSET, INTERVAL
 
-
 asset = ASSET
 interval = INTERVAL
 
@@ -24,6 +23,8 @@ if prediction > last:
 
 diff = np.round(last / (prediction * 100), 2)
 
+print('---------------------------------------------------------')
+print(ASSET)
 print(last)
 print(prediction)
 print(trend)

@@ -1,7 +1,7 @@
 from binance import Client
 
 DB_URL = {
-    "prod": "postgresql://postgres:@localhost/ta",
+    "dev": "postgresql://postgres:@localhost/ta",
     "test": "postgresql://postgres:@localhost/ta"
 }
 

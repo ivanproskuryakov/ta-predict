@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from src.service.predictor_unseen import make_prediction
 from src.parameters import market, ASSET, INTERVAL
 
-
 asset = ASSET
 interval = INTERVAL
 

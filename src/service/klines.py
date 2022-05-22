@@ -42,25 +42,25 @@ class KLines:
         collection = []
 
         for i in range(1, len(klines)):
-            c = klines[i]
-            p = klines[i - 1]
+            current = klines[i]
+            previous = klines[i - 1]
 
-            time_open = c[0] / 1000
-            price_open = self.round(c[1], 10)
-            price_high = self.round(c[2], 10)
-            price_low = self.round(c[3], 10)
-            price_close = self.round(c[4], 10)
-            volume = self.round(float(p[5]), 1)
-            time_close = self.round(float(p[6]), 1)
+            time_open = current[0] / 1000
+            price_open = self.round(current[1], 10)
+            price_high = self.round(current[2], 10)
+            price_low = self.round(current[3], 10)
+            price_close = self.round(current[4], 10)
+            volume = self.round(float(previous[5]), 1)
+            time_close = self.round(float(previous[6]), 1)
 
-            quote_asset_volume = self.round(float(p[7]), 0)
-            trades = self.round(float(p[8]), 0)
-            volume_maker = self.round(float(p[9]), 0)
+            quote_asset_volume = self.round(float(previous[7]), 0)
+            trades = self.round(float(previous[8]), 0)
+            volume_maker = self.round(float(previous[9]), 0)
             volume_taker = self.round(volume - volume_maker, 1)
 
             # --
-            avg_current = self.price_average(c)
-            avg_previous = self.price_average(p)
+            avg_current = self.price_average(current)
+            avg_previous = self.price_average(previous)
             avg_diff = self.round(avg_current - avg_previous)
 
             item = {
