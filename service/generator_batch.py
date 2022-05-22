@@ -1,9 +1,5 @@
 import numpy as np
 
-"""
-Generator function for creating random batches of training-data.
-"""
-
 
 def batch_generator(
         x_data,

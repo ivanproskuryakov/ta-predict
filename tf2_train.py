@@ -3,7 +3,7 @@ import tensorflow as tf
 from keras.layers import Dense, GRU, LSTM
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
-from service.dataset_builder import build_dataset_prepared
+from service.dataset_builder import build_dataset
 from service.generator_window import WindowGenerator
 
 from parameters import market, ASSET, intervals
@@ -25,7 +25,7 @@ for interval in intervals:
     width = SIZE_INPUT_LABEL
     filepath_model = f'data/ta_{market}_{asset}_{interval}.keras'
 
-    [df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(
+    [df, train_df, val_df, test_df, df_num_signals] = build_dataset(
         market=market, asset=asset,
         interval=interval
     )

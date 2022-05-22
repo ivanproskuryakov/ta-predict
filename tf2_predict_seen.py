@@ -3,7 +3,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from service.dataset_builder import build_dataset_prepared
+from service.dataset_builder import build_dataset
 from parameters import market, ASSET, INTERVAL
 from sklearn.preprocessing import MinMaxScaler
 
@@ -15,7 +15,7 @@ asset = ASSET
 interval = INTERVAL
 filepath_model = f'data/ta_{market}_{asset}_{interval}.keras'
 
-[df, train_df, val_df, test_df, df_num_signals] = build_dataset_prepared(
+[df, train_df, val_df, test_df, df_num_signals] = build_dataset(
     market=market,
     asset=asset,
     interval=interval

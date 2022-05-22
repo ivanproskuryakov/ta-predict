@@ -17,7 +17,7 @@ def scale_data(df):
     return df_scaled
 
 
-def build_dataset_prepared_seen(market: str, asset: str, interval: str):
+def build_dataset_seen(market: str, asset: str, interval: str):
     path = f'out_klines/{market}/{asset}_{interval}.json'
 
     df_ohlc = read_asset_file(path)
@@ -27,7 +27,7 @@ def build_dataset_prepared_seen(market: str, asset: str, interval: str):
     return df
 
 
-def build_dataset_prepared_unseen(market: str, asset: str, interval: str):
+def build_dataset_unseen(market: str, asset: str, interval: str):
     path = f'test/{market}_{asset}_{interval}.json'
 
     df_ohlc = read_asset_file(path)
@@ -37,8 +37,8 @@ def build_dataset_prepared_unseen(market: str, asset: str, interval: str):
     return df
 
 
-def build_dataset_prepared(market: str, asset: str, interval: str):
-    df = build_dataset_prepared_seen(market, asset, interval)
+def build_dataset(market: str, asset: str, interval: str):
+    df = build_dataset_seen(market, asset, interval)
     df_num_signals = df.shape[1]
 
     # Data split

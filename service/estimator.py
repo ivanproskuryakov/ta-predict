@@ -1,13 +1,14 @@
 import talib.abstract as ta
 import vendor.qtpylib as qtpylib
 
+
 def estimate_ta_fill_na(df):
     macd = ta.MACD(df)
     bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(df), window=20, stds=2)
     stoch_fast = ta.STOCHF(df, 5, 3, 0, 3, 0);
 
     tadf = {
-        'adx': ta.ADX(df, timeperiod=14),
+        'adx': ta.ADX(df, timeperiod=14), \
         'cdlhammer': ta.CDLHAMMER(df),
 
         # bollinger
