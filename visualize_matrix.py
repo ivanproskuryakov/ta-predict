@@ -4,7 +4,7 @@ import sys
 from datetime import datetime
 from yachalk import chalk
 
-from parameters import assets as assets_available
+from src.parameters import assets as assets_available
 
 assets = assets_available[0:23]
 interval = sys.argv[1]

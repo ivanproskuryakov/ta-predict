@@ -2,10 +2,10 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import pandas as pd
-
-from service.dataset_builder import build_dataset
-from parameters import market, ASSET, INTERVAL
 from sklearn.preprocessing import MinMaxScaler
+
+from src.service.dataset_builder import build_dataset
+from src.parameters import market, ASSET, INTERVAL
 
 # Data
 # ------------------------------------------------------------------------

@@ -5,8 +5,8 @@ from yachalk import chalk
 from datetime import datetime
 from binance import Client
 
-from service.reader import Reader
-from parameters import market
+from src.service.reader import Reader
+from src.parameters import market
 
 
 def trades_diff_total(trades: []):

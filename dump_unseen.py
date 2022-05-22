@@ -1,7 +1,7 @@
-from service.klines import KLines
 import json
 
-from parameters import INTERVAL
+from src.service.klines import KLines
+from src.parameters import INTERVAL
 
 # 1440 - 1 minutes
 # 480 - 3 minutes

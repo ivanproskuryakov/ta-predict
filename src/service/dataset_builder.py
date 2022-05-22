@@ -3,8 +3,8 @@ import pandas as pd
 from deprecated import deprecated
 from sklearn.preprocessing import MinMaxScaler
 
-from service.asset_reader import read_asset_file
-from service.estimator import estimate_ta_fill_na
+from src.service.asset_reader import read_asset_file
+from src.service.estimator import estimate_ta_fill_na
 
 
 @deprecated

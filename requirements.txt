@@ -11,3 +11,6 @@ matplotlib
 sklearn
 IPython
 deprecated
+SQLAlchemy
+psycopg2
+pytest

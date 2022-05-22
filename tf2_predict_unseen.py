@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 from sklearn.preprocessing import MinMaxScaler
 
-from service.dataset_builder import build_dataset_unseen
-from parameters import market, ASSET, INTERVAL
+from src.service.dataset_builder import build_dataset_unseen
+from src.parameters import market, ASSET, INTERVAL
 
 # Data
 # ------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 import talib.abstract as ta
-import vendor.qtpylib as qtpylib
+import src.vendor.qtpylib as qtpylib
 
 
 def estimate_ta_fill_na(df):

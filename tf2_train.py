@@ -3,10 +3,9 @@ import tensorflow as tf
 from keras.layers import Dense, GRU, LSTM
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
-from service.dataset_builder import build_dataset
-from service.generator_window import WindowGenerator
-
-from parameters import market, ASSET, intervals
+from src.service.dataset_builder import build_dataset
+from src.service.generator_window import WindowGenerator
+from src.parameters import market, ASSET, intervals
 
 # Var
 # ------------------------------------------------------------------------

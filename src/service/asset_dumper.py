@@ -1,4 +1,4 @@
-from service.klines import KLines
+from src.service.klines import KLines
 import json
 
 
