@@ -27,9 +27,11 @@ python visualize_list.py ETC
 python visualize_matrix 12h
 ```
 
-### Weights
+### Inputs
 
 ```
+- volume
+- ohlc
 - bitcoin hashrate
 - sequences leading to peaks 
 - day of the week
@@ -40,5 +42,4 @@ python visualize_matrix 12h
     - 5min(0, 1, 2, 3, 4, 5)
     - 3min(0, 1, 2, 3, 4, 5 … 9)
     - 1min(0, 1, 2, 3, 4, 5 … 29)
-
 ```

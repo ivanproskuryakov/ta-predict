@@ -29,6 +29,6 @@ sequence = klines.build_klines(
 
 text = json.dumps(sequence)
 
-file = open(f'test/{market}_{asset}_{interval}.json', 'w')
+file = open(f'unseen/{market}_{asset}_{interval}.json', 'w')
 file.write(text)
 file.close()

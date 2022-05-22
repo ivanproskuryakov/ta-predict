@@ -1,6 +1,9 @@
 from binance import Client
 
-DB_ADDRESS = "postgresql://postgres:@localhost/ta"
+DB_URL = {
+    "prod": "postgresql://postgres:@localhost/ta",
+    "test": "postgresql://postgres:@localhost/ta"
+}
 
 assets = [
     "BTC",

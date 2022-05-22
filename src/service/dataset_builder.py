@@ -28,7 +28,7 @@ def build_dataset_seen(market: str, asset: str, interval: str):
 
 
 def build_dataset_unseen(market: str, asset: str, interval: str):
-    path = f'test/{market}_{asset}_{interval}.json'
+    path = f'unseen/{market}_{asset}_{interval}.json'
 
     df_ohlc = read_asset_file(path)
 

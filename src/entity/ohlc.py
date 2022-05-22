@@ -10,6 +10,8 @@ class Ohlc(Base):
     id = Column(Integer, primary_key=True)
 
     exchange = Column(String)
+    market = Column(String)
+    asset = Column(String)
     interval = Column(String)
 
     time_open = Column(Integer)
