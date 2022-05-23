@@ -1,9 +1,12 @@
 import json
 import pandas as pd
-from datetime import datetime
+
+from src.service.estimator import estimate_ta_fill_na
 
 
-def read_asset_file(path: str):
+def build_dataset(market: str, asset: str, interval: str):
+    path = f'unseen/{market}_{asset}_{interval}.json'
+
     with open(path) as f:
         data = f.read()
         collection = json.loads(data)
@@ -30,7 +33,7 @@ def read_asset_file(path: str):
             # datetime.utcfromtimestamp(collection[i]['time_open']),
         ])
 
-    df = pd.DataFrame(prepared, None, [
+    df_ohlc = pd.DataFrame(prepared, None, [
         'open',
         'high',
         'low',
@@ -47,5 +50,7 @@ def read_asset_file(path: str):
         'quote_asset_volume',
         # 'epoch',
     ])
+
+    df = estimate_ta_fill_na(df_ohlc)
 
     return df

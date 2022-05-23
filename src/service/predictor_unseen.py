@@ -3,8 +3,7 @@ import tensorflow as tf
 import pandas as pd
 
 from sklearn.preprocessing import MinMaxScaler
-
-from src.service.dataset_builder import build_dataset_unseen
+from src.service.dataset_builder_file import build_dataset
 
 
 def make_prediction(market: str, asset: str, interval: str):
@@ -15,7 +14,7 @@ def make_prediction(market: str, asset: str, interval: str):
     # filepath_model = f'data/ta_USDT_BTC_15m.keras'
     filepath_model = f'data/ta_USDT_BTC_30m.keras'
 
-    x_df = build_dataset_unseen(
+    x_df = build_dataset(
         market=market,
         asset=asset,
         interval=interval,

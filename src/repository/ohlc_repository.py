@@ -1,8 +1,10 @@
-from sqlalchemy.orm import Session
-
 import numpy as np
-from src.entity.ohlc import Ohlc
+import pandas as pd
+
+from sqlalchemy.orm import Session
 from sqlalchemy.engine.base import Connectable
+
+from src.entity.ohlc import Ohlc
 
 
 # https://docs.sqlalchemy.org/en/14/orm/session_basics.html
@@ -17,6 +19,65 @@ class OhlcRepository:
         with Session(self.connection) as session:
             session.add(ohlc)
             session.commit()
+
+    def find_all_with_df(
+            self,
+            exchange: str,
+            market: str,
+            asset: str,
+            interval: str,
+    ):
+        list = []
+        prepared = []
+
+        with Session(self.connection) as session:
+            collection = session.query(Ohlc) \
+                .filter(Ohlc.exchange == exchange) \
+                .filter(Ohlc.market == market) \
+                .filter(Ohlc.interval == interval) \
+                .filter(Ohlc.interval == interval) \
+                .filter(Ohlc.asset == asset) \
+                .order_by(Ohlc.time_open) \
+                .all()
+
+            for item in collection:
+                list.append([
+                    item.price_open,
+                    item.price_high,
+                    item.price_low,
+                    item.price_close,
+
+                    item.avg_percentage,
+                    item.avg_current,
+
+                    item.trades,
+                    item.volume,
+                    item.volume_taker,
+                    item.volume_maker,
+
+                    item.quote_asset_volume,
+                    # datetime.utcfromtimestamp(collection[i]['time_open']),
+                ])
+
+            df = pd.DataFrame(prepared, None, [
+                'open',
+                'high',
+                'low',
+                'close',
+
+                'avg_percentage',
+                'avg_current',
+
+                'trades',
+                'volume',
+                'volume_taker',
+                'volume_maker',
+
+                'quote_asset_volume',
+                # 'epoch',
+            ])
+
+            return df
 
     def create_many(
             self,
