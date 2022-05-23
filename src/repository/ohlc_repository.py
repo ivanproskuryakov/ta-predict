@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 
+import numpy as np
 from src.entity.ohlc import Ohlc
 from sqlalchemy.engine.base import Connectable
 
@@ -17,7 +18,44 @@ class OhlcRepository:
             session.add(ohlc)
             session.commit()
 
-    def create_many(self, list: list[Ohlc]):
+    def create_many(
+            self,
+            exchange: str,
+            market: str,
+            asset: str,
+            interval: str,
+            collection: []
+    ):
+        list = []
+
+        for item in collection:
+            ohlc = Ohlc()
+
+            ohlc.exchange = exchange
+            ohlc.interval = interval
+            ohlc.market = market
+            ohlc.asset = asset
+
+            ohlc.time_open = np.round(item['time_open'], 0)
+            ohlc.time_close = np.round(item['time_close'], 0)
+
+            ohlc.price_open = item['price_open']
+            ohlc.price_low = item['price_low']
+            ohlc.price_high = item['price_high']
+            ohlc.price_close = item['price_close']
+
+            ohlc.avg_current = item['avg_current']
+            ohlc.avg_percentage = item['avg_percentage']
+
+            ohlc.trades = item['trades']
+            ohlc.volume = item['volume']
+            ohlc.volume_taker = item['volume_taker']
+            ohlc.volume_maker = item['volume_maker']
+
+            ohlc.quote_asset_volume = item['quote_asset_volume']
+
+            list.append(ohlc)
+
         with Session(self.connection) as session:
             session.add_all(list)
             session.commit()

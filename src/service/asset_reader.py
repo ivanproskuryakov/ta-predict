@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+from datetime import datetime
 
 
 def read_asset_file(path: str):
@@ -12,7 +13,6 @@ def read_asset_file(path: str):
 
     for i in range(0, len(collection)):
         prepared.append([
-            # datetime.utcfromtimestamp(collection[i]['time_open']),
             collection[i]['price_open'],
             collection[i]['price_high'],
             collection[i]['price_low'],
@@ -27,10 +27,10 @@ def read_asset_file(path: str):
             collection[i]['volume_maker'],
 
             collection[i]['quote_asset_volume'],
+            # datetime.utcfromtimestamp(collection[i]['time_open']),
         ])
 
     df = pd.DataFrame(prepared, None, [
-        # 'date',
         'open',
         'high',
         'low',
@@ -45,6 +45,7 @@ def read_asset_file(path: str):
         'volume_maker',
 
         'quote_asset_volume',
+        # 'epoch',
     ])
 
     return df

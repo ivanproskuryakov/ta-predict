@@ -13,6 +13,10 @@ interval = INTERVAL
 
 
 tail = y_df_open['open'].tail(2).values
+# last = y_df_open['open'].last()
+
+# print(last)
+# exit()
 
 last = tail[0]
 prediction = tail[1]

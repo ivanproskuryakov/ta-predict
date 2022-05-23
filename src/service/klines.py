@@ -50,12 +50,12 @@ class KLines:
             price_high = self.round(current[2], 10)
             price_low = self.round(current[3], 10)
             price_close = self.round(current[4], 10)
-            volume = self.round(float(previous[5]), 1)
-            time_close = self.round(float(previous[6]), 1)
+            volume = self.round(float(current[5]), 1)
+            time_close = current[6] / 1000
 
-            quote_asset_volume = self.round(float(previous[7]), 0)
-            trades = self.round(float(previous[8]), 0)
-            volume_maker = self.round(float(previous[9]), 0)
+            quote_asset_volume = self.round(float(current[7]), 0)
+            trades = self.round(float(current[8]), 0)
+            volume_maker = self.round(float(current[9]), 0)
             volume_taker = self.round(volume - volume_maker, 1)
 
             # --

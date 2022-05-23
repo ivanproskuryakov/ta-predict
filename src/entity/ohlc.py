@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Column, BigInteger, String, Float
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -7,15 +7,15 @@ Base = declarative_base()
 class Ohlc(Base):
     __tablename__ = 'ohlc'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
 
     exchange = Column(String)
     market = Column(String)
     asset = Column(String)
     interval = Column(String)
 
-    time_open = Column(Integer)
-    time_close = Column(Integer)
+    time_open = Column(BigInteger)
+    time_close = Column(BigInteger)
 
     price_open = Column(Float)
     price_high = Column(Float)
@@ -25,9 +25,9 @@ class Ohlc(Base):
     avg_current = Column(Float)
     avg_percentage = Column(Float)
 
-    trades = Column(Integer)
-    volume = Column(Integer)
-    volume_taker = Column(Integer)
-    volume_maker = Column(Integer)
+    trades = Column(BigInteger)
+    volume = Column(BigInteger)
+    volume_taker = Column(BigInteger)
+    volume_maker = Column(BigInteger)
 
-    quote_asset_volume = Column(Integer)
+    quote_asset_volume = Column(BigInteger)
