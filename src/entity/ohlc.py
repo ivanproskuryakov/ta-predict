@@ -17,13 +17,13 @@ class Ohlc(Base):
     time_open = Column(BigInteger)
     time_close = Column(BigInteger)
 
-    price_open = Column(Float)
-    price_high = Column(Float)
-    price_low = Column(Float)
-    price_close = Column(Float)
+    price_open = Column(Float, precision=32, scale=10)
+    price_high = Column(Float, precision=32, scale=10)
+    price_low = Column(Float, precision=32, scale=10)
+    price_close = Column(Float, precision=32, scale=10)
 
-    avg_current = Column(Float)
-    avg_percentage = Column(Float)
+    avg_current = Column(Float, precision=32, scale=10)
+    avg_percentage = Column(Float, precision=32, scale=10)
 
     trades = Column(BigInteger)
     volume = Column(BigInteger)
