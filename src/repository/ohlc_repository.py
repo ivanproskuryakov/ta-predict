@@ -28,7 +28,6 @@ class OhlcRepository:
             interval: str,
     ):
         list = []
-        prepared = []
 
         with Session(self.connection) as session:
             collection = session.query(Ohlc) \
@@ -59,25 +58,25 @@ class OhlcRepository:
                     # datetime.utcfromtimestamp(collection[i]['time_open']),
                 ])
 
-            df = pd.DataFrame(prepared, None, [
-                'open',
-                'high',
-                'low',
-                'close',
+        df = pd.DataFrame(list, None, [
+            'open',
+            'high',
+            'low',
+            'close',
 
-                'avg_percentage',
-                'avg_current',
+            'avg_percentage',
+            'avg_current',
 
-                'trades',
-                'volume',
-                'volume_taker',
-                'volume_maker',
+            'trades',
+            'volume',
+            'volume_taker',
+            'volume_maker',
 
-                'quote_asset_volume',
-                # 'epoch',
-            ])
+            'quote_asset_volume',
+            # 'epoch',
+        ])
 
-            return df
+        return df
 
     def create_many(
             self,

@@ -15,7 +15,6 @@ def build_dataset(market: str, asset: str, interval: str):
     )
 
     df = estimate_ta_fill_na(df_ohlc)
-
     df_num_signals = df.shape[1]
 
     # Data split
