@@ -16,6 +16,10 @@ class Ohlc(Base):
 
     time_open = Column(BigInteger)
     time_close = Column(BigInteger)
+    time_month = Column(BigInteger)
+    time_day = Column(BigInteger)
+    time_hour = Column(BigInteger)
+    time_minute = Column(BigInteger)
 
     price_open = Column(Float(precision=32, decimal_return_scale=None))
     price_high = Column(Float(precision=32, decimal_return_scale=None))

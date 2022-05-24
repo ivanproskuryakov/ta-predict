@@ -1,5 +1,7 @@
-from binance import Client
 import numpy as np
+import datetime
+from binance import Client
+from datetime import datetime
 
 
 class KLines:
@@ -44,6 +46,7 @@ class KLines:
         for i in range(1, len(klines)):
             current = klines[i]
             previous = klines[i - 1]
+            date = datetime.utcfromtimestamp(current[0])
 
             time_open = current[0] / 1000
             price_open = self.round(current[1], 10)
@@ -64,15 +67,20 @@ class KLines:
             avg_diff = self.round(avg_current - avg_previous)
 
             item = {
-                'time_open': time_open,
                 'price_open': price_open,
                 'price_high': price_high,
                 'price_low': price_low,
                 'price_close': price_close,
+
+                'time_open': time_open,
                 'time_close': time_close,
+                'time_month': date.month,
+                'time_hour': date.hour,
+                'time_day': date.day,
+                'time_minute': date.minute,
 
                 'avg_current': avg_current,
-                'avg_percentage': self.round(avg_diff * 100 / avg_current, 2),
+                'avg_percentage': self.round(avg_diff * 100 / avg_current, 4),
 
                 'trades': trades,
                 'volume': volume,

@@ -3,7 +3,7 @@ from src.connector.db_connector import db_connect
 from src.service.klines import KLines
 from src.parameters import intervals, assets
 
-start_at = '5 year ago UTC'
+start_at = '8 year ago UTC'
 exchange = 'binance'
 market = 'USDT'
 

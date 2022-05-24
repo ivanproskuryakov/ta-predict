@@ -1,0 +1,16 @@
+requests
+numpy
+TA-Lib
+python-binance
+yachalk
+arrow
+pandas
+binance
+tensorflow
+matplotlib
+sklearn
+IPython
+deprecated
+SQLAlchemy
+psycopg2-binary
+pytest

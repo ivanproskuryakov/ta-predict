@@ -98,6 +98,10 @@ class OhlcRepository:
 
             ohlc.time_open = np.round(item['time_open'], 0)
             ohlc.time_close = np.round(item['time_close'], 0)
+            ohlc.time_month = item['time_month']
+            ohlc.time_day = item['time_day']
+            ohlc.time_hour = item['time_hour']
+            ohlc.time_minute = item['time_minute']
 
             ohlc.price_open = item['price_open']
             ohlc.price_low = item['price_low']
