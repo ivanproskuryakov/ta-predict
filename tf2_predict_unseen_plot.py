@@ -19,21 +19,31 @@ x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
 
 plt.figure(figsize=(16, 8))
 
+plt.xlim(left=0)
+plt.xlim(right=tail)
+
+plt.rcParams['axes.facecolor'] = 'white'
+plt.rcParams['axes.edgecolor'] = 'white'
+plt.rcParams['axes.grid'] = True
+plt.rcParams['grid.alpha'] = 1
+plt.rcParams['grid.color'] = "#cccccc"
+plt.grid(True)
+
 a = plt.subplot(2, 1, 1)
 a.plot(
-    x_df_open['open'].tail(tail - 1).values,
-    color='orange',
+    x_df_open['open'].tail(tail).values,
+    color='blue',
     label='real',
     marker='.'
 )
-#
-# b = plt.subplot(2, 1, 2)
-# b.plot(
-#     y_df_open['open'].tail(tail).values,
-#     color='green',
-#     label=f'predict {interval}',
-#     marker='.'
-# )
+
+b = plt.subplot(2, 1, 2)
+b.plot(
+    y_df_open['open'].tail(tail).values,
+    color='green',
+    label=f'predict {interval}',
+    marker='.'
+)
 
 plt.legend()
 plt.show()
