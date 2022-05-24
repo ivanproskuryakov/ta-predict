@@ -5,19 +5,35 @@ from src.parameters import market, ASSET, INTERVAL
 
 asset = ASSET
 interval = INTERVAL
+tail = 20
 
-(x_df_open, y_df_open) = make_prediction(market, ASSET, INTERVAL)
+x_df_open, y_df_open = make_prediction(market, ASSET, INTERVAL)
+
+# Plot align
+# ------------------------------------------------------------------------
+
+x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
 
 # Plot
 # ------------------------------------------------------------------------
-tail = 20
 
 plt.figure(figsize=(16, 8))
 
-plt.plot(x_df_open['open'].tail(tail - 1).values, label='real', marker='.')
-plt.plot(y_df_open['open'].tail(tail).values, label='predict', marker='.')
+a = plt.subplot(2, 1, 1)
+a.plot(
+    x_df_open['open'].tail(tail - 1).values,
+    color='orange',
+    label='real',
+    marker='.'
+)
+#
+# b = plt.subplot(2, 1, 2)
+# b.plot(
+#     y_df_open['open'].tail(tail).values,
+#     color='green',
+#     label=f'predict {interval}',
+#     marker='.'
+# )
 
-plt.ylabel('open')
-plt.xlabel('time')
 plt.legend()
 plt.show()

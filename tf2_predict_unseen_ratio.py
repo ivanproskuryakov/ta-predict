@@ -6,17 +6,12 @@ from src.parameters import market, ASSET, INTERVAL
 asset = ASSET
 interval = INTERVAL
 
-(x_df_open, y_df_open) = make_prediction(market, ASSET, INTERVAL)
+x_df_open, y_df_open = make_prediction(market, ASSET, INTERVAL)
 
 # Measure
 # ------------------------------------------------------------------------
 
-
 tail = y_df_open['open'].tail(2).values
-# last = y_df_open['open'].last()
-
-# print(last)
-# exit()
 
 last = tail[0]
 prediction = tail[1]

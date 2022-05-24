@@ -17,17 +17,17 @@ class Ohlc(Base):
     time_open = Column(BigInteger)
     time_close = Column(BigInteger)
 
-    price_open = Column(Float, precision=32, scale=10)
-    price_high = Column(Float, precision=32, scale=10)
-    price_low = Column(Float, precision=32, scale=10)
-    price_close = Column(Float, precision=32, scale=10)
+    price_open = Column(Float(precision=32, decimal_return_scale=None))
+    price_high = Column(Float(precision=32, decimal_return_scale=None))
+    price_low = Column(Float(precision=32, decimal_return_scale=None))
+    price_close = Column(Float(precision=32, decimal_return_scale=None))
 
-    avg_current = Column(Float, precision=32, scale=10)
-    avg_percentage = Column(Float, precision=32, scale=10)
+    avg_current = Column(Float(precision=32, decimal_return_scale=None))
+    avg_percentage = Column(Float(precision=32, decimal_return_scale=None))
 
-    trades = Column(BigInteger)
-    volume = Column(BigInteger)
-    volume_taker = Column(BigInteger)
-    volume_maker = Column(BigInteger)
+    trades = Column(Float(precision=32, decimal_return_scale=None))
+    volume = Column(Float(precision=32, decimal_return_scale=None))
+    volume_taker = Column(Float(precision=32, decimal_return_scale=None))
+    volume_maker = Column(Float(precision=32, decimal_return_scale=None))
 
-    quote_asset_volume = Column(BigInteger)
+    quote_asset_volume = Column(Float(precision=32, decimal_return_scale=None))
