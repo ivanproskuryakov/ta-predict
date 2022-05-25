@@ -46,6 +46,11 @@ class OhlcRepository:
                     item.price_low,
                     item.price_close,
 
+                    item.time_month,
+                    item.time_day,
+                    item.time_hour,
+                    item.time_minute,
+
                     item.avg_percentage,
                     item.avg_current,
 
@@ -63,6 +68,11 @@ class OhlcRepository:
             'high',
             'low',
             'close',
+
+            'time_month',
+            'time_day',
+            'time_hour',
+            'time_minute',
 
             'avg_percentage',
             'avg_current',

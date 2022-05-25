@@ -46,13 +46,12 @@ for interval in intervals:
 
     model = tf.keras.models.Sequential([
         GRU(
-            units=200,
+            units=300,
             return_sequences=True,
             input_shape=(None, df_num_signals,)
         ),
-        LSTM(200, return_sequences=True),
-        Dense(df_num_signals),
-        # Dense(df_num_signals, activation='sigmoid'),
+        LSTM(300, return_sequences=True),
+        Dense(df_num_signals, activation='sigmoid'),
         Dense(units=1),
     ])
 
@@ -64,9 +63,9 @@ for interval in intervals:
     )
     callback_reduce_lr = ReduceLROnPlateau(
         monitor='val_loss',
-        factor=0.1,
-        min_lr=0.001,
-        patience=1,
+        factor=0.2,
+        min_lr=0.0001,
+        patience=2,
         verbose=1
     )
 
@@ -86,7 +85,7 @@ for interval in intervals:
 
     model.fit(
         window.train,
-        epochs=1000,
+        epochs=500,
         validation_data=window.val,
         callbacks=[
             # callback_early_stopping,
