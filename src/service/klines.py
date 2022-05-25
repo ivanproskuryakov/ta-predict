@@ -46,7 +46,7 @@ class KLines:
         for i in range(1, len(klines)):
             current = klines[i]
             previous = klines[i - 1]
-            date = datetime.utcfromtimestamp(current[0])
+
 
             time_open = current[0] / 1000
             price_open = self.round(current[1], 10)
@@ -65,6 +65,8 @@ class KLines:
             avg_current = self.price_average(current)
             avg_previous = self.price_average(previous)
             avg_diff = self.round(avg_current - avg_previous)
+
+            date = datetime.utcfromtimestamp(time_open)
 
             item = {
                 'price_open': price_open,

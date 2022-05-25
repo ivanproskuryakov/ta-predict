@@ -11,7 +11,7 @@ from src.parameters import market, ASSET, intervals
 # ------------------------------------------------------------------------
 
 SIZE_SHIFT = 1
-SIZE_BATCH = 50
+SIZE_BATCH = 1000
 SIZE_INPUT_LABEL = 30
 
 # Data load
@@ -46,11 +46,13 @@ for interval in intervals:
 
     model = tf.keras.models.Sequential([
         GRU(
-            units=100,
+            units=200,
             return_sequences=True,
             input_shape=(None, df_num_signals,)
         ),
-        LSTM(100, return_sequences=True),
+        LSTM(200, return_sequences=True),
+        Dense(df_num_signals),
+        # Dense(df_num_signals, activation='sigmoid'),
         Dense(units=1),
     ])
 
@@ -84,7 +86,7 @@ for interval in intervals:
 
     model.fit(
         window.train,
-        epochs=100,
+        epochs=1000,
         validation_data=window.val,
         callbacks=[
             # callback_early_stopping,
