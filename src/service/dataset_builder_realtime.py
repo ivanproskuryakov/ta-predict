@@ -5,7 +5,7 @@ from src.service.estimator import estimate_ta_fill_na
 from src.service.klines import KLines
 
 
-def build_dataset(market: str, asset: str, interval: str):
+def     build_dataset(market: str, asset: str, interval: str):
     klines = KLines()
     start_at = '48 hour ago UTC'
     prepared = []
@@ -19,10 +19,6 @@ def build_dataset(market: str, asset: str, interval: str):
 
     total = len(collection)
     last = collection[total - 1]
-    date = datetime.utcfromtimestamp(last["time_open"])
-
-    print(f'time_open: {date.strftime("%d %m %Y %H:%M:%S")}')
-    print(f'price_open: {last["price_open"]}')
 
     for i in range(0, len(collection)):
         time_open = collection[i]['time_open'] / 1000
@@ -84,4 +80,4 @@ def build_dataset(market: str, asset: str, interval: str):
     #
     # df = (df - train_mean) / train_std
 
-    return df
+    return df, last

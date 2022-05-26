@@ -6,7 +6,7 @@ from src.service.dataset_builder_realtime import build_dataset
 
 
 def make_prediction(market: str, asset: str, interval: str, model):
-    x_df = build_dataset(
+    x_df, last = build_dataset(
         market=market,
         asset=asset,
         interval=interval,
@@ -23,7 +23,7 @@ def make_prediction(market: str, asset: str, interval: str, model):
 
     # Predict
     # ------------------------------------------------------------------------
-    y = model.predict(x_df_scaled_expanded)
+    y = model.predict(x_df_scaled_expanded, verbose=0)
 
     # Append
     # ------------------------------------------------------------------------
@@ -40,4 +40,4 @@ def make_prediction(market: str, asset: str, interval: str, model):
     y_df_open_inverse = scaler.inverse_transform(y_df_open)
     y_df_open['open'] = y_df_open_inverse[:, 0]
 
-    return x_df_open, y_df_open
+    return x_df_open, y_df_open, last

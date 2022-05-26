@@ -23,7 +23,9 @@ while True:
     print("------------------------------------------------------------------------------------------")
 
     for asset in assets:
-        x_df_open, y_df_open = make_prediction(market, asset, INTERVAL, model)
+        x_df_open, y_df_open, last = make_prediction(market, asset, INTERVAL, model)
+
+        date = datetime.utcfromtimestamp(last["time_open"])
 
         # Measure
         # ------------------------------------------------------------------------
@@ -36,8 +38,7 @@ while True:
 
         diff = diff_percentage(prediction=prediction, last=last)
 
-        print(f'asset: {asset}')
-        print(f'real: {last_real} prediction: {last} -> {prediction}')
+        print(f'{asset} {last_real} | {last} -> {prediction} | {date.strftime("%d %m %Y %H:%M:%S")}')
 
         if diff > 0.05:
             print(chalk.green(f'diff: {diff}%'))
