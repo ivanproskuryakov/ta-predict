@@ -8,9 +8,9 @@ from src.service.predictor_unseen import make_prediction
 from src.parameters import market, assets
 from src.service.util import diff_percentage
 
-interval = Client.KLINE_INTERVAL_1MINUTE
+interval = Client.KLINE_INTERVAL_15MINUTE
 start_time = time.time()
-time_sec = 20
+time_sec = 60 * 5
 
 model = tf.keras.models.load_model('model/ta_USDT_BTC_1m.keras')
 
@@ -23,9 +23,9 @@ while True:
     print("------------------------------------------------------------------------------------------")
 
     for asset in assets:
-        x_df_open, y_df_open, last = make_prediction(market, asset, interval, model)
+        x_df_open, y_df_open, last_item = make_prediction(market, asset, interval, model)
 
-        date = datetime.utcfromtimestamp(last["time_open"])
+        date = datetime.utcfromtimestamp(last_item["time_open"])
 
         # Measure
         # ------------------------------------------------------------------------

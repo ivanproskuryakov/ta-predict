@@ -9,8 +9,8 @@ assets = [
     "BTC",
     "ETH",
 
-    # "BNB", "ADA", "TRX", "SOL", "XRP",
-    #
+    "BNB", "ADA", "TRX", "SOL", "XRP",
+
     # "DOT", "ATOM", "HBAR", "IOTA", "AVAX",
     # "COTI", "NEAR", "BAT", "WAVES", "MINA",
     # "EGLD", "XTZ", "ALGO", "KSM",
