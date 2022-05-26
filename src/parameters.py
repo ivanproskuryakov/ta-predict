@@ -10,10 +10,11 @@ assets = [
     "ETH",
 
     "BNB", "ADA", "TRX", "SOL", "XRP",
+    "DOT", "ATOM", "HBAR", "IOTA", "AVAX",
+    "COTI", "NEAR", "BAT", "WAVES", "MINA",
 
-    # "DOT", "ATOM", "HBAR", "IOTA", "AVAX",
-    # "COTI", "NEAR", "BAT", "WAVES", "MINA",
-    # "EGLD", "XTZ", "ALGO", "KSM",
+    "EGLD", "XTZ", "ALGO", "KSM",
+
     # "MATIC", "ONE", "1INCH", "KAVA", "OCEAN",
     # "GRT", "ROSE", "CTSI", "ZRX", "ROSE",
     # "ETC", "BCH", "LINK", "FIL", "UNI",

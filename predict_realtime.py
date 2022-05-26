@@ -15,11 +15,9 @@ time_sec = 60 * 5
 model = tf.keras.models.load_model('model/ta_USDT_BTC_1m.keras')
 
 while True:
-    time.sleep(time_sec - ((time.time() - start_time) % time_sec))
-
     print('\n\n')
     print(interval)
-    print(datetime.now().strftime('%Y %m %d %H:%M:%S'))
+    print(datetime.utcnow().strftime('%Y %m %d %H:%M:%S'))
     print("------------------------------------------------------------------------------------------")
 
     for asset in assets:
@@ -38,11 +36,13 @@ while True:
 
         diff = diff_percentage(prediction=prediction, last=last)
 
-        print(f'{asset} {last_real:.4f} | f{last:.4f} -> {prediction:.4f} | {date.strftime("%Y %m %d %H:%M:%S")}')
+        print(f'{asset} {last_real:.4f} | {last:.4f} -> {prediction:.4f} | {date.strftime("%Y %m %d %H:%M:%S")}')
 
-        if diff > 0.05:
+        if diff > 0.1:
             print(chalk.green(f'diff: {diff}%'))
-        elif diff < -0.05:
+        elif diff < -0.1:
             print(chalk.red(f'diff: {diff}%'))
         else:
             print(f'diff: {diff}%')
+
+    time.sleep(time_sec - ((time.time() - start_time) % time_sec))
