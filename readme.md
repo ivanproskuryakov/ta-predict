@@ -27,7 +27,7 @@ python visualize_list.py ETC
 python visualize_matrix 12h
 ```
 
-### Inputs
+### Features
 
 ```
 - volume
