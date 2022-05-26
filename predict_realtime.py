@@ -14,6 +14,18 @@ time_sec = 60 * 5
 
 model = tf.keras.models.load_model('model/ta_USDT_BTC_1m.keras')
 
+
+def paint_diff(diff: float):
+    color = f'{diff:.4f}%'
+
+    if diff > 0.2:
+        color = chalk.green(f'{diff:.4f}%')
+    if diff < -0.2:
+        color = chalk.red(f'{diff:.4f}%')
+
+    return color
+
+
 while True:
     print('\n\n')
     print(interval)
@@ -36,13 +48,12 @@ while True:
 
         diff = diff_percentage(prediction=prediction, last=last)
 
-        print(f'{asset} {last_real:.4f} | {last:.4f} -> {prediction:.4f} | {date.strftime("%Y %m %d %H:%M:%S")}')
-
-        if diff > 0.1:
-            print(chalk.green(f'diff: {diff}%'))
-        elif diff < -0.1:
-            print(chalk.red(f'diff: {diff}%'))
-        else:
-            print(f'diff: {diff}%')
+        print(f''
+              f'{asset}\t'
+              f'{paint_diff(diff)} \t |'
+              f'{last_real:.4f} | '
+              f'{last:.4f} -> {prediction:.4f} | '
+              f'{date.strftime("%Y %m %d %H:%M:%S")}'
+              f'')
 
     time.sleep(time_sec - ((time.time() - start_time) % time_sec))

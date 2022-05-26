@@ -14,9 +14,8 @@ assets = [
     "COTI", "NEAR", "BAT", "WAVES", "MINA",
 
     "EGLD", "XTZ", "ALGO", "KSM",
-
-    # "MATIC", "ONE", "1INCH", "KAVA", "OCEAN",
-    # "GRT", "ROSE", "CTSI", "ZRX", "ROSE",
+    "MATIC", "ONE", "1INCH", "KAVA", "OCEAN",
+    "GRT", "ROSE", "CTSI", "ZRX", "ROSE",
     # "ETC", "BCH", "LINK", "FIL", "UNI",
     # "GTC", "POND", "CELO"
 ]
