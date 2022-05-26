@@ -17,11 +17,9 @@ class Prediction(Base):
     time_open = Column(BigInteger)
 
     price_open = Column(Float(precision=32, decimal_return_scale=None))
+    price_close = Column(Float(precision=32, decimal_return_scale=None))
 
-    price_real = Column(Float(precision=32, decimal_return_scale=None))
-    price_prediction = Column(Float(precision=32, decimal_return_scale=None))
-    price_error = Column(Float(precision=32, decimal_return_scale=None))
-
-    percentage_real = Column(Float(precision=32, decimal_return_scale=None))
-    percentage_prediction = Column(Float(precision=32, decimal_return_scale=None))
-    percentage_error = Column(Float(precision=32, decimal_return_scale=None))
+    prediction_price = Column(Float(precision=32, decimal_return_scale=None))
+    prediction_price_error = Column(Float(precision=32, decimal_return_scale=None))
+    prediction_percentage = Column(Float(precision=32, decimal_return_scale=None))
+    prediction_percentage_error = Column(Float(precision=32, decimal_return_scale=None))

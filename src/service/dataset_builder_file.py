@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+from datetime import datetime
 
 from src.service.estimator import estimate_ta_fill_na
 
@@ -15,11 +16,19 @@ def build_dataset(market: str, asset: str, interval: str):
     prepared = []
 
     for i in range(0, len(collection)):
+        time_open = collection[i]['time_open'] / 1000
+        date = datetime.utcfromtimestamp(time_open)
+
         prepared.append([
             collection[i]['price_open'],
             collection[i]['price_high'],
             collection[i]['price_low'],
             collection[i]['price_close'],
+
+            date.month,
+            date.day,
+            date.hour,
+            date.minute,
 
             collection[i]['avg_percentage'],
             collection[i]['avg_current'],
@@ -38,6 +47,11 @@ def build_dataset(market: str, asset: str, interval: str):
         'high',
         'low',
         'close',
+
+        'time_month',
+        'time_day',
+        'time_hour',
+        'time_minute',
 
         'avg_percentage',
         'avg_current',

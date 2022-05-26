@@ -13,6 +13,7 @@ klines = KLines()
 
 for asset in assets:
     for interval in intervals:
+        print(f'processing: {interval}')
         collection = klines.build_klines(
             market,
             asset,

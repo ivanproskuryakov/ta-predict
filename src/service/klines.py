@@ -76,6 +76,7 @@ class KLines:
 
                 'time_open': time_open,
                 'time_close': time_close,
+
                 'time_month': date.month,
                 'time_hour': date.hour,
                 'time_day': date.day,

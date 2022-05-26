@@ -18,6 +18,8 @@ SIZE_INPUT_LABEL = 30
 # ------------------------------------------------------------------------
 
 for interval in intervals:
+    print(f'training interval: {interval}')
+
     asset = ASSET
     shift = SIZE_SHIFT
     batch_size = SIZE_BATCH
