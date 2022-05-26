@@ -9,15 +9,15 @@ assets = [
     "BTC",
     "ETH",
 
-    "BNB", "ADA", "TRX", "SOL", "XRP",
-
-    "DOT", "ATOM", "HBAR", "IOTA", "AVAX",
-    "COTI", "NEAR", "BAT", "WAVES", "MINA",
+    # "BNB", "ADA", "TRX", "SOL", "XRP",
+    #
+    # "DOT", "ATOM", "HBAR", "IOTA", "AVAX",
+    # "COTI", "NEAR", "BAT", "WAVES", "MINA",
     # "EGLD", "XTZ", "ALGO", "KSM",
     # "MATIC", "ONE", "1INCH", "KAVA", "OCEAN",
     # "GRT", "ROSE", "CTSI", "ZRX", "ROSE",
     # "ETC", "BCH", "LINK", "FIL", "UNI",
-    # "GTC", "NU", "POND", "CELO"
+    # "GTC", "POND", "CELO"
 ]
 
 market = 'USDT'
@@ -37,9 +37,9 @@ intervals = [
 start_at = '24 month ago UTC'
 
 ASSET = 'BTC'
-INTERVAL = Client.KLINE_INTERVAL_1MINUTE
+# INTERVAL = Client.KLINE_INTERVAL_1MINUTE
 # INTERVAL = Client.KLINE_INTERVAL_3MINUTE
-# INTERVAL = Client.KLINE_INTERVAL_5MINUTE
+INTERVAL = Client.KLINE_INTERVAL_5MINUTE
 # INTERVAL = Client.KLINE_INTERVAL_15MINUTE
 # INTERVAL = Client.KLINE_INTERVAL_30MINUTE
 # INTERVAL = Client.KLINE_INTERVAL_1HOUR
