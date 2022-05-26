@@ -1,19 +1,28 @@
-import json
 import pandas as pd
 from datetime import datetime
 
 from src.service.estimator import estimate_ta_fill_na
+from src.service.klines import KLines
 
 
 def build_dataset(market: str, asset: str, interval: str):
-    path = f'unseen/{market}_{asset}_{interval}.json'
-
-    with open(path) as f:
-        data = f.read()
-        collection = json.loads(data)
-        f.close()
-
+    klines = KLines()
+    start_at = '48 hour ago UTC'
     prepared = []
+
+    collection = klines.build_klines(
+        market,
+        asset,
+        interval,
+        start_at
+    )
+
+    total = len(collection)
+    last = collection[total - 1]
+    date = datetime.utcfromtimestamp(last["time_open"])
+
+    print(f'time_open: {date.strftime("%d %m %Y %H:%M:%S")}')
+    print(f'price_open: {last["price_open"]}')
 
     for i in range(0, len(collection)):
         time_open = collection[i]['time_open'] / 1000

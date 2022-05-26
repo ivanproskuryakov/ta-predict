@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
-from src.service.dataset_builder_file import build_dataset
+from src.service.dataset_builder_realtime import build_dataset
 from src.parameters import market, ASSET, INTERVAL
 
 # Data

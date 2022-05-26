@@ -3,7 +3,7 @@ import tensorflow as tf
 import pandas as pd
 
 from sklearn.preprocessing import MinMaxScaler
-from src.service.dataset_builder_file import build_dataset
+from src.service.dataset_builder_realtime import build_dataset
 
 
 def make_prediction(market: str, asset: str, interval: str):
