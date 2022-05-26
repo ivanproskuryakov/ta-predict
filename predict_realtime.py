@@ -1,4 +1,5 @@
 import time
+import tensorflow as tf
 from yachalk import chalk
 from datetime import datetime
 
@@ -11,16 +12,18 @@ start_time = time.time()
 
 time_sec = 20
 
+filepath_model = f'model/ta_{market}_BTC_{interval}.keras'
+model = tf.keras.models.load_model(filepath_model)
+
 while True:
-
-    print('\n\n\n')
-    print(datetime.now().strftime('%Y  %m %d %H:%M:%S'))
-    print("------------------------------------------------------------------------------------------")
-
     time.sleep(time_sec - ((time.time() - start_time) % time_sec))
 
+    print('\n\n')
+    print(datetime.now().strftime('%Y %m %d %H:%M:%S'))
+    print("------------------------------------------------------------------------------------------")
+
     for asset in assets:
-        x_df_open, y_df_open = make_prediction(market, asset, INTERVAL)
+        x_df_open, y_df_open = make_prediction(market, asset, INTERVAL, model)
 
         # Measure
         # ------------------------------------------------------------------------
@@ -34,8 +37,7 @@ while True:
         diff = diff_percentage(prediction=prediction, last=last)
 
         print(f'asset: {asset}')
-        print(f'real: {last_real}')
-        print(f'prediction: {last} -> {prediction}')
+        print(f'real: {last_real} prediction: {last} -> {prediction}')
 
         if diff > 0.05:
             print(chalk.green(f'diff: {diff}%'))

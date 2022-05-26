@@ -1,14 +1,11 @@
 import numpy as np
-import tensorflow as tf
 import pandas as pd
 
 from sklearn.preprocessing import MinMaxScaler
 from src.service.dataset_builder_realtime import build_dataset
 
 
-def make_prediction(market: str, asset: str, interval: str):
-    filepath_model = f'model/ta_{market}_BTC_{interval}.keras'
-
+def make_prediction(market: str, asset: str, interval: str, model):
     x_df = build_dataset(
         market=market,
         asset=asset,
@@ -24,11 +21,8 @@ def make_prediction(market: str, asset: str, interval: str):
     x_df_scaled = pd.DataFrame(scaled, None, x_df.keys())
     x_df_scaled_expanded = np.expand_dims(x_df_scaled, axis=0)
 
-
-    # Model
+    # Predict
     # ------------------------------------------------------------------------
-
-    model = tf.keras.models.load_model(filepath_model)
     y = model.predict(x_df_scaled_expanded)
 
     # Append
