@@ -1,7 +1,6 @@
 ### Installation
 
 ```
-mkdir out_klines
 mkdir markets
 
 pip install -r requirements.txt

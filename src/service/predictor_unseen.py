@@ -7,7 +7,7 @@ from src.service.dataset_builder_realtime import build_dataset
 
 
 def make_prediction(market: str, asset: str, interval: str):
-    filepath_model = f'model/ta_{market}_{asset}_{interval}.keras'
+    filepath_model = f'model/ta_{market}_BTC_{interval}.keras'
 
     x_df = build_dataset(
         market=market,

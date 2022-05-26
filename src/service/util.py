@@ -1,4 +1,12 @@
+import numpy as np
 from keras.backend import square, mean
+
+
+def diff_percentage(prediction, last):
+    diff = 100 * (prediction - last) / ((prediction + last) / 2)
+    diff = np.round(diff, 4)
+
+    return diff
 
 
 def loss_mse_warmup(y_true, y_pred):
