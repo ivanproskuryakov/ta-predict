@@ -1,5 +1,7 @@
 import numpy as np
 import time
+from yachalk import chalk
+
 from src.service.predictor_unseen import make_prediction
 from src.parameters import market, ASSET, INTERVAL
 
@@ -27,9 +29,14 @@ while True:
     prediction = tail[1]
 
     diff = 100 * (prediction - last) / ((prediction + last) / 2)
-    diff = np.round(diff, 10)
 
     print(ASSET)
     print(f'real: {last_real}')
     print(f'prediction: {last} -> {prediction}')
-    print(f'diff: {diff}%')
+
+    if diff > 0.05:
+        print(chalk.green(f'diff: {diff}%'))
+    elif diff < 0.05:
+        print(chalk.red(f'diff: {diff}%'))
+    else:
+        print(f'diff: {diff}%')
