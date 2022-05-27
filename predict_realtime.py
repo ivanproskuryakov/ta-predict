@@ -8,9 +8,9 @@ from src.service.predictor_unseen import make_prediction
 from src.parameters import market, assets
 from src.service.util import diff_percentage
 
-interval = Client.KLINE_INTERVAL_15MINUTE
+interval = Client.KLINE_INTERVAL_30MINUTE
 start_time = time.time()
-time_sec = 60 * 5
+time_sec = 60 * 30
 
 model = tf.keras.models.load_model('model/ta_USDT_BTC_1m.keras')
 

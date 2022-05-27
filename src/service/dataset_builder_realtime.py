@@ -7,7 +7,7 @@ from src.service.klines import KLines
 
 def build_dataset(market: str, asset: str, interval: str):
     klines = KLines()
-    start_at = '48 hour ago UTC'
+    start_at = '2 week ago UTC'
     prepared = []
 
     collection = klines.build_klines(

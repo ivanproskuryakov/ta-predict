@@ -13,11 +13,15 @@ assets = [
     "DOT", "ATOM", "HBAR", "IOTA", "AVAX",
     "COTI", "NEAR", "BAT", "WAVES", "MINA",
 
-    "EGLD", "XTZ", "ALGO", "KSM",
-    "MATIC", "ONE", "1INCH", "KAVA", "OCEAN",
-    "GRT", "ROSE", "CTSI", "ZRX", "ROSE",
-    # "ETC", "BCH", "LINK", "FIL", "UNI",
-    # "GTC", "POND", "CELO"
+    "EGLD", "XTZ", "ALGO", "KSM", "MATIC",
+    "ONE", "1INCH", "KAVA", "OCEAN",
+    "GRT", "ROSE", "CTSI", "ZRX", "ETC",
+    "BCH", "LINK", "FIL", "UNI",
+    "GTC", "POND", "CELO", "ZIL",
+    "LTC", "XLM", "ICP", "ZEN", "ENJ",
+
+    "FLOW", "COMP", "AAVE", "NEO", "CHZ",
+    "XTZ", "DASH", "ZEC", "IOTX", "ICX",
 ]
 
 market = 'USDT'
