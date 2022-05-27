@@ -2,8 +2,8 @@ import numpy as np
 from keras.backend import square, mean
 
 
-def diff_percentage(prediction, last):
-    diff = 100 * (prediction - last) / ((prediction + last) / 2)
+def diff_percentage(v2, v1):
+    diff = ((v2 - v1) / ((v2 + v1) / 2)) * 100
     diff = np.round(diff, 4)
 
     return diff

@@ -13,7 +13,7 @@ for i in collection:
     pairs[i['quoteAsset']].append(i['baseAsset'])
 
 for p in pairs:
-    file = open('out_markets/' + p + '.txt', 'w')
+    file = open('data/' + p + '.txt', 'w')
     lines = []
 
     for a in pairs.get(p):

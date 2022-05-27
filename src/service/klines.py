@@ -3,6 +3,8 @@ import datetime
 from binance import Client
 from datetime import datetime
 
+from src.parameters import API_KEY, API_SECRET
+
 
 class KLines:
     def round(self, n: float, decimals=10):
@@ -14,7 +16,10 @@ class KLines:
         return self.round(avg)
 
     def build_klines(self, market: str, asset: str, interval: str, start_str: str):
-        client = Client()
+        client = Client(
+            api_key=API_KEY,
+            api_secret=API_SECRET,
+        )
         symbol = asset + market
         # Taker - an order that trades immediately before going on the order book
         # Maker - an order that goes on the order book partially or fully
@@ -46,7 +51,6 @@ class KLines:
         for i in range(1, len(klines)):
             current = klines[i]
             previous = klines[i - 1]
-
 
             time_open = current[0] / 1000
             price_open = self.round(current[1], 10)
