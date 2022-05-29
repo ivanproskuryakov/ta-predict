@@ -7,19 +7,19 @@ def estimate_ta_fill_na(df):
     bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(df), window=20, stds=2)
     stoch_fast = ta.STOCHF(df, 5, 3, 0, 3, 0)
 
-    KST = ta.trend.KSTIndicator(
-        close=df['close'],
-        roc1=10,
-        roc2=15,
-        roc3=20,
-        roc4=30,
-        window1=10,
-        window2=10,
-        window3=10,
-        window4=15,
-        nsig=9,
-        fillna=False
-    )
+    # KST = ta.trend.KSTIndicator(
+    #     close=df['close'],
+    #     roc1=10,
+    #     roc2=15,
+    #     roc3=20,
+    #     roc4=30,
+    #     window1=10,
+    #     window2=10,
+    #     window3=10,
+    #     window4=15,
+    #     nsig=9,
+    #     fillna=False
+    # )
 
     tadf = {
         'adx': ta.ADX(df, timeperiod=14),
@@ -31,7 +31,7 @@ def estimate_ta_fill_na(df):
         'bollinger_low': bollinger['lower'],
 
         # CCI
-        'trend_kst_diff': KST.kst_diff(),
+        # 'trend_kst_diff': KST.kst_diff(),
 
         'cci_one': ta.CCI(df, timeperiod=170),
         'cci_two': ta.CCI(df, timeperiod=34),

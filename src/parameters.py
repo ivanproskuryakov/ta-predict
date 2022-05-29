@@ -360,11 +360,11 @@ intervals = [
     # Client.KLINE_INTERVAL_3MINUTE,
     # Client.KLINE_INTERVAL_5MINUTE,
     Client.KLINE_INTERVAL_15MINUTE,
-    Client.KLINE_INTERVAL_30MINUTE,
-
-    Client.KLINE_INTERVAL_1HOUR,
-    Client.KLINE_INTERVAL_2HOUR,
-    Client.KLINE_INTERVAL_4HOUR,
+    # Client.KLINE_INTERVAL_30MINUTE,
+    #
+    # Client.KLINE_INTERVAL_1HOUR,
+    # Client.KLINE_INTERVAL_2HOUR,
+    # Client.KLINE_INTERVAL_4HOUR,
 ]
 
 start_at = '24 month ago UTC'

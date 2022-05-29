@@ -38,16 +38,13 @@ class WindowGenerator:
         # Work out the window parameters.
         self.input_width = input_width
         self.label_width = label_width
-        self.shift = shift
 
         self.total_window_size = input_width + shift
 
         self.input_slice = slice(0, input_width)
-        self.input_indices = np.arange(self.total_window_size)[self.input_slice]
 
         self.label_start = self.total_window_size - self.label_width
         self.labels_slice = slice(self.label_start, None)
-        self.label_indices = np.arange(self.total_window_size)[self.labels_slice]
 
     def split_window(self, features):
         inputs = features[:, self.input_slice, :]

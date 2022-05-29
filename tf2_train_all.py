@@ -1,16 +1,17 @@
 import tensorflow as tf
 
 from keras.layers import Dense, GRU, LSTM
-from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
+from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 
 from src.service.dataset_builder_db import build_dataset
 from src.service.generator_window import WindowGenerator
-from src.parameters import market, assets, intervals
+from src.parameters import market
 
 # Variables
 # ------------------------------------------------------------------------
 
-df_num_signals = 40
+df_num_signals = 45
+width = 100
 
 filepath_model = f'data/ta_{market}.keras'
 filepath_checkpoint = f'data/ta_{market}.checkpoint'
@@ -29,6 +30,12 @@ callback_reduce_lr = ReduceLROnPlateau(
     # mode='auto',
     # min_delta=0.0001,
     # cooldown=0,
+
+    # monitor='val_loss',
+    # factor=0.1,
+    # min_lr=1e-4,
+    # patience=0,
+    # verbose=1
 )
 
 callback_checkpoint = ModelCheckpoint(
@@ -44,7 +51,9 @@ model = tf.keras.models.Sequential([
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
-    Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
+    # LSTM(100, return_sequences=False),
+    Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
+    # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
     Dense(units=1),
 ])
 
@@ -56,6 +65,9 @@ model.compile(
 
 # Data load & train
 # ------------------------------------------------------------------------
+
+intervals = ['15m']
+assets = ['BTC']
 
 for interval in intervals:
     for asset in assets:
@@ -71,8 +83,8 @@ for interval in intervals:
         # --------------------------------------------------------
 
         window = WindowGenerator(
-            input_width=100,
-            label_width=100,
+            input_width=width,
+            label_width=width,
             shift=1,
             batch_size=500,
             label_columns=['open'],
@@ -82,7 +94,7 @@ for interval in intervals:
 
         model.fit(
             window.train,
-            epochs=5,
+            epochs=500,
             validation_data=window.val,
             callbacks=[
                 # callback_early_stopping,

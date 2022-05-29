@@ -31,11 +31,11 @@ def build_dataset(market: str, asset: str, interval: str):
     # Data split
     # --------------------------------------------------------
     n = len(df)
-    # train_df = df[0:int(n * 0.9)]
-    # val_df = df[int(n * 0.9):]
+    train_df = df[0:int(n * 0.9)]
+    val_df = df[int(n * 0.9):]
 
-    train_df = df[:int(n * 0.7), int(n * 0.8):]
-    val_df = df[int(n * 0.7):int(n * 0.8)]
+    # train_df = df[:int(n * 0.7), int(n * 0.8):]
+    # val_df = df[int(n * 0.7):int(n * 0.8)]
 
     # # Sets preparation
     # # --------------------------------------------------------
