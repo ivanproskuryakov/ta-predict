@@ -10,33 +10,30 @@ from src.parameters import market, assets, intervals
 # Variables
 # ------------------------------------------------------------------------
 
-df_num_signals = 36
+df_num_signals = 40
 shift = 1
-batch_size = 1000
-width = 30
+width = 100
+
+batch_size = 500
+epochs = 5
 
 filepath_model = f'data/ta_{market}.keras'
+filepath_checkpoint = f'data/ta_{market}.checkpoint'
 
 # Model definition
 # ------------------------------------------------------------------------
 
 
-callback_early_stopping = EarlyStopping(
-    monitor='val_loss',
-    patience=5,
-    mode='min',
-    verbose=1
-)
 callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
-    factor=0.2,
-    min_lr=0.0001,
+    factor=0.3,
+    min_lr=0.00001,
     patience=2,
     verbose=1
 )
 
 callback_checkpoint = ModelCheckpoint(
-    filepath=filepath_model,
+    filepath=filepath_checkpoint,
     monitor='val_loss',
     verbose=1,
     save_weights_only=True,
@@ -44,12 +41,15 @@ callback_checkpoint = ModelCheckpoint(
 )
 model = tf.keras.models.Sequential([
     GRU(
-        units=100,
+        units=200,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
     # LSTM(300, return_sequences=True),
     # Dense(df_num_signals, activation='sigmoid'),
+    # Dense(df_num_signals, activation='linear'),
+    # Dense(df_num_signals, activation='relu'),
+    Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
     Dense(units=1),
 ])
 
@@ -79,7 +79,7 @@ for interval in intervals:
             input_width=width,
             label_width=width,
             shift=shift,
-            batch_size=500,
+            batch_size=batch_size,
             label_columns=['open'],
             train_df=train_df,
             val_df=val_df,
@@ -87,7 +87,7 @@ for interval in intervals:
 
         model.fit(
             window.train,
-            epochs=2,
+            epochs=epochs,
             validation_data=window.val,
             callbacks=[
                 # callback_early_stopping,
