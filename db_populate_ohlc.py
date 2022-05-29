@@ -11,9 +11,11 @@ connection = db_connect()
 repository = OhlcRepository(connection)
 klines = KLines()
 
-for asset in assets:
-    for interval in intervals:
-        print(f'processing: {interval}')
+intervals_reversed = intervals[::-1]
+
+for interval in intervals_reversed:
+    for asset in assets:
+        print(f'processing: {asset} {interval}')
         collection = klines.build_klines(
             market,
             asset,

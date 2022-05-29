@@ -11,15 +11,13 @@ from src.parameters import market, ASSET, intervals
 # ------------------------------------------------------------------------
 
 SIZE_SHIFT = 1
-SIZE_BATCH = 1000
+SIZE_BATCH = 50
 SIZE_INPUT_LABEL = 30
 
 # Data load
 # ------------------------------------------------------------------------
 
 for interval in intervals:
-    print(f'training interval: {interval}')
-
     asset = ASSET
     shift = SIZE_SHIFT
     batch_size = SIZE_BATCH
@@ -48,12 +46,11 @@ for interval in intervals:
 
     model = tf.keras.models.Sequential([
         GRU(
-            units=300,
+            units=100,
             return_sequences=True,
             input_shape=(None, df_num_signals,)
         ),
-        LSTM(300, return_sequences=True),
-        Dense(df_num_signals, activation='sigmoid'),
+        LSTM(100, return_sequences=True),
         Dense(units=1),
     ])
 
@@ -65,9 +62,9 @@ for interval in intervals:
     )
     callback_reduce_lr = ReduceLROnPlateau(
         monitor='val_loss',
-        factor=0.2,
-        min_lr=0.0001,
-        patience=2,
+        factor=0.1,
+        min_lr=0.001,
+        patience=1,
         verbose=1
     )
 
@@ -87,7 +84,7 @@ for interval in intervals:
 
     model.fit(
         window.train,
-        epochs=500,
+        epochs=100,
         validation_data=window.val,
         callbacks=[
             # callback_early_stopping,
