@@ -11,11 +11,6 @@ from src.parameters import market, assets, intervals
 # ------------------------------------------------------------------------
 
 df_num_signals = 40
-shift = 1
-width = 100
-
-batch_size = 500
-epochs = 5
 
 filepath_model = f'data/ta_{market}.keras'
 filepath_checkpoint = f'data/ta_{market}.checkpoint'
@@ -26,10 +21,15 @@ filepath_checkpoint = f'data/ta_{market}.checkpoint'
 
 callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
-    factor=0.3,
+    factor=0.2,
     min_lr=0.00001,
+    # min_lr=0,
     patience=2,
-    verbose=1
+    verbose=1,
+
+    # mode='auto',
+    # min_delta=0.0001,
+    # cooldown=0,
 )
 
 callback_checkpoint = ModelCheckpoint(
@@ -45,11 +45,7 @@ model = tf.keras.models.Sequential([
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
-    # LSTM(300, return_sequences=True),
-    # Dense(df_num_signals, activation='sigmoid'),
-    # Dense(df_num_signals, activation='linear'),
-    # Dense(df_num_signals, activation='relu'),
-    Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
+    Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
     Dense(units=1),
 ])
 
@@ -76,10 +72,10 @@ for interval in intervals:
         # --------------------------------------------------------
 
         window = WindowGenerator(
-            input_width=width,
-            label_width=width,
-            shift=shift,
-            batch_size=batch_size,
+            input_width=100,
+            label_width=100,
+            shift=1,
+            batch_size=500,
             label_columns=['open'],
             train_df=train_df,
             val_df=val_df,
@@ -87,7 +83,7 @@ for interval in intervals:
 
         model.fit(
             window.train,
-            epochs=epochs,
+            epochs=5,
             validation_data=window.val,
             callbacks=[
                 # callback_early_stopping,

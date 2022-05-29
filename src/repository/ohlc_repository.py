@@ -27,7 +27,7 @@ class OhlcRepository:
             asset: str,
             interval: str,
     ):
-        list = []
+        data = []
 
         with Session(self.connection) as session:
             collection = session.query(Ohlc) \
@@ -40,7 +40,7 @@ class OhlcRepository:
                 .all()
 
             for item in collection:
-                list.append([
+                data.append([
                     item.price_open,
                     item.price_high,
                     item.price_low,
@@ -63,30 +63,7 @@ class OhlcRepository:
                     # datetime.utcfromtimestamp(collection[i]['time_open']),
                 ])
 
-        df = pd.DataFrame(list, None, [
-            'open',
-            'high',
-            'low',
-            'close',
-
-            'time_month',
-            'time_day',
-            'time_hour',
-            'time_minute',
-
-            'avg_percentage',
-            'avg_current',
-
-            'trades',
-            'volume',
-            'volume_taker',
-            'volume_maker',
-
-            'quote_asset_volume',
-            # 'epoch',
-        ])
-
-        return df
+        return data
 
     def create_many(
             self,
