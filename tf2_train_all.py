@@ -26,7 +26,6 @@ callback_reduce_lr = ReduceLROnPlateau(
     # min_lr=0,
     patience=2,
     verbose=1,
-
     # mode='auto',
     # min_delta=0.0001,
     # cooldown=0,
