@@ -12,7 +12,7 @@ interval = Client.KLINE_INTERVAL_1HOUR
 start_time = time.time()
 time_sec = 60 * 30
 
-model = tf.keras.models.load_model('model/ta_USDT_BTC_1m.keras')
+model = tf.keras.models.load_model('model/ta_USDT2.keras')
 
 
 def paint_diff(diff: float):

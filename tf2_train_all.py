@@ -13,7 +13,7 @@ from src.parameters import market
 df_num_signals = 45
 width = 100
 
-filepath_model = f'data/ta_{market}.keras'
+filepath_model = f'data/ta_{market}2.keras'
 filepath_checkpoint = f'data/ta_{market}.checkpoint'
 
 # Model definition
@@ -47,7 +47,7 @@ callback_checkpoint = ModelCheckpoint(
 )
 model = tf.keras.models.Sequential([
     GRU(
-        units=200,
+        units=500,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
@@ -94,12 +94,12 @@ for interval in intervals:
 
         model.fit(
             window.train,
-            epochs=500,
+            epochs=1500,
             validation_data=window.val,
             callbacks=[
                 # callback_early_stopping,
                 callback_reduce_lr,
-                # callback_checkpoint,
+                callback_checkpoint,
             ]
         )
 

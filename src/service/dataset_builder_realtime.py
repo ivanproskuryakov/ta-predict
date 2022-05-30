@@ -27,10 +27,10 @@ def build_dataset(market: str, asset: str, interval: str):
             item['price_low'],
             item['price_close'],
 
-            date.month,
-            date.day,
-            date.hour,
-            date.minute,
+            # date.month,
+            # date.day,
+            # date.hour,
+            # date.minute,
 
             item['avg_percentage'],
             item['avg_current'],
@@ -50,10 +50,10 @@ def build_dataset(market: str, asset: str, interval: str):
         'low',
         'close',
 
-        'time_month',
-        'time_day',
-        'time_hour',
-        'time_minute',
+        # 'time_month',
+        # 'time_day',
+        # 'time_hour',
+        # 'time_minute',
 
         'avg_percentage',
         'avg_current',
