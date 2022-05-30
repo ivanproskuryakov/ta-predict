@@ -11,10 +11,10 @@ from src.parameters import market
 # ------------------------------------------------------------------------
 
 df_num_signals = 45
-width = 100
+width = 200
 
 filepath_model = f'data/ta_{market}3.keras'
-filepath_checkpoint = f'data/ta_{market}.checkpoint'
+filepath_checkpoint = f'data/ta_{market}3.checkpoint'
 
 # Model definition
 # ------------------------------------------------------------------------
@@ -22,10 +22,10 @@ filepath_checkpoint = f'data/ta_{market}.checkpoint'
 
 callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
-    factor=0.2,
+    factor=0.5,
     min_lr=0.00001,
     # min_lr=0,
-    patience=2,
+    patience=5,
     verbose=1,
     # mode='auto',
     # min_delta=0.0001,
@@ -38,6 +38,17 @@ callback_reduce_lr = ReduceLROnPlateau(
     # verbose=1
 )
 
+# callback_reduce_lr = ReduceLROnPlateau(
+#     monitor='val_loss',
+#     factor=0.1,
+#     patience=20,
+#     verbose=0,
+#     mode='auto',
+#     min_delta=0.0001,
+#     cooldown=0,
+#     min_lr=0.0001
+# )
+
 callback_checkpoint = ModelCheckpoint(
     filepath=filepath_checkpoint,
     monitor='val_loss',
@@ -47,7 +58,7 @@ callback_checkpoint = ModelCheckpoint(
 )
 model = tf.keras.models.Sequential([
     GRU(
-        units=100,
+        units=500,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
@@ -94,7 +105,7 @@ for interval in intervals:
 
         model.fit(
             window.train,
-            epochs=500,
+            epochs=1000,
             validation_data=window.val,
             callbacks=[
                 # callback_early_stopping,
