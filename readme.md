@@ -18,14 +18,6 @@ python dump_unseen.py
 python tf2_dump.py && python tf2_predict_unseen.py
 ```
 
-### Visualisation
-
-```
-python binance_markets_dump.py
-python visualize_list.py ETC
-python visualize_matrix 12h
-```
-
 ### Features
 
 ```

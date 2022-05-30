@@ -13,7 +13,7 @@ from src.parameters import market
 df_num_signals = 45
 width = 100
 
-filepath_model = f'data/ta_{market}2.keras'
+filepath_model = f'data/ta_{market}3.keras'
 filepath_checkpoint = f'data/ta_{market}.checkpoint'
 
 # Model definition
@@ -47,12 +47,12 @@ callback_checkpoint = ModelCheckpoint(
 )
 model = tf.keras.models.Sequential([
     GRU(
-        units=500,
+        units=100,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
-    # LSTM(100, return_sequences=False),
-    Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
+    # LSTM(df_num_signals, return_sequences=False),
+    # Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
     # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
     Dense(units=1),
 ])
@@ -66,7 +66,7 @@ model.compile(
 # Data load & train
 # ------------------------------------------------------------------------
 
-intervals = ['15m']
+intervals = ['5m']
 assets = ['BTC']
 
 for interval in intervals:
@@ -94,7 +94,7 @@ for interval in intervals:
 
         model.fit(
             window.train,
-            epochs=1500,
+            epochs=500,
             validation_data=window.val,
             callbacks=[
                 # callback_early_stopping,

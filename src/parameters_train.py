@@ -1,16 +1,14 @@
-from binance import Client
-
 DB_URL = {
     "dev": "postgresql://postgres:12qw12@localhost/ta",
     "test": "postgresql://postgres:@localhost/ta"
 }
 
 assets = [
-    # "BTC",
-    # "ETH",
-    # "BNB",
-    # "NEO",
-    # "LTC",
+    "BTC",
+    "ETH",
+    "BNB",
+    "NEO",
+    "LTC",
     "QTUM",
     "ADA",
     "XRP",
@@ -347,30 +345,5 @@ assets = [
     "GAL",
     "LDO",
     "EPX",
+    "LUNA",
 ]
-
-API_KEY = "y95Lhdr2WXTVCbD44gpDhcOHKQaUr1LVNIOFhk1SIhxq4nzCdVoLB0obXWLcyRio"
-API_SECRET = "nBmXWlMBreF5uttkRVDxKbEbYtByJiW322iUtGMUCvDsHha9k5tMRjKCSmZtHFsb"
-
-market = 'USDT'
-
-intervals = [
-    # Client.KLINE_INTERVAL_1MINUTE,
-    # Client.KLINE_INTERVAL_3MINUTE,
-    # Client.KLINE_INTERVAL_5MINUTE,
-    Client.KLINE_INTERVAL_15MINUTE,
-    # Client.KLINE_INTERVAL_30MINUTE,
-    #
-    # Client.KLINE_INTERVAL_1HOUR,
-    # Client.KLINE_INTERVAL_2HOUR,
-    # Client.KLINE_INTERVAL_4HOUR,
-]
-
-
-ASSET = 'BTC'
-# INTERVAL = Client.KLINE_INTERVAL_1MINUTE
-# INTERVAL = Client.KLINE_INTERVAL_3MINUTE
-INTERVAL = Client.KLINE_INTERVAL_5MINUTE
-# INTERVAL = Client.KLINE_INTERVAL_15MINUTE
-# INTERVAL = Client.KLINE_INTERVAL_30MINUTE
-# INTERVAL = Client.KLINE_INTERVAL_1HOUR

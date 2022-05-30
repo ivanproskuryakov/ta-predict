@@ -41,6 +41,7 @@ for interval in intervals:
         label_columns=['open'],
         train_df=train_df,
         val_df=val_df,
+        test_df=test_df,
     )
 
     model = tf.keras.models.Sequential([
