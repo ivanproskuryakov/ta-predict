@@ -39,9 +39,20 @@ def make_prediction(x_df, model):
 
 
 @ray.remote
-def data_load(market: str, asset: str, interval: str):
+def data_load_remote(asset: str, market: str, interval: str):
     return build_dataset(
         market=market,
         asset=asset,
         interval=interval,
     )
+
+
+def data_load_all(assets: [], market: str, interval: str):
+    fns = []
+
+    for asset in assets:
+        fns.append(data_load_remote.remote(asset, market, interval))
+
+    data = ray.get(fns)
+
+    return data

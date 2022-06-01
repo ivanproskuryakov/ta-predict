@@ -1,5 +1,7 @@
 import numpy as np
+
 from keras.backend import square, mean
+from yachalk import chalk
 
 
 def diff_percentage(v2, v1):
@@ -7,6 +9,17 @@ def diff_percentage(v2, v1):
     diff = np.round(diff, 4)
 
     return diff
+
+
+def paint_diff(diff: float):
+    color = f'{diff:.4f}%'
+
+    if diff > 1:
+        color = chalk.green(f'{diff:.4f}%')
+    if diff < -1:
+        color = chalk.red(f'{diff:.4f}%')
+
+    return color
 
 
 def loss_mse_warmup(y_true, y_pred):

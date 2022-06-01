@@ -1,6 +1,5 @@
 import time
 import tensorflow as tf
-from yachalk import chalk
 from datetime import datetime
 from binance import Client
 
@@ -13,17 +12,6 @@ start_time = time.time()
 time_sec = 60 * 15
 
 model = tf.keras.models.load_model('model/ta_USDT_5m.keras')
-
-
-def paint_diff(diff: float):
-    color = f'{diff:.4f}%'
-
-    if diff > 1:
-        color = chalk.green(f'{diff:.4f}%')
-    if diff < -1:
-        color = chalk.red(f'{diff:.4f}%')
-
-    return color
 
 
 while True:

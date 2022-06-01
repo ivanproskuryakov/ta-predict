@@ -1,12 +1,11 @@
 import time
-import ray
 import tensorflow as tf
 
 from datetime import datetime
 from binance import Client
-from src.service.predictor_unseen import data_load, make_prediction
+from src.service.predictor_unseen import data_load_all, make_prediction
+from src.service.util import diff_percentage, paint_diff
 from src.parameters import market, assets
-from src.service.util import diff_percentage
 
 interval = Client.KLINE_INTERVAL_30MINUTE
 start_time = time.time()
@@ -17,14 +16,7 @@ print(interval)
 print(datetime.now().strftime('%Y %m %d %H:%M:%S'))
 print("------------------------------------------------------------------------------------------")
 
-fns = []
-
-for asset in assets:
-    fns.append(data_load.remote(market, asset, interval))
-
-data = ray.get(fns)
-
-print(len(data))
+data = data_load_all(assets=assets, market=market, interval=interval)
 
 for x_df in data:
     x_df_open, y_df_open = make_prediction(x_df, model)
@@ -41,10 +33,13 @@ for x_df in data:
     diff = diff_percentage(v2=prediction, v1=last)
 
     print(f''
-          f'{diff} \t |'
+          f'{paint_diff(diff)} \t |'
           f'{last_real:.4f} \t | '
           f'{last:.6f} -> {prediction:.6f} \t | '
           f'')
+
+    if diff > 1 or diff < -1:
+        print(x_df_open.tail(1))
 
 print(datetime.now().strftime('%Y %m %d %H:%M:%S'))
 print("------------------------------------------------------------------------------------------")
