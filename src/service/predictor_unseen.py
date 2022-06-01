@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import ray
 
 from sklearn.preprocessing import MinMaxScaler
 from src.service.dataset_builder_realtime import build_dataset
@@ -41,3 +42,22 @@ def make_prediction(market: str, asset: str, interval: str, model):
     y_df_open['open'] = y_df_open_inverse[:, 0]
 
     return x_df_open, y_df_open, last_item
+
+@ray.remote
+def data_prepare(market: str, asset: str, interval: str):
+    x_df, last_item = build_dataset(
+        market=market,
+        asset=asset,
+        interval=interval,
+    )
+
+    # Scale
+    # ------------------------------------------------------------------------
+
+    scaler = MinMaxScaler()
+    scaled = scaler.fit_transform(x_df)
+
+    x_df_scaled = pd.DataFrame(scaled, None, x_df.keys())
+    x_df_scaled_expanded = np.expand_dims(x_df_scaled, axis=0)
+
+    return x_df_scaled_expanded

@@ -352,6 +352,7 @@ assets = [
 API_KEY = "y95Lhdr2WXTVCbD44gpDhcOHKQaUr1LVNIOFhk1SIhxq4nzCdVoLB0obXWLcyRio"
 API_SECRET = "nBmXWlMBreF5uttkRVDxKbEbYtByJiW322iUtGMUCvDsHha9k5tMRjKCSmZtHFsb"
 
+ASSET = 'BTC'
 market = 'USDT'
 
 intervals = [
@@ -366,8 +367,6 @@ intervals = [
     # Client.KLINE_INTERVAL_4HOUR,
 ]
 
-
-ASSET = 'BTC'
 # INTERVAL = Client.KLINE_INTERVAL_1MINUTE
 # INTERVAL = Client.KLINE_INTERVAL_3MINUTE
 INTERVAL = Client.KLINE_INTERVAL_5MINUTE

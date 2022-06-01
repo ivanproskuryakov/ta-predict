@@ -10,7 +10,7 @@ from src.service.util import diff_percentage
 
 interval = Client.KLINE_INTERVAL_30MINUTE
 start_time = time.time()
-time_sec = 60 * 30
+time_sec = 60 * 15
 
 model = tf.keras.models.load_model('model/ta_USDT_5m.keras')
 

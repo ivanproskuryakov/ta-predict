@@ -4,6 +4,7 @@
 mkdir markets
 
 pip install -r requirements.txt
+pip install -r requirements-ubuntu.txt
 pip install --force-reinstall -r requirements.txt
 ```
 
