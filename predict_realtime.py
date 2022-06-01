@@ -8,19 +8,19 @@ from src.service.predictor_unseen import make_prediction
 from src.parameters import market, assets
 from src.service.util import diff_percentage
 
-interval = Client.KLINE_INTERVAL_1HOUR
+interval = Client.KLINE_INTERVAL_30MINUTE
 start_time = time.time()
 time_sec = 60 * 30
 
-model = tf.keras.models.load_model('model/ta_USDT2.keras')
+model = tf.keras.models.load_model('model/ta_USDT_5m.keras')
 
 
 def paint_diff(diff: float):
     color = f'{diff:.4f}%'
 
-    if diff > 0.5:
+    if diff > 1:
         color = chalk.green(f'{diff:.4f}%')
-    if diff < -0.5:
+    if diff < -1:
         color = chalk.red(f'{diff:.4f}%')
 
     return color
@@ -51,9 +51,12 @@ while True:
         print(f''
               f'{asset}\t'
               f'{paint_diff(diff)} \t |'
-              f'{last_real:.4f} | '
-              f'{last:.4f} -> {prediction:.4f} | '
+              f'{last_real:.4f} \t | '
+              f'{last:.6f} -> {prediction:.6f} \t | '
               f'{date.strftime("%Y %m %d %H:%M:%S")}'
               f'')
+
+        if diff > 1 or diff < -1:
+            print(last_item)
 
     time.sleep(time_sec - ((time.time() - start_time) % time_sec))

@@ -1,7 +1,7 @@
 from src.repository.ohlc_repository import OhlcRepository
 from src.connector.db_connector import db_connect
 from src.service.klines import KLines
-from src.parameters import assets
+from src.parameters_train import assets
 
 start_at = '8 year ago UTC'
 exchange = 'binance'

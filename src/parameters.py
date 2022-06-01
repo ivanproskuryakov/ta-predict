@@ -51,7 +51,7 @@ assets = [
     # "GTO",
     # "DOGE",
     # "DUSK",
-    # "ANKR",
+    "ANKR",
     "WIN",
     "COS",
     "COCOS",
