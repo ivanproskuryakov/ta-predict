@@ -16,14 +16,15 @@ print(interval)
 print(datetime.now().strftime('%Y %m %d %H:%M:%S'))
 print("------------------------------------------------------------------------------------------")
 
-data = data_load_all(assets=assets, market=market, interval=interval)
+items = data_load_all(assets=assets, market=market, interval=interval)
 
-for x_df in data:
+for item in items:
+    asset, x_df = item
+
     x_df_open, y_df_open = make_prediction(x_df, model)
 
     # Measure
     # ------------------------------------------------------------------------
-
     last_real = x_df_open['open'].tail(1).values[0]
     tail = y_df_open['open'].tail(2).values
 
@@ -33,6 +34,7 @@ for x_df in data:
     diff = diff_percentage(v2=prediction, v1=last)
 
     print(f''
+          f'{asset} \t |'
           f'{paint_diff(diff)} \t |'
           f'{last_real:.4f} \t | '
           f'{last:.6f} -> {prediction:.6f} \t | '
