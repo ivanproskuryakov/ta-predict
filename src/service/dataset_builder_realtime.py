@@ -69,12 +69,4 @@ def build_dataset(market: str, asset: str, interval: str):
 
     df = estimate_ta_fill_na(df_ohlc)
 
-    # Sets preparation
-    # --------------------------------------------------------
-
-    # train_mean = df.mean()
-    # train_std = df.std()
-    #
-    # df = (df - train_mean) / train_std
-
-    return df
+    return df, item

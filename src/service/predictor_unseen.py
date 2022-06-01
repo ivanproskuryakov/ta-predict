@@ -34,13 +34,13 @@ def make_prediction(x_df, model):
 
 @ray.remote
 def data_load_remote(asset: str, market: str, interval: str):
-    data = build_dataset(
+    data, last_item = build_dataset(
         market=market,
         asset=asset,
         interval=interval,
     )
 
-    return asset, data
+    return asset, data, last_item
 
 
 def data_load_parallel_all(assets: [], market: str, interval: str):
