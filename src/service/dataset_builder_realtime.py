@@ -77,4 +77,4 @@ def build_dataset(market: str, asset: str, interval: str):
     #
     # df = (df - train_mean) / train_std
 
-    return df, item
+    return df
