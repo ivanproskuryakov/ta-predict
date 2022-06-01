@@ -6,7 +6,7 @@ from src.service.predictor_unseen import data_load_parallel_all, make_prediction
 from src.service.util import diff_percentage, paint_diff
 from src.parameters import market, assets
 
-interval = Client.KLINE_INTERVAL_2HOUR
+interval = Client.KLINE_INTERVAL_30MINUTE
 model = tf.keras.models.load_model('model/ta_USDT_5m.keras')
 
 print(interval)
@@ -37,7 +37,7 @@ for item in items:
           f'{date.strftime("%Y %m %d %H:%M:%S")}'
           f'')
 
-    if diff > 2:
+    if diff > 1:
         print(last_item)
 
 print(datetime.now().strftime('%Y %m %d %H:%M:%S'))
