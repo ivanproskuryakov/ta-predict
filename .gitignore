@@ -1,8 +1,5 @@
 .idea
-out_markets
 data
-unseen
 model
-
 __pycache__
 .env
