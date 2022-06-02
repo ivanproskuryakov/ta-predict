@@ -5,30 +5,20 @@ from binance import Client
 
 from src.service.predictor_unseen import data_load_parallel_all, make_prediction
 from src.service.util import diff_percentage, paint_diff
-from src.parameters import market
+from src.parameters import market, assets
 
-assets = [
-    "BTC",
-    "ETH",
-    "BNB",
-    "SOL",
-    "NEO",
-    "LTC",
-    "ADA",
-    "XRP",
-]
-interval = Client.KLINE_INTERVAL_5MINUTE
+interval = Client.KLINE_INTERVAL_15MINUTE
 model = tf.keras.models.load_model('model/ta_USDT_5m.keras')
 
 start_time = time.time()
-time_sec = 60 * 5
-
-print('\n\n')
-print(interval)
-print(datetime.now().strftime('%Y %m %d %H:%M:%S'))
-print("------------------------------------------------------------------------------------------")
+time_sec = 60 * 15
 
 while True:
+    print('\n\n')
+    print(interval)
+    print(datetime.now().strftime('%Y %m %d %H:%M:%S'))
+    print("------------------------------------------------------------------------------------------")
+
     items = data_load_parallel_all(assets=assets, market=market, interval=interval)
 
     for item in items:
@@ -45,16 +35,16 @@ while True:
 
         diff = diff_percentage(v2=prediction, v1=last)
 
-        print(f''
-              f'{asset} \t |'
-              f'{paint_diff(diff)} \t |'
-              f'{last_real:.4f} \t | '
-              f'{last:.6f} -> {prediction:.6f} \t | '
-              f'{date.strftime("%Y %m %d %H:%M:%S")}'
-              f'')
-
-        if diff > 1:
-            print(last_item)
+        if diff > 0.4:
+            print(f''
+                  f'{asset} \t |'
+                  f'{paint_diff(diff)} \t |'
+                  f'{last_real:.4f} \t | '
+                  f'{last:.6f} -> {prediction:.6f} \t | '
+                  f'{last_item["trades"]} \t | '
+                  f'{last_item["volume"]} \t | '
+                  f'{date.strftime("%Y %m %d %H:%M:%S")}'
+                  f'')
 
     print(datetime.now().strftime('%Y %m %d %H:%M:%S'))
     time.sleep(time_sec - ((time.time() - start_time) % time_sec))
