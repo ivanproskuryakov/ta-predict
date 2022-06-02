@@ -9,7 +9,6 @@ from src.parameters import market
 
 # Variables
 # ------------------------------------------------------------------------
-
 df_num_signals = 45
 width = 200
 

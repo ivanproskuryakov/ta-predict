@@ -20,7 +20,6 @@ class PredictionRepository:
             interval: str,
             time_open: int,
     ):
-
         with Session(self.connection) as session:
             collection = session.query(Prediction) \
                 .filter(Prediction.exchange == exchange) \

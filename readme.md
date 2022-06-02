@@ -1,5 +1,4 @@
-### Installation*
-*
+### Installation
 ```
 mkdir markets
 
@@ -14,9 +13,8 @@ pip install --force-reinstall -r requirements.txt
 python -m venv .env
 source .env/bin/activate
 
-python dump_many.py
-python dump_unseen.py
-python tf2_dump.py && python tf2_predict_unseen.py
+python tf2_train_all.py
+python predict.py
 ```
 
 ### Features
