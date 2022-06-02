@@ -11,7 +11,7 @@ interval = Client.KLINE_INTERVAL_15MINUTE
 model = tf.keras.models.load_model('model/ta_USDT_5m.keras')
 
 start_time = time.time()
-time_sec = 60 * 15
+time_sec = 60 * 5
 
 while True:
     print('\n\n')
@@ -35,14 +35,16 @@ while True:
 
         diff = diff_percentage(v2=prediction, v1=last)
 
-        if diff > 0.4:
+        if diff > 0.4 or diff < -1:
             print(f''
                   f'{asset} \t |'
                   f'{paint_diff(diff)} \t |'
                   f'{last_real:.4f} \t | '
-                  f'{last:.6f} -> {prediction:.6f} \t | '
+                  # f'{last:.6f} -> {prediction:.6f} \t | '
                   f'{last_item["trades"]} \t | '
                   f'{last_item["volume"]} \t | '
+                  # f'{last_item["volume_taker"]} \t | '
+                  # f'{last_item["volume_maker"]} \t | '
                   f'{date.strftime("%Y %m %d %H:%M:%S")}'
                   f'')
 
