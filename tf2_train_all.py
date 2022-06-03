@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 from keras.layers import Dense, GRU, LSTM
-from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
+from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 from src.service.dataset_builder_db import build_dataset
 from src.service.generator_window import WindowGenerator
@@ -9,15 +9,21 @@ from src.parameters import market
 
 # Variables
 # ------------------------------------------------------------------------
-df_num_signals = 45
+df_num_signals = 37
 width = 200
 
-filepath_model = f'data/ta_{market}3.keras'
-filepath_checkpoint = f'data/ta_{market}3.checkpoint'
+filepath_model = f'data/ta_{market}_ohlconly.keras'
+filepath_checkpoint = f'data/ta_{market}_ohlconly.checkpoint'
 
 # Model definition
 # ------------------------------------------------------------------------
 
+callback_early_stopping = EarlyStopping(
+    monitor='val_loss',
+    patience=10,
+    mode='min',
+    verbose=1
+)
 
 callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
@@ -104,7 +110,7 @@ for interval in intervals:
 
         model.fit(
             window.train,
-            epochs=1000,
+            epochs=500,
             validation_data=window.val,
             callbacks=[
                 # callback_early_stopping,

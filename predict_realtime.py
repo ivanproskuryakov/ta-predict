@@ -8,10 +8,10 @@ from src.service.util import diff_percentage, paint_diff
 from src.parameters import market, assets
 
 interval = Client.KLINE_INTERVAL_15MINUTE
-model = tf.keras.models.load_model('model/ta_USDT_5m.keras')
+model = tf.keras.models.load_model('model/ta_USDT_ohlconly.keras')
 
 start_time = time.time()
-time_sec = 60 * 5
+time_sec = 60 * 15
 
 while True:
     print('\n\n')
@@ -35,7 +35,7 @@ while True:
 
         diff = diff_percentage(v2=prediction, v1=last)
 
-        if diff > 0.4 or diff < -1:
+        if diff > 0.4:
             print(f''
                   f'{asset} \t |'
                   f'{paint_diff(diff)} \t |'
@@ -47,6 +47,8 @@ while True:
                   # f'{last_item["volume_maker"]} \t | '
                   f'{date.strftime("%Y %m %d %H:%M:%S")}'
                   f'')
+
+            print(last_item)
 
     print(datetime.now().strftime('%Y %m %d %H:%M:%S'))
     time.sleep(time_sec - ((time.time() - start_time) % time_sec))

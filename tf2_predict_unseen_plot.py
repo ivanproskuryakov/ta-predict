@@ -1,13 +1,20 @@
 import matplotlib.pyplot as plt
+import tensorflow as tf
 
-from src.service.predictor_unseen import make_prediction
+from src.service.predictor_unseen import make_prediction, data_load_parallel_all
 from src.parameters import market, ASSET, INTERVAL
 
 asset = ASSET
 interval = INTERVAL
 tail = 20
 
-x_df_open, y_df_open = make_prediction(market, ASSET, INTERVAL)
+# Predict
+# ------------------------------------------------------------------------
+
+model = tf.keras.models.load_model('model/ta_USDT_ohlconly.keras')
+data = data_load_parallel_all([ASSET], market, INTERVAL)
+
+x_df_open, y_df_open = make_prediction(data, model)
 
 # Plot align
 # ------------------------------------------------------------------------

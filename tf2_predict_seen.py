@@ -9,7 +9,6 @@ from src.parameters import market, ASSET, INTERVAL
 
 # Data
 # ------------------------------------------------------------------------
-
 tail = 50
 asset = ASSET
 interval = INTERVAL
