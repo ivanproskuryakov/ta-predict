@@ -11,6 +11,7 @@ tail = 20
 # Predict
 # ------------------------------------------------------------------------
 
+
 model = tf.keras.models.load_model('model/ta_USDT_ohlconly.keras')
 data = data_load_parallel_all([ASSET], market, INTERVAL)
 
