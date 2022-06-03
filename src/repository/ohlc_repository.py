@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 
 from sqlalchemy.orm import Session
-from sqlalchemy.engine.base import Connectable
 
 from src.entity.ohlc import Ohlc
+from src.connector.db_connector import db_connect
 
 
 # https://docs.sqlalchemy.org/en/14/orm/session_basics.html
@@ -12,8 +12,8 @@ from src.entity.ohlc import Ohlc
 class OhlcRepository:
     connection = None
 
-    def __init__(self, connection: Connectable):
-        self.connection = connection
+    def __init__(self):
+        self.connection = db_connect()
 
     def create(self, ohlc: Ohlc):
         with Session(self.connection) as session:
