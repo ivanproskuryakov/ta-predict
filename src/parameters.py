@@ -1,7 +1,7 @@
 from binance import Client
 
 DB_URL = {
-    "dev": "postgresql://postgres:@localhost/ta",
+    "dev": "postgresql://postgres:12qw12@localhost/ta",
     "test": "postgresql://postgres:@localhost/ta"
 }
 
@@ -10,8 +10,7 @@ assets = [
     "ETH",
     "BNB",
     "NEO",
-    "LTC",
-    "QTUM",
+    "LTC",\
     "ADA",
     "XRP",
     "EOS",

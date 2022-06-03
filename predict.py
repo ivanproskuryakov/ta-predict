@@ -24,6 +24,7 @@ for item in items:
 
     # Measure
     last_real = x_df['open'].tail(1).values[0]
+
     tail = y_df_open['open'].tail(2).values
     last = tail[0]
     prediction = tail[1]

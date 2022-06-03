@@ -53,7 +53,7 @@ def estimate_ta_fill_na(df):
         'macd_hist': macd['macdhist'],
 
         'mom': ta.MOM(df, timeperiod=14),
-        # 'mfi': ta.MFI(df),
+        'mfi': ta.MFI(df),
 
         'min': ta.MIN(df, timeperiod=12),
         'max': ta.MAX(df, timeperiod=12),

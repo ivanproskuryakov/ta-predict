@@ -51,15 +51,15 @@ class OhlcRepository:
                     # item.time_hour,
                     # item.time_minute,
 
-                    # item.avg_percentage,
-                    # item.avg_current,
-                    #
-                    # item.trades,
-                    # item.volume,
-                    # item.volume_taker,
-                    # item.volume_maker,
-                    #
-                    # item.quote_asset_volume,
+                    item.avg_percentage,
+                    item.avg_current,
+
+                    item.trades,
+                    item.volume,
+                    item.volume_taker,
+                    item.volume_maker,
+
+                    item.quote_asset_volume,
                     # datetime.utcfromtimestamp(collection[i]['time_open']),
                 ])
 
@@ -74,15 +74,15 @@ class OhlcRepository:
             # 'time_hour',
             # 'time_minute',
 
-            # 'avg_percentage',
-            # 'avg_current',
-            #
-            # 'trades',
-            # 'volume',
-            # 'volume_taker',
-            # 'volume_maker',
-            #
-            # 'quote_asset_volume',
+            'avg_percentage',
+            'avg_current',
+
+            'trades',
+            'volume',
+            'volume_taker',
+            'volume_maker',
+
+            'quote_asset_volume',
             # 'epoch',
         ])
 
