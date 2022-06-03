@@ -3,12 +3,10 @@ from sklearn.preprocessing import MinMaxScaler
 
 from src.service.estimator import estimate_ta_fill_na
 from src.repository.ohlc_repository import OhlcRepository
-from src.connector import db_connector
 
 
 def build_dataset(market: str, asset: str, interval: str):
-    driver = db_connector.db_connect()
-    repository = OhlcRepository(driver)
+    repository = OhlcRepository()
 
     df_ohlc = repository.find_all_with_df(
         exchange='binance',
