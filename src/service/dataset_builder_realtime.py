@@ -27,20 +27,20 @@ def build_dataset(market: str, asset: str, interval: str):
             item['price_low'],
             item['price_close'],
 
-            date.month,
-            date.day,
-            date.hour,
-            date.minute,
+            # date.month,
+            # date.day,
+            # date.hour,
+            # date.minute,
 
-            item['avg_percentage'],
-            item['avg_current'],
-
-            item['trades'],
-            item['volume'],
-            item['volume_taker'],
-            item['volume_maker'],
-
-            item['quote_asset_volume'],
+            # item['avg_percentage'],
+            # item['avg_current'],
+            #
+            # item['trades'],
+            # item['volume'],
+            # item['volume_taker'],
+            # item['volume_maker'],
+            #
+            # item['quote_asset_volume'],
             # datetime.utcfromtimestamp(item['time_open']),
         ])
 
@@ -50,20 +50,20 @@ def build_dataset(market: str, asset: str, interval: str):
         'low',
         'close',
 
-        'time_month',
-        'time_day',
-        'time_hour',
-        'time_minute',
+        # 'time_month',
+        # 'time_day',
+        # 'time_hour',
+        # 'time_minute',
 
-        'avg_percentage',
-        'avg_current',
-
-        'trades',
-        'volume',
-        'volume_taker',
-        'volume_maker',
-
-        'quote_asset_volume',
+        # 'avg_percentage',
+        # 'avg_current',
+        #
+        # 'trades',
+        # 'volume',
+        # 'volume_taker',
+        # 'volume_maker',
+        #
+        # 'quote_asset_volume',
         # 'epoch',
     ])
 

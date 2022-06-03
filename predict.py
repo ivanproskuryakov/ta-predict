@@ -8,8 +8,8 @@ from src.parameters import market, assets
 
 interval = sys.argv[1]
 
-model = tf.keras.models.load_model('model/ta_USDT_5m.keras')
-# model = tf.keras.models.load_model('model/ta_USDT_ohlconly.keras')
+# model = tf.keras.models.load_model('model/ta_USDT_5m.keras')
+model = tf.keras.models.load_model('model/ta_USDT_ohlconly.keras')
 
 print(interval)
 print("------------------------------------------------------------------------------------------")
