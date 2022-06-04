@@ -11,15 +11,18 @@ tail = 20
 # Predict
 # ------------------------------------------------------------------------
 
-
-model = tf.keras.models.load_model('model/ta_USDT_ohlconly.keras')
+model = tf.keras.models.load_model('model/ta_USDT3.keras')
 data = data_load_parallel_all([ASSET], market, INTERVAL)
 
-x_df_open, y_df_open = make_prediction(data, model)
+asset, x_df_open, last_item = data[0]
+
+y_df_open = make_prediction(x_df_open, model)
 
 # Plot align
 # ------------------------------------------------------------------------
 
+x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
+x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
 x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
 
 # Plot
