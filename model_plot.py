@@ -6,7 +6,7 @@ from src.parameters import market, ASSET, INTERVAL
 
 asset = ASSET
 interval = INTERVAL
-tail = 20
+tail = 100
 
 # Predict
 # ------------------------------------------------------------------------
