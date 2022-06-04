@@ -4,7 +4,7 @@ import tensorflow as tf
 from src.service.predictor_unseen import data_load_parallel_all, make_prediction
 
 from src.parameters import market, assets
-from src.service.reporter import render_console
+from src.service.reporter import render_console_table
 
 interval = sys.argv[1]
 
@@ -24,4 +24,4 @@ for item in items:
 
     report.append((asset, last_item, x_df, y_df))
 
-render_console(report)
+render_console_table(report)
