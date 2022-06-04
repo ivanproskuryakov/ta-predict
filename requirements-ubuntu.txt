@@ -15,3 +15,4 @@ SQLAlchemy
 psycopg2-binary
 pytest
 ray
+tabulate
