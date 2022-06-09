@@ -1,29 +1,28 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
-from src.service.predictor_unseen import make_prediction, data_load_parallel_all
+from src.service.predictor_unseen import make_prediction
+from src.service.dataset_builder_realtime import build_dataset
 from src.parameters import market, ASSET, INTERVAL
 
 asset = ASSET
 interval = INTERVAL
 tail = 100
-
+asset,
 # Predict
 # ------------------------------------------------------------------------
 
-model = tf.keras.models.load_model('model/ta_USDT3.keras')
-data = data_load_parallel_all([ASSET], market, INTERVAL)
-
-asset, x_df_open, last_item = data[0]
+model = tf.keras.models.load_model('data/tf.keras')
+x_df_open, last_item = build_dataset(market, ASSET, INTERVAL)
 
 y_df_open = make_prediction(x_df_open, model)
 
 # Plot align
 # ------------------------------------------------------------------------
 
-x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
-x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
-x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
+# x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
+# x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
+# x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
 
 # Plot
 # ------------------------------------------------------------------------

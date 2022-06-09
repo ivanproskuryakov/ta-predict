@@ -50,3 +50,11 @@ def data_load_parallel_all(assets: [], market: str, interval: str):
         fns.append(data_load_remote.remote(asset, market, interval))
 
     return ray.get(fns)
+
+def data_load_parallel_all(assets: [], market: str, interval: str):
+    fns = []
+
+    for asset in assets:
+        fns.append(data_load_remote.remote(asset, market, interval))
+
+    return ray.get(fns)

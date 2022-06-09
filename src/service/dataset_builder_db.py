@@ -33,3 +33,24 @@ def build_dataset(market: str, asset: str, interval: str):
     val_df = df[int(n * 0.9):]
 
     return train_df, val_df, df_num_signals
+
+
+def build_dataset_multi_step(market: str, asset: str, interval: str):
+    repository = OhlcRepository()
+
+    df_ohlc = repository.find_all_with_df(
+        exchange='binance',
+        market=market,
+        asset=asset,
+        interval=interval
+    )
+
+    df_ta_na = estimate_ta_fill_na(df_ohlc)
+
+    # Data Scaling
+    # ------------------------------------------------------------------------
+
+    scaler = MinMaxScaler()
+    scaled = scaler.fit_transform(df_ta_na)
+
+    return pd.DataFrame(scaled, None, df_ta_na.keys())
