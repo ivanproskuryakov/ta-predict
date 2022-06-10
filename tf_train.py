@@ -37,7 +37,9 @@ df_num_signals = df.shape[1]
 # Data preparation
 # ------------------------------------------------------------------------
 
-shift_steps = 3
+# see https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/23_Time-Series-Prediction.ipynb
+
+shift_steps = 1
 
 x_data = df.values[:-shift_steps]  # cut tail, array size - 5
 y_data = df.values[shift_steps:]  # cut head
@@ -143,8 +145,8 @@ callbacks = [
 
 model.fit(
     x=generator,
-    epochs=20,
-    steps_per_epoch=20,
+    epochs=50,
+    steps_per_epoch=500,
     validation_data=validation_data,
     callbacks=callbacks
 )

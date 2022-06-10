@@ -1,5 +1,5 @@
 import pandas as pd
-from datetime import datetime
+import json
 
 from src.service.estimator import estimate_ta_fill_na
 from src.service.klines import KLines
@@ -10,16 +10,21 @@ def build_dataset(market: str, asset: str, interval: str):
     start_at = '1 week ago UTC'
     prepared = []
 
-    collection = klines.build_klines(
-        market,
-        asset,
-        interval,
-        start_at
-    )
+    # collection = klines.build_klines(
+    #     market,
+    #     asset,
+    #     interval,
+    #     start_at
+    # )
+
+    file = open('data/ohlc.json', 'r')
+    collection = json.loads(file.read())
+
+    collection = collection[0: 201]
 
     for item in collection:
         time_open = item['time_open'] / 1000
-        date = datetime.utcfromtimestamp(time_open)
+        # date = datetime.utcfromtimestamp(time_open)
 
         prepared.append([
             item['price_open'],

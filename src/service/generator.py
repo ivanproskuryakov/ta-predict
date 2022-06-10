@@ -2,15 +2,6 @@ import numpy as np
 import pandas as pd
 
 
-def build_dataset(asset, interval):
-    df_ohlc = read_asset_file(asset, interval)
-    df_ta = estimate_ta(df_ohlc)
-    df_nan = df_ta.fillna(0)
-    df = scale_data(df_nan)
-
-    return df
-
-
 def batch_generator(
         x_data,
         y_data,
