@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
+import pandas as pd
+import numpy as np
 
+from sklearn.preprocessing import MinMaxScaler
 from src.service.predictor_unseen import make_prediction
 from src.service.dataset_builder_realtime import build_dataset
 from src.parameters import market
@@ -14,10 +17,23 @@ shift_steps = 1
 # ------------------------------------------------------------------------
 
 model = tf.keras.models.load_model(f'data/ta_{shift_steps}.keras')
-x_df_open, last_item = build_dataset(market, asset, interval)
 
-x_df_open = x_df_open.tail(50)
-y_df_open = make_prediction(x_df_open, model)
+
+x, last_item = build_dataset(market, asset, interval)
+
+scaler = MinMaxScaler()
+scaled = scaler.fit_transform(x)
+
+x_df_scaled = pd.DataFrame(scaled, None, x.keys())
+x_df_scaled_expanded = np.expand_dims(x_df_scaled, axis=0)
+
+y = model.predict(x_df_scaled_expanded, verbose=0)
+
+# Inverse
+# ------------------------------------------------------------------------
+y_inverse = scaler.inverse_transform(y[0])
+
+y = pd.DataFrame(y_inverse, None, columns=x.columns)\
 
 # Plot
 # ------------------------------------------------------------------------
@@ -47,7 +63,7 @@ plt.grid(which='major', alpha=0.5)
 
 # b = plt.subplot(2, 1, 2)
 plt.plot(
-    y_df_open['open'].values,
+    y['open'].values,
     color='green',
     label=f'predict {interval}',
     marker='.'

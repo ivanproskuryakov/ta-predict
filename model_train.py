@@ -113,7 +113,7 @@ model.compile(
 
 model.fit(
     x=generator,
-    epochs=10,
+    epochs=20,
     steps_per_epoch=100,
     validation_data=(
         np.expand_dims(x_validate, axis=0),
