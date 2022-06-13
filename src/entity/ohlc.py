@@ -26,8 +26,8 @@ class Ohlc(Base):
     price_low = Column(Float(precision=32, decimal_return_scale=None))
     price_close = Column(Float(precision=32, decimal_return_scale=None))
 
-    avg_current = Column(Float(precision=32, decimal_return_scale=None))
-    avg_percentage = Column(Float(precision=32, decimal_return_scale=None))
+    # avg_current = Column(Float(precision=32, decimal_return_scale=None))
+    # avg_percentage = Column(Float(precision=32, decimal_return_scale=None))
 
     trades = Column(Float(precision=32, decimal_return_scale=None))
     volume = Column(Float(precision=32, decimal_return_scale=None))

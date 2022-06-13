@@ -15,5 +15,6 @@ python -m venv .env
 source .env/bin/activate
 
 python model_train.py
-python predict.py
+python model_predict.py
+python model_plot.py
 ```

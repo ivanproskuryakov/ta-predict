@@ -41,34 +41,30 @@ class KLines:
 
         # 11 Ignore
 
-        klines = client.get_historical_klines(
+        data = client.get_historical_klines(
             symbol=symbol,
             interval=interval,
             start_str=start_str
         )
         collection = []
 
-        for i in range(1, len(klines)):
-            current = klines[i]
-            previous = klines[i - 1]
+        for item in data:
+            time_open = item[0] / 1000
+            price_open = self.round(item[1], 10)
+            price_high = self.round(item[2], 10)
+            price_low = self.round(item[3], 10)
+            price_close = self.round(item[4], 10)
+            volume = self.round(float(item[5]), 1)
+            time_close = item[6] / 1000
 
-            time_open = current[0] / 1000
-            price_open = self.round(current[1], 10)
-            price_high = self.round(current[2], 10)
-            price_low = self.round(current[3], 10)
-            price_close = self.round(current[4], 10)
-            volume = self.round(float(current[5]), 1)
-            time_close = current[6] / 1000
-
-            quote_asset_volume = self.round(float(current[7]), 0)
-            trades = self.round(float(current[8]), 0)
-            volume_maker = self.round(float(current[9]), 0)
+            quote_asset_volume = self.round(float(item[7]), 0)
+            trades = self.round(float(item[8]), 0)
+            volume_maker = self.round(float(item[9]), 0)
             volume_taker = self.round(volume - volume_maker, 1)
 
-            # --
-            avg_current = self.price_average(current)
-            avg_previous = self.price_average(previous)
-            avg_diff = self.round(avg_current - avg_previous)
+            avg_item = self.price_average(item)
+            # avg_previous = self.price_average(previous)
+            # avg_diff = self.round(avg_item - avg_previous)
 
             date = datetime.utcfromtimestamp(time_open)
 
@@ -86,8 +82,8 @@ class KLines:
                 'time_day': date.day,
                 'time_minute': date.minute,
 
-                'avg_current': avg_current,
-                'avg_percentage': self.round(avg_diff * 100 / avg_current, 4),
+                # 'avg_item': avg_item,
+                # 'avg_percentage': self.round(avg_diff * 100 / avg_item, 4),
 
                 'trades': trades,
                 'volume': volume,

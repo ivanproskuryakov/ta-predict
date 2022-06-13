@@ -35,8 +35,8 @@ df = build_dataset(
 
 df_num_signals = df.shape[1]
 
-x = df.shift(-shift_steps).iloc[:-shift_steps]
-y = df.iloc[:-shift_steps]
+y = df.shift(-shift_steps).iloc[:-shift_steps]
+x = df.iloc[:-shift_steps]
 
 # # print(df['open'].head(10))
 # # print(df['open'].tail(10))
@@ -79,15 +79,12 @@ callback_early_stopping = EarlyStopping(
     mode='min',
     verbose=1
 )
-
 callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
     factor=0.3,
-    # min_lr=0,
     patience=5,
     verbose=1,
 )
-
 callback_checkpoint = ModelCheckpoint(
     filepath=filepath_checkpoint,
     monitor='val_loss',
@@ -95,6 +92,7 @@ callback_checkpoint = ModelCheckpoint(
     save_weights_only=True,
     save_best_only=True
 )
+
 model = tf.keras.models.Sequential([
     GRU(
         units=500,
@@ -122,7 +120,7 @@ model.fit(
         np.expand_dims(y_validate, axis=0)
     ),
     callbacks=[
-        # callback_early_stopping,
+        callback_early_stopping,
         callback_reduce_lr,
         callback_checkpoint,
     ]
