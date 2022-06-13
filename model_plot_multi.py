@@ -19,7 +19,10 @@ shift_steps = 1
 model = tf.keras.models.load_model(f'data/ta_{shift_steps}.keras')
 x, last_item = build_dataset(market, asset, interval)
 
-for i in range(3):
+x = x[0:-1]
+
+for i in range(5):
+    print('......')
     scaler = MinMaxScaler()
     scaled = scaler.fit_transform(x)
 
@@ -27,9 +30,6 @@ for i in range(3):
     x_df_scaled_expanded = np.expand_dims(x_df_scaled, axis=0)
 
     y = model.predict(x_df_scaled_expanded, verbose=0)
-
-    # Inverse
-    # ------------------------------------------------------------------------
     y_inverse = scaler.inverse_transform(y[0])
 
     y = pd.DataFrame(y_inverse, None, columns=x.columns)

@@ -18,15 +18,9 @@ def make_prediction(x_df, model):
     # Predict
     # ------------------------------------------------------------------------
     y = model.predict(x_df_scaled_expanded, verbose=0)
+    y_inverse = scaler.inverse_transform(y[0])
 
-    # Append
-    # ------------------------------------------------------------------------
-    y_df = pd.DataFrame(y[0], None, x_df.keys())
-
-    # Inverse
-    # ------------------------------------------------------------------------
-    y_df_open_inverse = scaler.inverse_transform(y[0])
-    y_df['open'] = y_df_open_inverse[:, 0]
+    y_df = pd.DataFrame(y_inverse, None, x_df.keys())
 
     return y_df
 
@@ -49,6 +43,7 @@ def data_load_parallel_all(assets: [], market: str, interval: str):
         fns.append(data_load_remote.remote(asset, market, interval))
 
     return ray.get(fns)
+
 
 def data_load_parallel_all(assets: [], market: str, interval: str):
     fns = []
