@@ -5,7 +5,7 @@ from src.service.estimator import estimate_ta_fill_na
 from src.repository.ohlc_repository import OhlcRepository
 
 
-def build_dataset(market: str, asset: str, interval: str):
+def build_dataset_data_split(market: str, asset: str, interval: str):
     repository = OhlcRepository()
 
     df_ohlc = repository.find_all_with_df(
@@ -35,7 +35,7 @@ def build_dataset(market: str, asset: str, interval: str):
     return train_df, val_df, df_num_signals
 
 
-def build_dataset_multi_step(market: str, asset: str, interval: str):
+def build_dataset(market: str, asset: str, interval: str):
     repository = OhlcRepository()
 
     df_ohlc = repository.find_all_with_df(

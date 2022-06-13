@@ -1,8 +1,7 @@
 import numpy as np
-import pandas as pd
 
 
-def batch_generator(
+def batch_generator_random(
         x_data,
         y_data,
         batch_size,

@@ -4,26 +4,26 @@ import numpy as np
 from keras.layers import Dense, GRU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
-from src.service.dataset_builder_db import build_dataset_multi_step
-from src.service.generator import batch_generator
+from src.service.dataset_builder_db import build_dataset
+from src.service.generator import batch_generator_random
 from src.parameters import market
 
 # Variables
 # ------------------------------------------------------------------------
 sequence_length = 50
-shift_steps = 1
+shift_steps = 3
 interval = '15m'
 asset = 'BTC'
 
 filepath_model = f'data/ta_{shift_steps}.keras'
 filepath_checkpoint = f'data/ta_{shift_steps}.checkpoint'
 
-print(f'training interval: {interval} {asset}')
+print(f'training interval: {interval} {asset} {shift_steps}')
 
-# Data load & train
+# Data load
 # ------------------------------------------------------------------------
 
-df = build_dataset_multi_step(
+df = build_dataset(
     market=market,
     asset=asset,
     interval=interval
@@ -31,7 +31,29 @@ df = build_dataset_multi_step(
 
 df_num_signals = df.shape[1]
 
-# Model definition
+x = df.values[0:-shift_steps]
+y = df.shift(-shift_steps).values[:-shift_steps]
+
+num_data = len(x)
+num_train = int(0.9 * num_data)
+
+x_train = x[0:num_train]
+x_validate = x[num_train:]
+
+y_train = y[0:num_train]
+y_validate = y[num_train:]
+
+# Generator function
+# --------------------------------------------------------
+
+generator = batch_generator_random(
+    x_data=x_train,
+    y_data=y_train,
+    batch_size=100,
+    sequence_length=sequence_length
+)
+
+# Model
 # ------------------------------------------------------------------------
 
 callback_early_stopping = EarlyStopping(
@@ -44,7 +66,7 @@ callback_early_stopping = EarlyStopping(
 callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
     factor=0.3,
-    min_lr=0.0001,
+    # min_lr=0,
     patience=5,
     verbose=1,
 )
@@ -73,30 +95,6 @@ model.compile(
     optimizer=tf.optimizers.Adam(),
     metrics=[tf.metrics.MeanAbsoluteError()]
 )
-
-# Generator function
-# --------------------------------------------------------
-x = df.values[0:-shift_steps]
-y = df.shift(-shift_steps).values[:-shift_steps]
-
-num_data = len(x)
-num_train = int(0.9 * num_data)
-
-x_train = x[0:num_train]
-x_validate = x[num_train:]
-
-y_train = y[0:num_train]
-y_validate = y[num_train:]
-
-generator = batch_generator(
-    x_data=x_train,
-    y_data=y_train,
-    batch_size=100,
-    sequence_length=sequence_length
-)
-
-# Generator function
-# --------------------------------------------------------
 
 model.fit(
     x=generator,

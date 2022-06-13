@@ -6,9 +6,9 @@ from src.service.dataset_builder_realtime import build_dataset
 from src.parameters import market, ASSET, INTERVAL
 
 asset = ASSET
-interval = INTERVAL
-tail = 20
-shift_steps = 1
+interval = '15m'
+tail = 50
+shift_steps = 3
 
 # Predict
 # ------------------------------------------------------------------------
@@ -16,7 +16,7 @@ shift_steps = 1
 model = tf.keras.models.load_model(f'data/ta_{shift_steps}.keras')
 x_df_open, last_item = build_dataset(market, ASSET, INTERVAL)
 
-x_df_open = x_df_open.tail(100)
+x_df_open = x_df_open.tail(tail)
 y_df_open = make_prediction(x_df_open, model)
 
 # Plot
