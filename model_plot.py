@@ -7,25 +7,17 @@ from src.parameters import market, ASSET, INTERVAL
 
 asset = ASSET
 interval = INTERVAL
-tail = 100
+tail = 20
+shift_steps = 1
 
 # Predict
 # ------------------------------------------------------------------------
 
-model = tf.keras.models.load_model('data/ta_1.keras')
+model = tf.keras.models.load_model(f'data/ta_{shift_steps}.keras')
 x_df_open, last_item = build_dataset(market, ASSET, INTERVAL)
 
-# x_df_open = x_df_open[-60:]
-
+x_df_open = x_df_open.tail(100)
 y_df_open = make_prediction(x_df_open, model)
-
-# Plot alignta_USDT_4.keras
-# ------------------------------------------------------------------------
-
-# x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
-# x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
-# x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
-# x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
 
 # Plot
 # ------------------------------------------------------------------------
@@ -41,17 +33,17 @@ plt.rcParams['axes.grid'] = True
 plt.rcParams['grid.alpha'] = 1
 plt.rcParams['grid.color'] = "#cccccc"
 plt.grid(True)
+#
+# a = plt.subplot(2, 1, 1)
+# a.plot(
+#     x_df_open['open'].tail(tail).values,
+#     color='blue',
+#     label='real',
+#     marker='.'
+# )
 
-a = plt.subplot(2, 1, 1)
-a.plot(
-    x_df_open['open'].tail(tail).values,
-    color='blue',
-    label='real',
-    marker='.'
-)
-
-b = plt.subplot(2, 1, 2)
-b.plot(
+# b = plt.subplot(2, 1, 2)
+plt.plot(
     y_df_open['open'].tail(tail).values,
     color='green',
     label=f'predict {interval}',

@@ -10,7 +10,7 @@ from src.parameters import market
 
 # Variables
 # ------------------------------------------------------------------------
-sequence_length = 100
+sequence_length = 50
 shift_steps = 1
 interval = '15m'
 asset = 'BTC'
@@ -76,23 +76,22 @@ model.compile(
 
 # Generator function
 # --------------------------------------------------------
-x_data = df.values[0:-shift_steps]
-y_data = df.shift(-shift_steps).values[:-shift_steps]
+x = df.values[0:-shift_steps]
+y = df.shift(-shift_steps).values[:-shift_steps]
 
-num_data = len(x_data)
-
+num_data = len(x)
 num_train = int(0.9 * num_data)
 
-x_train = x_data[0:num_train]
-x_validate = x_data[num_train:]
+x_train = x[0:num_train]
+x_validate = x[num_train:]
 
-y_train = y_data[0:num_train]
-y_validate = y_data[num_train:]
+y_train = y[0:num_train]
+y_validate = y[num_train:]
 
 generator = batch_generator(
-    x_data=x_data,
-    y_data=y_data,
-    batch_size=1000,
+    x_data=x_train,
+    y_data=y_train,
+    batch_size=100,
     sequence_length=sequence_length
 )
 
