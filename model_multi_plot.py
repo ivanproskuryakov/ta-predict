@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
+import pandas as pd
+import numpy as np
 
+from sklearn.preprocessing import MinMaxScaler
 from src.service.predictor_unseen import make_prediction
 from src.service.dataset_builder_realtime import build_dataset
 from src.parameters import market
@@ -16,7 +19,22 @@ shift_steps = 1
 model = tf.keras.models.load_model(f'data/ta_{shift_steps}.keras')
 x, last_item = build_dataset(market, asset, interval)
 
-y = make_prediction(x, model)
+for i in range(3):
+    scaler = MinMaxScaler()
+    scaled = scaler.fit_transform(x)
+
+    x_df_scaled = pd.DataFrame(scaled, None, x.keys())
+    x_df_scaled_expanded = np.expand_dims(x_df_scaled, axis=0)
+
+    y = model.predict(x_df_scaled_expanded, verbose=0)
+
+    # Inverse
+    # ------------------------------------------------------------------------
+    y_inverse = scaler.inverse_transform(y[0])
+
+    y = pd.DataFrame(y_inverse, None, columns=x.columns)
+
+    x.loc[len(x)] = y.loc[len(y) - 1]
 
 # Plot
 # ------------------------------------------------------------------------

@@ -21,15 +21,14 @@ def make_prediction(x_df, model):
 
     # Append
     # ------------------------------------------------------------------------
-    # y_df_open = pd.DataFrame(np.zeros((len(x_df), len(x_df.columns))), columns=x_df.columns)
-    # y_df_open['open'] = y[0][:, 0]
+    y_df = pd.DataFrame(y[0], None, x_df.keys())
 
     # Inverse
     # ------------------------------------------------------------------------
-    # y_df_open_inverse = scaler.inverse_transform(y)
-    # y_df_open['open'] = y_df_open_inverse[:, 0]
+    y_df_open_inverse = scaler.inverse_transform(y[0])
+    y_df['open'] = y_df_open_inverse[:, 0]
 
-    return pd.DataFrame(y[0], None, x_df.keys()), scaler
+    return y_df
 
 
 @ray.remote
