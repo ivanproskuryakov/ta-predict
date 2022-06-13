@@ -1,5 +1,6 @@
 import tensorflow as tf
 import numpy as np
+import pandas as pd
 
 from keras.layers import Dense, GRU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
@@ -8,10 +9,13 @@ from src.service.dataset_builder_db import build_dataset
 from src.service.generator import batch_generator_random
 from src.parameters import market
 
+pd.set_option("display.precision", 6)
+np.set_printoptions(precision=6)
+
 # Variables
 # ------------------------------------------------------------------------
 sequence_length = 50
-shift_steps = 20
+shift_steps = 10
 interval = '15m'
 asset = 'BTC'
 
@@ -31,8 +35,22 @@ df = build_dataset(
 
 df_num_signals = df.shape[1]
 
-x = df.values[0:-shift_steps]
-y = df.shift(-shift_steps).values[:-shift_steps]
+x = df.shift(-shift_steps).iloc[:-shift_steps]
+y = df.iloc[:-shift_steps]
+
+# # print(df['open'].head(10))
+# # print(df['open'].tail(10))
+# print('x')
+# # print(x.head(10))
+# print(x.tail(10))
+# # print(x[-10:, 0])
+# print('y')
+# # print(y.head(10))
+# print(y.tail(10))
+# # print(y[-10:, 0])
+# print(len(x))
+# print(len(y))
+# exit()
 
 num_train = int(0.9 * len(x))
 
@@ -97,7 +115,7 @@ model.compile(
 
 model.fit(
     x=generator,
-    epochs=20,
+    epochs=10,
     steps_per_epoch=100,
     validation_data=(
         np.expand_dims(x_validate, axis=0),

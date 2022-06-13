@@ -34,7 +34,6 @@ class OhlcRepository:
                 .filter(Ohlc.exchange == exchange) \
                 .filter(Ohlc.market == market) \
                 .filter(Ohlc.interval == interval) \
-                .filter(Ohlc.interval == interval) \
                 .filter(Ohlc.asset == asset) \
                 .order_by(Ohlc.time_open) \
                 .all()

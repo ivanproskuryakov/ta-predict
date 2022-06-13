@@ -7,16 +7,17 @@ def batch_generator_random(
         batch_size,
         sequence_length,
 ):
-    num_signals = x_data.shape[1]
+    x_num_signals = x_data.shape[1]
+    y_num_signals = x_data.shape[1]
     num_train = len(x_data)
 
     while True:
         # Allocate a new array for the batch of input-signals.
-        x_shape = (batch_size, sequence_length, num_signals)
+        x_shape = (batch_size, sequence_length, x_num_signals)
         x_batch = np.zeros(shape=x_shape, dtype=np.float32)
 
         # Allocate a new array for the batch of output-signals.
-        y_shape = (batch_size, sequence_length, num_signals)
+        y_shape = (batch_size, sequence_length, y_num_signals)
         y_batch = np.zeros(shape=y_shape, dtype=np.float32)
 
         # Fill the batch with random sequences of data.
