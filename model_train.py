@@ -11,7 +11,7 @@ from src.parameters import market
 # Variables
 # ------------------------------------------------------------------------
 sequence_length = 50
-shift_steps = 3
+shift_steps = 20
 interval = '15m'
 asset = 'BTC'
 
@@ -34,8 +34,7 @@ df_num_signals = df.shape[1]
 x = df.values[0:-shift_steps]
 y = df.shift(-shift_steps).values[:-shift_steps]
 
-num_data = len(x)
-num_train = int(0.9 * num_data)
+num_train = int(0.9 * len(x))
 
 x_train = x[0:num_train]
 x_validate = x[num_train:]
