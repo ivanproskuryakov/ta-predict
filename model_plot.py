@@ -17,23 +17,24 @@ shift_steps = 1
 # ------------------------------------------------------------------------
 
 model = tf.keras.models.load_model(f'data/ta_{shift_steps}.keras')
-
-
 x, last_item = build_dataset(market, asset, interval)
 
-scaler = MinMaxScaler()
-scaled = scaler.fit_transform(x)
+for i in range(3):
+    scaler = MinMaxScaler()
+    scaled = scaler.fit_transform(x)
 
-x_df_scaled = pd.DataFrame(scaled, None, x.keys())
-x_df_scaled_expanded = np.expand_dims(x_df_scaled, axis=0)
+    x_df_scaled = pd.DataFrame(scaled, None, x.keys())
+    x_df_scaled_expanded = np.expand_dims(x_df_scaled, axis=0)
 
-y = model.predict(x_df_scaled_expanded, verbose=0)
+    y = model.predict(x_df_scaled_expanded, verbose=0)
 
-# Inverse
-# ------------------------------------------------------------------------
-y_inverse = scaler.inverse_transform(y[0])
+    # Inverse
+    # ------------------------------------------------------------------------
+    y_inverse = scaler.inverse_transform(y[0])
 
-y = pd.DataFrame(y_inverse, None, columns=x.columns)\
+    y = pd.DataFrame(y_inverse, None, columns=x.columns)
+
+    x.loc[len(x)] = y.loc[len(y) - 1]
 
 # Plot
 # ------------------------------------------------------------------------
@@ -63,7 +64,7 @@ plt.grid(which='major', alpha=0.5)
 
 # b = plt.subplot(2, 1, 2)
 plt.plot(
-    y['open'].values,
+    y['open'].tail(50).values,
     color='green',
     label=f'predict {interval}',
     marker='.'
