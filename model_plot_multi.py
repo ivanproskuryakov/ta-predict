@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 
 from sklearn.preprocessing import MinMaxScaler
-from src.service.predictor_unseen import make_prediction
 from src.service.dataset_builder_realtime import build_dataset
 from src.parameters import market
 
@@ -19,9 +18,9 @@ shift_steps = 1
 model = tf.keras.models.load_model(f'data/ta_{shift_steps}.keras')
 x, last_item = build_dataset(market, asset, interval)
 
-x = x[0:-1]
+x = x[0:-6]
 
-for i in range(5):
+for i in range(3):
     print('......')
     scaler = MinMaxScaler()
     scaled = scaler.fit_transform(x)

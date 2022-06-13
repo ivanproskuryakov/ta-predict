@@ -44,7 +44,6 @@ def data_load_parallel_all(assets: [], market: str, interval: str):
 
     return ray.get(fns)
 
-
 def data_load_parallel_all(assets: [], market: str, interval: str):
     fns = []
 

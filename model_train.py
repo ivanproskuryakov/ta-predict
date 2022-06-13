@@ -14,7 +14,7 @@ np.set_printoptions(precision=6)
 
 # Variables
 # ------------------------------------------------------------------------
-sequence_length = 50
+sequence_length = 100
 shift_steps = 1
 interval = '15m'
 asset = 'BTC'
@@ -66,7 +66,7 @@ y_validate = y[num_train:]
 generator = batch_generator_random(
     x_data=x_train,
     y_data=y_train,
-    batch_size=100,
+    batch_size=1000,
     sequence_length=sequence_length
 )
 
@@ -95,7 +95,7 @@ callback_checkpoint = ModelCheckpoint(
 
 model = tf.keras.models.Sequential([
     GRU(
-        units=500,
+        units=512,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
@@ -113,8 +113,8 @@ model.compile(
 
 model.fit(
     x=generator,
-    epochs=20,
-    steps_per_epoch=100,
+    epochs=200,
+    steps_per_epoch=1000,
     validation_data=(
         np.expand_dims(x_validate, axis=0),
         np.expand_dims(y_validate, axis=0)
