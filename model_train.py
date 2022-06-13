@@ -11,12 +11,12 @@ from src.parameters import market
 # Variables
 # ------------------------------------------------------------------------
 sequence_length = 100
-shift_steps = 4
+shift_steps = 1
 interval = '15m'
 asset = 'BTC'
 
-filepath_model = f'data/ta_{market}_{shift_steps}.keras'
-filepath_checkpoint = f'data/ta_{market}_{shift_steps}.checkpoint'
+filepath_model = f'data/ta_{shift_steps}.keras'
+filepath_checkpoint = f'data/ta_{shift_steps}.checkpoint'
 
 print(f'training interval: {interval} {asset}')
 
@@ -43,8 +43,8 @@ callback_early_stopping = EarlyStopping(
 
 callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
-    factor=0.5,
-    min_lr=0.00001,
+    factor=0.3,
+    min_lr=0.0001,
     patience=5,
     verbose=1,
 )
@@ -65,7 +65,7 @@ model = tf.keras.models.Sequential([
     # LSTM(df_num_signals, return_sequences=False),
     # Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
     # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
-    Dense(units=1),
+    Dense(units=df_num_signals, activation='sigmoid'),
 ])
 
 model.compile(
@@ -89,7 +89,12 @@ x_validate = x_data[num_train:]
 y_train = y_data[0:num_train]
 y_validate = y_data[num_train:]
 
-generator = batch_generator(x_data=x_data, y_data=y_data, batch_size=100, sequence_length=50)
+generator = batch_generator(
+    x_data=x_data,
+    y_data=y_data,
+    batch_size=1000,
+    sequence_length=sequence_length
+)
 
 # Generator function
 # --------------------------------------------------------

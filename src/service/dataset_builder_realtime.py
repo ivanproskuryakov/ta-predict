@@ -16,11 +16,12 @@ def build_dataset(market: str, asset: str, interval: str):
     #     interval,
     #     start_at
     # )
+    #
+    # file = open('data/ohlc.json', 'w')
+    # file.write(json.dumps(collection))
 
     file = open('data/ohlc.json', 'r')
     collection = json.loads(file.read())
-
-    collection = collection[0: 201]
 
     for item in collection:
         time_open = item['time_open'] / 1000

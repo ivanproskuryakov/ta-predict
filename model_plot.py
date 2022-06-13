@@ -7,22 +7,22 @@ from src.parameters import market, ASSET, INTERVAL
 
 asset = ASSET
 interval = INTERVAL
-tail = 50
+tail = 100
 
 # Predict
 # ------------------------------------------------------------------------
 
-model = tf.keras.models.load_model('data/tf.keras')
+model = tf.keras.models.load_model('data/ta_1.keras')
 x_df_open, last_item = build_dataset(market, ASSET, INTERVAL)
 
 # x_df_open = x_df_open[-60:]
 
 y_df_open = make_prediction(x_df_open, model)
 
-# Plot align
+# Plot alignta_USDT_4.keras
 # ------------------------------------------------------------------------
 
-x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
+# x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
 # x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
 # x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
 # x_df_open.loc[len(x_df_open)] = x_df_open.loc[len(x_df_open) - 1]
