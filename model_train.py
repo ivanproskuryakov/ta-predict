@@ -15,7 +15,7 @@ np.set_printoptions(precision=6)
 # Variables
 # ------------------------------------------------------------------------
 sequence_length = 50
-shift_steps = 10
+shift_steps = 1
 interval = '15m'
 asset = 'BTC'
 
@@ -35,8 +35,8 @@ df = build_dataset(
 
 df_num_signals = df.shape[1]
 
-y = df.shift(-shift_steps).iloc[:-shift_steps]
-x = df.iloc[:-shift_steps]
+x = df.shift(-shift_steps).iloc[:-shift_steps]
+y = df.iloc[:-shift_steps]
 
 # # print(df['open'].head(10))
 # # print(df['open'].tail(10))

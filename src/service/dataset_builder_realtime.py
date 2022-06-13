@@ -38,8 +38,8 @@ def build_dataset(market: str, asset: str, interval: str):
             # date.hour,
             # date.minute,
 
-            item['avg_percentage'],
-            item['avg_current'],
+            # item['avg_percentage'],
+            # item['avg_current'],
 
             item['trades'],
             item['volume'],
@@ -61,8 +61,8 @@ def build_dataset(market: str, asset: str, interval: str):
         # 'time_hour',
         # 'time_minute',
 
-        'avg_percentage',
-        'avg_current',
+        # 'avg_percentage',
+        # 'avg_current',
 
         'trades',
         'volume',

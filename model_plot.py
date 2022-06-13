@@ -8,7 +8,7 @@ from src.parameters import market
 asset = 'BTC'
 interval = '15m'
 tail = 50
-shift_steps = 5
+shift_steps = 1
 
 # Predict
 # ------------------------------------------------------------------------
