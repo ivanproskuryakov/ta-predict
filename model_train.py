@@ -1,24 +1,35 @@
 import tensorflow as tf
+import numpy as np
 
-from keras.layers import Dense, GRU, LSTM
+from keras.layers import Dense, GRU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
-from src.service.dataset_builder_db import build_dataset
-from src.service.generator_window import WindowGenerator
+from src.service.dataset_builder_db import build_dataset_multi_step
+from src.service.generator import batch_generator
 from src.parameters import market
 
 # Variables
 # ------------------------------------------------------------------------
-df_num_signals = 45
-width = 200
-
-filepath_model = f'data/ta_{market}_shift3.keras'
-filepath_checkpoint = f'data/ta_{market}_shift3.checkpoint'
-
-interval = '5m'
+sequence_length = 100
+shift_steps = 4
+interval = '15m'
 asset = 'BTC'
 
+filepath_model = f'data/ta_{market}_{shift_steps}.keras'
+filepath_checkpoint = f'data/ta_{market}_{shift_steps}.checkpoint'
+
 print(f'training interval: {interval} {asset}')
+
+# Data load & train
+# ------------------------------------------------------------------------
+
+df = build_dataset_multi_step(
+    market=market,
+    asset=asset,
+    interval=interval
+)
+
+df_num_signals = df.shape[1]
 
 # Model definition
 # ------------------------------------------------------------------------
@@ -63,32 +74,34 @@ model.compile(
     metrics=[tf.metrics.MeanAbsoluteError()]
 )
 
-# Data load & train
-# ------------------------------------------------------------------------
+# Generator function
+# --------------------------------------------------------
+x_data = df.values[0:-shift_steps]
+y_data = df.shift(-shift_steps).values[:-shift_steps]
 
-train_df, val_df, df_num_signals = build_dataset(
-    market=market,
-    asset=asset,
-    interval=interval
-)
+num_data = len(x_data)
+
+num_train = int(0.9 * num_data)
+
+x_train = x_data[0:num_train]
+x_validate = x_data[num_train:]
+
+y_train = y_data[0:num_train]
+y_validate = y_data[num_train:]
+
+generator = batch_generator(x_data=x_data, y_data=y_data, batch_size=100, sequence_length=50)
 
 # Generator function
 # --------------------------------------------------------
 
-window = WindowGenerator(
-    input_width=width,
-    label_width=width,
-    shift=3,
-    batch_size=500,
-    label_columns=['open'],
-    train_df=train_df,
-    val_df=val_df,
-)
-
 model.fit(
-    window.train,
-    epochs=500,
-    validation_data=window.val,
+    x=generator,
+    epochs=20,
+    steps_per_epoch=100,
+    validation_data=(
+        np.expand_dims(x_validate, axis=0),
+        np.expand_dims(y_validate, axis=0)
+    ),
     callbacks=[
         # callback_early_stopping,
         callback_reduce_lr,
