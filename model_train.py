@@ -65,7 +65,7 @@ generator = batch_generator_random(
     y_data=y_train,
     x_num_signals=x_num_signals,
     y_num_signals=x_num_signals,
-    batch_size=1000,
+    batch_size=500,
     sequence_length=sequence_length
 )
 

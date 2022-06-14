@@ -5,12 +5,10 @@ import numpy as np
 
 from sklearn.preprocessing import MinMaxScaler
 from src.service.dataset_builder_realtime import build_dataset
-from src.parameters import market
+from src.parameters import market, shift_steps, tail
 
 asset = 'BTC'
 interval = '15m'
-tail = 50
-shift_steps = 1
 
 # Predict
 # ------------------------------------------------------------------------
@@ -18,9 +16,9 @@ shift_steps = 1
 model = tf.keras.models.load_model(f'data/ta_{shift_steps}.keras')
 x, last_item = build_dataset(market, asset, interval)
 
-# x = x[0:-3]
+x = x[:-2]
 
-for i in range(10):
+for i in range(2):
     print('......')
     scaler = MinMaxScaler()
     scaled = scaler.fit_transform(x)
@@ -41,7 +39,7 @@ for i in range(10):
 plt.figure(figsize=(16, 8))
 
 plt.xlim(left=0)
-plt.xlim(right=100)
+plt.xlim(right=200)
 
 plt.rcParams['axes.facecolor'] = 'white'
 plt.rcParams['axes.edgecolor'] = 'white'
@@ -63,7 +61,7 @@ plt.grid(which='major', alpha=0.5)
 
 # b = plt.subplot(2, 1, 2)
 plt.plot(
-    y['open'].tail(50).values,
+    y['open'].tail(tail).values,
     color='green',
     label=f'predict {interval}',
     marker='.'

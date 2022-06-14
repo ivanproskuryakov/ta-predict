@@ -7,7 +7,6 @@ from src.parameters import market, shift_steps
 
 asset = 'BTC'
 interval = '15m'
-tail = 100
 
 # Predict
 # ------------------------------------------------------------------------
@@ -45,7 +44,7 @@ plt.grid(which='major', alpha=0.5)
 
 # b = plt.subplot(2, 1, 2)
 plt.plot(
-    y['open'].tail(100).values,
+    y['open'].tail(tail).values,
     color='green',
     label=f'predict {interval}',
     marker='.'
