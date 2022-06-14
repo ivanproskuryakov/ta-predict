@@ -82,4 +82,6 @@ def estimate_ta_fill_na(df):
     for key in tadf.keys():
         df[key] = tadf[key]
 
+    df = df.fillna(0)
+
     return df
