@@ -5,6 +5,7 @@ DB_URL = {
 }
 shift_steps = 4
 tail = 100
+sequence_length = 100
 
 assets = [
     "BTC",
