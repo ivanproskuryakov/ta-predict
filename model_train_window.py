@@ -11,8 +11,8 @@ from src.parameters import market
 # ------------------------------------------------------------------------
 width = 200
 
-filepath_model = f'data/ta_{market}_shift3.keras'
-filepath_checkpoint = f'data/ta_{market}_shift3.checkpoint'
+filepath_model = f'data/ta_{market}.keras'
+filepath_checkpoint = f'data/ta_{market}.checkpoint'
 
 interval = '15m'
 asset = 'BTC'

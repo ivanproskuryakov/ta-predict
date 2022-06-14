@@ -63,7 +63,7 @@ class KLines:
             volume_maker = self.round(float(current[9]), 0)
             volume_taker = self.round(volume - volume_maker, 1)
 
-            avg_current = self.price_average(current)
+            # avg_current = self.price_average(current)
             date = datetime.utcfromtimestamp(time_open)
 
             item = {
@@ -71,6 +71,7 @@ class KLines:
                 'price_high': price_high,
                 'price_low': price_low,
                 'price_close': price_close,
+                'price_diff': diff_percentage(price_close, price_open),
 
                 'time_open': time_open,
                 'time_close': time_close,
@@ -80,8 +81,8 @@ class KLines:
                 'time_day': date.day,
                 'time_minute': date.minute,
 
-                'avg_current': avg_current,
-                'avg_percentage': diff_percentage(price_close, price_open),
+                # 'avg_current': avg_current,
+                # 'avg_percentage': diff_percentage(price_close, price_open),
 
                 'trades': trades,
                 'volume': volume,

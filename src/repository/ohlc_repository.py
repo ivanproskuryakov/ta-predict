@@ -45,6 +45,7 @@ class OhlcRepository:
                     item.price_high,
                     item.price_low,
                     item.price_close,
+                    # item.price_diff,
 
                     # item.time_month,
                     # item.time_day,
@@ -60,7 +61,6 @@ class OhlcRepository:
                     item.volume_maker,
                     item.quote_asset_volume,
 
-                    item.price_diff,
                     # datetime.utcfromtimestamp(collection[i]['time_open']),
                 ])
 
@@ -69,11 +69,14 @@ class OhlcRepository:
             'high',
             'low',
             'close',
+            # 'diff',
 
             # 'time_month',
             # 'time_day',
             # 'time_hour',
             # 'time_minute',
+            # item.avg_percentage,
+            # item.avg_current,
 
             'trades',
             'volume',
@@ -81,7 +84,6 @@ class OhlcRepository:
             'volume_maker',
             'quote_asset_volume',
 
-            'diff',
             # 'epoch',
         ])
 
