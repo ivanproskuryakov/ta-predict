@@ -89,7 +89,7 @@ model.fit(
     epochs=500,
     validation_data=window.val,
     callbacks=[
-        # callback_early_stopping,
+        callback_early_stopping,
         callback_reduce_lr,
         callback_checkpoint,
     ]
