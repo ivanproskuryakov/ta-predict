@@ -45,12 +45,12 @@ class OhlcRepository:
                     item.price_high,
                     item.price_low,
                     item.price_close,
-                    # item.price_diff,
+                    item.price_diff,
 
-                    # item.time_month,
-                    # item.time_day,
-                    # item.time_hour,
-                    # item.time_minute,
+                    item.time_month,
+                    item.time_day,
+                    item.time_hour,
+                    item.time_minute,
 
                     # item.avg_percentage,
                     # item.avg_current,
@@ -69,12 +69,13 @@ class OhlcRepository:
             'high',
             'low',
             'close',
-            # 'diff',
+            'diff',
 
-            # 'time_month',
-            # 'time_day',
-            # 'time_hour',
-            # 'time_minute',
+            'time_month',
+            'time_day',
+            'time_hour',
+            'time_minute',
+
             # item.avg_percentage,
             # item.avg_current,
 

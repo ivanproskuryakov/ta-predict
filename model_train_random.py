@@ -17,8 +17,8 @@ np.set_printoptions(precision=6)
 interval = '15m'
 asset = 'BTC'
 
-filepath_model = f'data/ta_{shift_steps}.keras'
-filepath_checkpoint = f'data/ta_{shift_steps}.checkpoint'
+filepath_model = f'data/ta_{market}.keras'
+filepath_checkpoint = f'data/ta_{market}.checkpoint'
 
 print(f'training interval: {interval} {asset} {shift_steps}')
 
