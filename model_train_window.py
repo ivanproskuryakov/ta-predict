@@ -3,7 +3,7 @@ import tensorflow as tf
 from keras.layers import Dense, GRU, LSTM
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
-from src.service.dataset_builder_db import build_dataset
+from src.service.dataset_builder_db import build_dataset_window
 from src.service.generator_window import WindowGenerator
 from src.parameters import market
 
@@ -22,7 +22,7 @@ print(f'training interval: {interval} {asset}')
 # Data load & train
 # ------------------------------------------------------------------------
 
-train_df, val_df, df_num_signals = build_dataset(
+train_df, val_df, df_num_signals = build_dataset_window(
     market=market,
     asset=asset,
     interval=interval

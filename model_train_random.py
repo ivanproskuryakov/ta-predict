@@ -5,7 +5,7 @@ import pandas as pd
 from keras.layers import Dense, GRU, LSTM
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
-from src.service.dataset_builder_db import build_dataset
+from src.service.dataset_builder_db import build_dataset_random
 from src.service.generator import batch_generator_random
 from src.parameters import market, sequence_length, shift_steps
 
@@ -25,7 +25,7 @@ print(f'training interval: {interval} {asset} {shift_steps}')
 # Data load
 # ------------------------------------------------------------------------
 
-df = build_dataset(
+df = build_dataset_random(
     market=market,
     asset=asset,
     interval=interval
