@@ -73,7 +73,7 @@ model = tf.keras.models.Sequential([
     # LSTM(df_num_signals, return_sequences=False),
     # Dense(units=df_num_signals, activation='linear'-, input_dim=df_num_signals),
     # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
-    Dense(units=df_num_signals),
+    Dense(units=9),
 ])
 
 model.compile(
@@ -92,21 +92,17 @@ window = WindowGenerator(
     batch_size=500,
     label_columns=[
         'open',
-        # 'high',
-        # 'low',
-        # 'close',
+        'high',
+        'low',
+        'close',
+
+        'trades',
+        'volume',
+        'volume_taker',
+        'volume_maker',
+        'quote_asset_volume',
+
         # 'diff',
-        #
-        # 'time_month',
-        # 'time_day',
-        # 'time_hour',
-        # 'time_minute',
-        #
-        # 'trades',
-        # 'volume',
-        # 'volume_taker',
-        # 'volume_maker',
-        # 'quote_asset_volume',
     ],
     train_df=train_df,
     val_df=validate_df,

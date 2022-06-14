@@ -45,21 +45,19 @@ class OhlcRepository:
                     item.price_high,
                     item.price_low,
                     item.price_close,
-                    item.price_diff,
 
-                    item.time_month,
-                    item.time_day,
-                    item.time_hour,
-                    item.time_minute,
-
-                    # item.avg_percentage,
-                    # item.avg_current,
+                    # item.time_month,
+                    # item.time_day,
+                    # item.time_hour,
+                    # item.time_minute,
 
                     item.trades,
                     item.volume,
                     item.volume_taker,
                     item.volume_maker,
                     item.quote_asset_volume,
+
+                    item.price_diff,
 
                     # datetime.utcfromtimestamp(collection[i]['time_open']),
                 ])
@@ -69,21 +67,19 @@ class OhlcRepository:
             'high',
             'low',
             'close',
-            'diff',
 
-            'time_month',
-            'time_day',
-            'time_hour',
-            'time_minute',
-
-            # item.avg_percentage,
-            # item.avg_current,
+            # 'time_month',
+            # 'time_day',
+            # 'time_hour',
+            # 'time_minute',
 
             'trades',
             'volume',
             'volume_taker',
             'volume_maker',
             'quote_asset_volume',
+
+            'diff',
 
             # 'epoch',
         ])
@@ -110,6 +106,7 @@ class OhlcRepository:
 
             ohlc.time_open = np.round(item['time_open'], 0)
             ohlc.time_close = np.round(item['time_close'], 0)
+
             # ohlc.time_month = item['time_month']
             # ohlc.time_day = item['time_day']
             # ohlc.time_hour = item['time_hour']

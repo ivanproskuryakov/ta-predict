@@ -49,8 +49,8 @@ def build_dataset_window_many(market: str, assets: list[str], interval: str):
             train = df_train
             validate = df_validate
         else:
-            train.concat(df_train)
-            validate.concat(df_validate)
+            train.append(df_train)
+            validate.append(df_validate)
 
     return train, validate
 
