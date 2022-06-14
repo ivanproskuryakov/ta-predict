@@ -3,7 +3,7 @@ import tensorflow as tf
 
 from src.service.predictor_unseen import make_prediction
 from src.service.dataset_builder_realtime import build_dataset
-from src.parameters import market, shift_steps
+from src.parameters import market, shift_steps, tail
 
 asset = 'BTC'
 interval = '15m'

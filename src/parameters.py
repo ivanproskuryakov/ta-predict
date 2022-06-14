@@ -3,13 +3,15 @@ from binance import Client
 DB_URL = {
     "dev": "postgresql://postgres:@localhost/ta_dev",
 }
+shift_steps = 4
+tail = 100
 
 assets = [
     "BTC",
     "ETH",
     "BNB",
     "NEO",
-    "LTC",\
+    "LTC",
     "ADA",
     "XRP",
     "EOS",
