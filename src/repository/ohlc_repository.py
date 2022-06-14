@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from src.entity.ohlc import Ohlc
 from src.connector.db_connector import db_connect
+from src.service.util import diff_percentage
 
 
 # https://docs.sqlalchemy.org/en/14/orm/session_basics.html
@@ -34,7 +35,6 @@ class OhlcRepository:
                 .filter(Ohlc.exchange == exchange) \
                 .filter(Ohlc.market == market) \
                 .filter(Ohlc.interval == interval) \
-                .filter(Ohlc.interval == interval) \
                 .filter(Ohlc.asset == asset) \
                 .order_by(Ohlc.time_open) \
                 .all()
@@ -51,15 +51,16 @@ class OhlcRepository:
                     # item.time_hour,
                     # item.time_minute,
 
-                    item.avg_percentage,
-                    item.avg_current,
+                    # item.avg_percentage,
+                    # item.avg_current,
 
                     item.trades,
                     item.volume,
                     item.volume_taker,
                     item.volume_maker,
-
                     item.quote_asset_volume,
+
+                    item.price_diff,
                     # datetime.utcfromtimestamp(collection[i]['time_open']),
                 ])
 
@@ -74,15 +75,13 @@ class OhlcRepository:
             # 'time_hour',
             # 'time_minute',
 
-            'avg_percentage',
-            'avg_current',
-
             'trades',
             'volume',
             'volume_taker',
             'volume_maker',
-
             'quote_asset_volume',
+
+            'diff',
             # 'epoch',
         ])
 
@@ -108,18 +107,19 @@ class OhlcRepository:
 
             ohlc.time_open = np.round(item['time_open'], 0)
             ohlc.time_close = np.round(item['time_close'], 0)
-            ohlc.time_month = item['time_month']
-            ohlc.time_day = item['time_day']
-            ohlc.time_hour = item['time_hour']
-            ohlc.time_minute = item['time_minute']
+            # ohlc.time_month = item['time_month']
+            # ohlc.time_day = item['time_day']
+            # ohlc.time_hour = item['time_hour']
+            # ohlc.time_minute = item['time_minute']
 
             ohlc.price_open = item['price_open']
             ohlc.price_low = item['price_low']
             ohlc.price_high = item['price_high']
             ohlc.price_close = item['price_close']
+            ohlc.price_diff = item['price_diff']
 
-            ohlc.avg_current = item['avg_current']
-            ohlc.avg_percentage = item['avg_percentage']
+            # ohlc.avg_current = item['avg_current']
+            # ohlc.avg_percentage = item['avg_percentage']
 
             ohlc.trades = item['trades']
             ohlc.volume = item['volume']

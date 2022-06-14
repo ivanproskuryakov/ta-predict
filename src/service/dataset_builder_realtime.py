@@ -1,5 +1,5 @@
 import pandas as pd
-from datetime import datetime
+import json
 
 from src.service.estimator import estimate_ta_fill_na
 from src.service.klines import KLines
@@ -10,16 +10,22 @@ def build_dataset(market: str, asset: str, interval: str):
     start_at = '1 week ago UTC'
     prepared = []
 
-    collection = klines.build_klines(
-        market,
-        asset,
-        interval,
-        start_at
-    )
+    # collection = klines.build_klines(
+    #     market,
+    #     asset,
+    #     interval,
+    #     start_at
+    # )
+    #
+    # file = open('data/ohlc.json', 'w')
+    # file.write(json.dumps(collection))
+
+    file = open('data/ohlc.json', 'r')
+    collection = json.loads(file.read())
 
     for item in collection:
         time_open = item['time_open'] / 1000
-        date = datetime.utcfromtimestamp(time_open)
+        # date = datetime.utcfromtimestamp(time_open)
 
         prepared.append([
             item['price_open'],
@@ -32,8 +38,8 @@ def build_dataset(market: str, asset: str, interval: str):
             # date.hour,
             # date.minute,
 
-            item['avg_percentage'],
-            item['avg_current'],
+            # item['avg_percentage'],
+            # item['avg_current'],
 
             item['trades'],
             item['volume'],
@@ -41,6 +47,7 @@ def build_dataset(market: str, asset: str, interval: str):
             item['volume_maker'],
 
             item['quote_asset_volume'],
+            item['price_diff'],
             # datetime.utcfromtimestamp(item['time_open']),
         ])
 
@@ -55,8 +62,8 @@ def build_dataset(market: str, asset: str, interval: str):
         # 'time_hour',
         # 'time_minute',
 
-        'avg_percentage',
-        'avg_current',
+        # 'avg_percentage',
+        # 'avg_current',
 
         'trades',
         'volume',
@@ -64,9 +71,12 @@ def build_dataset(market: str, asset: str, interval: str):
         'volume_maker',
 
         'quote_asset_volume',
+        'price_diff',
         # 'epoch',
     ])
 
-    df = estimate_ta_fill_na(df_ohlc)
+    # df = estimate_ta_fill_na(df_ohlc)
 
-    return df, item
+    df_na = df_ohlc.fillna(0)
+
+    return df_na, item

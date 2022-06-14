@@ -5,7 +5,7 @@ from src.service.estimator import estimate_ta_fill_na
 from src.repository.ohlc_repository import OhlcRepository
 
 
-def build_dataset(market: str, asset: str, interval: str):
+def build_dataset_data_split(market: str, asset: str, interval: str):
     repository = OhlcRepository()
 
     df_ohlc = repository.find_all_with_df(
@@ -33,3 +33,26 @@ def build_dataset(market: str, asset: str, interval: str):
     val_df = df[int(n * 0.9):]
 
     return train_df, val_df, df_num_signals
+
+
+def build_dataset(market: str, asset: str, interval: str):
+    repository = OhlcRepository()
+
+    df_ohlc = repository.find_all_with_df(
+        exchange='binance',
+        market=market,
+        asset=asset,
+        interval=interval
+    )
+
+    df = df_ohlc.fillna(0)
+
+    # df_ta_na = estimate_ta_fill_na(df_na)
+
+    # Data Scaling
+    # ------------------------------------------------------------------------
+
+    scaler = MinMaxScaler()
+    scaled = scaler.fit_transform(df)
+
+    return pd.DataFrame(scaled, None, df.keys())

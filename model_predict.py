@@ -8,7 +8,7 @@ from src.service.reporter import render_console_table
 
 interval = sys.argv[1]
 
-model = tf.keras.models.load_model('model/ta_USDT3.keras')
+model = tf.keras.models.load_model('model/ta.keras')
 
 print(interval)
 print("------------------------------------------------------------------------------------------")
