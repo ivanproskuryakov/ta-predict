@@ -53,17 +53,22 @@ callback_checkpoint = ModelCheckpoint(
     save_weights_only=True,
     save_best_only=True
 )
-model = tf.keras.models.Sequential([
-    GRU(
-        units=100,
-        return_sequences=True,
-        input_shape=(None, df_num_signals)
-    ),
-    # LSTM(df_num_signals, return_sequences=False),
-    # Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
-    # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
-    Dense(units=df_num_signals),
-])
+# model = tf.keras.models.Sequential([
+#     GRU(
+#         units=100,
+#         return_sequences=True,
+#         input_shape=(None, df_num_signals)
+#     ),
+#     # LSTM(df_num_signals, return_sequences=False),
+#     # Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
+#     # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
+#     Dense(units=df_num_signals),
+# ])
+model = tf.keras.models.Sequential()
+model.add(LSTM(width, activation='relu', input_shape=(width, df_num_signals)))
+model.add(Dense(100, activation='relu'))
+model.add(Dense(3))
+model.compile(optimizer='adam', loss='mse')
 
 model.compile(
     loss=tf.losses.MeanSquaredError(),

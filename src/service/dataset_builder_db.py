@@ -16,7 +16,6 @@ def build_dataset_window(market: str, asset: str, interval: str):
     )
 
     df_ta_na = estimate_ta_fill_na(df_ohlc)
-    df_num_signals = df_ta_na.shape[1]
 
     # Data Scaling
     # ------------------------------------------------------------------------
@@ -29,10 +28,31 @@ def build_dataset_window(market: str, asset: str, interval: str):
     # Data split
     # --------------------------------------------------------
     n = len(df)
-    train_df = df[0:int(n * 0.9)]
-    val_df = df[int(n * 0.9):]
+    df_train = df[0:int(n * 0.9)]
+    dv_validate = df[int(n * 0.9):]
 
-    return train_df, val_df, df_num_signals
+    return df_train, dv_validate
+
+
+def build_dataset_window_many(market: str, assets: list[str], interval: str):
+    train = None
+    validate = None
+
+    for asset in assets:
+        df_train, df_validate = build_dataset_window(
+            asset=asset,
+            market=market,
+            interval=interval
+        )
+
+        if not train:
+            train = df_train
+            validate = df_validate
+        else:
+            train.append(df_train)
+            validate.append(df_validate)
+
+    return train, validate
 
 
 def build_dataset_random(market: str, asset: str, interval: str):

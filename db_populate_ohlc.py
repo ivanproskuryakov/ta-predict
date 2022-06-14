@@ -1,8 +1,6 @@
 from src.repository.ohlc_repository import OhlcRepository
 from src.service.klines import KLines
 
-# from src.parameters import assets
-
 start_at = '8 year ago UTC'
 exchange = 'binance'
 market = 'USDT'
@@ -10,10 +8,16 @@ market = 'USDT'
 repository = OhlcRepository()
 klines = KLines()
 
-interval = '15m'
+interval = '5m'
 assets = [
-    'BTC',
-    'ETH'
+    # 'BTC',
+    "ETH",
+    "BNB",
+    "NEO",
+    "LTC",
+    "ADA",
+    "XRP",
+    "EOS",
 ]
 
 for asset in assets:

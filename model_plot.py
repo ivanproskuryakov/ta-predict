@@ -14,6 +14,10 @@ interval = '15m'
 model = tf.keras.models.load_model(f'data/ta_multi.keras')
 x, last_item = build_dataset(market, asset, interval)
 
+x = x.tail(200)
+
+# print(x)
+# exit()
 y = make_prediction(x, model)
 
 # Plot

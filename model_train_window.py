@@ -3,7 +3,7 @@ import tensorflow as tf
 from keras.layers import Dense, GRU, LSTM
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
-from src.service.dataset_builder_db import build_dataset_window
+from src.service.dataset_builder_db import build_dataset_window_many
 from src.service.generator_window import WindowGenerator
 from src.parameters import market
 
@@ -14,19 +14,30 @@ width = 200
 filepath_model = f'data/ta_{market}.keras'
 filepath_checkpoint = f'data/ta_{market}.checkpoint'
 
-interval = '15m'
-asset = 'BTC'
+interval = '5m'
+assets = [
+    'BTC',
+    "ETH",
+    "BNB",
+    "NEO",
+    "LTC",
+    "ADA",
+    "XRP",
+    "EOS",
+]
 
-print(f'training interval: {interval} {asset}')
+print(f'training interval: {interval} {assets}')
 
 # Data load & train
 # ------------------------------------------------------------------------
 
-train_df, val_df, df_num_signals = build_dataset_window(
+train_df, validate_df = build_dataset_window_many(
     market=market,
-    asset=asset,
+    assets=assets,
     interval=interval
 )
+
+df_num_signals = train_df.shape[1]
 
 # Model definition
 # ------------------------------------------------------------------------
@@ -60,7 +71,7 @@ model = tf.keras.models.Sequential([
         input_shape=(None, df_num_signals)
     ),
     # LSTM(df_num_signals, return_sequences=False),
-    # Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
+    # Dense(units=df_num_signals, activation='linear'-, input_dim=df_num_signals),
     # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
     Dense(units=df_num_signals),
 ])
@@ -77,11 +88,28 @@ model.compile(
 window = WindowGenerator(
     input_width=width,
     label_width=width,
-    shift=30,
+    shift=5,
     batch_size=500,
-    label_columns=['open'],
+    label_columns=[
+        'open',
+        # 'high',
+        # 'low',
+        # 'close',
+        # 'diff',
+        #
+        # 'time_month',
+        # 'time_day',
+        # 'time_hour',
+        # 'time_minute',
+        #
+        # 'trades',
+        # 'volume',
+        # 'volume_taker',
+        # 'volume_maker',
+        # 'quote_asset_volume',
+    ],
     train_df=train_df,
-    val_df=val_df,
+    val_df=validate_df,
 )
 
 model.fit(

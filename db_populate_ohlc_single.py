@@ -8,7 +8,7 @@ market = 'USDT'
 repository = OhlcRepository()
 klines = KLines()
 
-interval = '15m'
+interval = '5m'
 asset = 'BTC'
 
 print(f'processing: {asset} {interval}')
