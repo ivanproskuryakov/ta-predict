@@ -9,7 +9,6 @@ from src.parameters import market
 
 # Variables
 # ------------------------------------------------------------------------
-df_num_signals = 45
 width = 200
 
 filepath_model = f'data/ta_{market}_shift3.keras'
@@ -19,6 +18,15 @@ interval = '15m'
 asset = 'BTC'
 
 print(f'training interval: {interval} {asset}')
+
+# Data load & train
+# ------------------------------------------------------------------------
+
+train_df, val_df, df_num_signals = build_dataset(
+    market=market,
+    asset=asset,
+    interval=interval
+)
 
 # Model definition
 # ------------------------------------------------------------------------
@@ -32,8 +40,8 @@ callback_early_stopping = EarlyStopping(
 
 callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
-    factor=0.5,
-    min_lr=0.00001,
+    factor=0.2,
+    min_lr=0,
     patience=5,
     verbose=1,
 )
@@ -63,22 +71,13 @@ model.compile(
     metrics=[tf.metrics.MeanAbsoluteError()]
 )
 
-# Data load & train
-# ------------------------------------------------------------------------
-
-train_df, val_df, df_num_signals = build_dataset(
-    market=market,
-    asset=asset,
-    interval=interval
-)
-
 # Generator function
 # --------------------------------------------------------
 
 window = WindowGenerator(
     input_width=width,
     label_width=width,
-    shift=3,
+    shift=30,
     batch_size=500,
     label_columns=['open'],
     train_df=train_df,
