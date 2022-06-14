@@ -18,9 +18,9 @@ shift_steps = 1
 model = tf.keras.models.load_model(f'data/ta_{shift_steps}.keras')
 x, last_item = build_dataset(market, asset, interval)
 
-x = x[0:-6]
+# x = x[0:-3]
 
-for i in range(3):
+for i in range(10):
     print('......')
     scaler = MinMaxScaler()
     scaled = scaler.fit_transform(x)

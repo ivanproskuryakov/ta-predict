@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from src.entity.ohlc import Ohlc
 from src.connector.db_connector import db_connect
+from src.service.util import diff_percentage
 
 
 # https://docs.sqlalchemy.org/en/14/orm/session_basics.html
@@ -57,8 +58,9 @@ class OhlcRepository:
                     item.volume,
                     item.volume_taker,
                     item.volume_maker,
-
                     item.quote_asset_volume,
+
+                    item.price_diff,
                     # datetime.utcfromtimestamp(collection[i]['time_open']),
                 ])
 
@@ -73,15 +75,13 @@ class OhlcRepository:
             # 'time_hour',
             # 'time_minute',
 
-            # 'avg_percentage',
-            # 'avg_current',
-
             'trades',
             'volume',
             'volume_taker',
             'volume_maker',
-
             'quote_asset_volume',
+
+            'diff',
             # 'epoch',
         ])
 
@@ -116,6 +116,7 @@ class OhlcRepository:
             ohlc.price_low = item['price_low']
             ohlc.price_high = item['price_high']
             ohlc.price_close = item['price_close']
+            ohlc.price_diff = diff_percentage(ohlc.price_close, ohlc.price_open)
 
             # ohlc.avg_current = item['avg_current']
             # ohlc.avg_percentage = item['avg_percentage']

@@ -12,7 +12,8 @@ klines = KLines()
 
 interval = '15m'
 assets = [
-    'BTC'
+    'BTC',
+    'ETH'
 ]
 
 for asset in assets:

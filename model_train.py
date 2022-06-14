@@ -33,7 +33,8 @@ df = build_dataset(
     interval=interval
 )
 
-df_num_signals = df.shape[1]
+x_num_signals = df.shape[1]
+y_num_signals = 10
 
 x = df.shift(-shift_steps).iloc[:-shift_steps]
 y = df.iloc[:-shift_steps]
@@ -66,6 +67,8 @@ y_validate = y[num_train:]
 generator = batch_generator_random(
     x_data=x_train,
     y_data=y_train,
+    x_num_signals=x_num_signals,
+    y_num_signals=y_num_signals,
     batch_size=1000,
     sequence_length=sequence_length
 )
@@ -97,12 +100,12 @@ model = tf.keras.models.Sequential([
     GRU(
         units=512,
         return_sequences=True,
-        input_shape=(None, df_num_signals)
+        input_shape=(None, x_num_signals)
     ),
     # LSTM(df_num_signals, return_sequences=False),
     # Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
     # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
-    Dense(units=df_num_signals, activation='sigmoid'),
+    Dense(units=y_num_signals, activation='sigmoid'),
 ])
 
 model.compile(

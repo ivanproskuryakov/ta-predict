@@ -4,11 +4,11 @@ import numpy as np
 def batch_generator_random(
         x_data,
         y_data,
+        x_num_signals,
+        y_num_signals,
         batch_size,
         sequence_length,
 ):
-    x_num_signals = x_data.shape[1]
-    y_num_signals = x_data.shape[1]
     num_train = len(x_data)
 
     while True:
