@@ -1,7 +1,7 @@
 from binance import Client
 
 DB_URL = {
-    "dev": "postgresql://postgres:@localhost/ta_multistep",
+    "dev": "postgresql://postgres:@localhost/ta_dev",
 }
 shift_steps = 4
 tail = 100
