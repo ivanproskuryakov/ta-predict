@@ -116,7 +116,7 @@ class OhlcRepository:
             ohlc.price_low = item['price_low']
             ohlc.price_high = item['price_high']
             ohlc.price_close = item['price_close']
-            ohlc.price_diff = diff_percentage(ohlc.price_close, ohlc.price_open)
+            ohlc.price_diff = item['price_diff']
 
             # ohlc.avg_current = item['avg_current']
             # ohlc.avg_percentage = item['avg_percentage']

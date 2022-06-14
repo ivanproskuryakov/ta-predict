@@ -2,20 +2,18 @@ import tensorflow as tf
 import numpy as np
 import pandas as pd
 
-from keras.layers import Dense, GRU
+from keras.layers import Dense, GRU, LSTM
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 from src.service.dataset_builder_db import build_dataset
 from src.service.generator import batch_generator_random
-from src.parameters import market
+from src.parameters import market, sequence_length, shift_steps
 
 pd.set_option("display.precision", 6)
 np.set_printoptions(precision=6)
 
 # Variables
 # ------------------------------------------------------------------------
-sequence_length = 100
-shift_steps = 10
 interval = '15m'
 asset = 'BTC'
 
@@ -35,19 +33,18 @@ df = build_dataset(
 
 x_num_signals = df.shape[1]
 
-x = df.shift(-shift_steps).iloc[:-shift_steps]
-y = df.iloc[:-shift_steps]
+x = df.shift(shift_steps).iloc[shift_steps:]
+y = df.iloc[shift_steps:]
 
-# # print(df['open'].head(10))
-# # print(df['open'].tail(10))
+# print(df['open'].head(10))
+# print(df['open'].tail(10))
 # print('x')
-# # print(x.head(10))
+# print(x.head(10))
 # print(x.tail(10))
-# # print(x[-10:, 0])
 # print('y')
-# # print(y.head(10))
+# print(y.head(10))
 # print(y.tail(10))
-# # print(y[-10:, 0])
+# print('=====')
 # print(len(x))
 # print(len(y))
 # exit()
@@ -101,11 +98,27 @@ model = tf.keras.models.Sequential([
         return_sequences=True,
         input_shape=(None, x_num_signals)
     ),
-    # LSTM(df_num_signals, return_sequences=False),
+    # LSTM(x_num_signals, return_sequences=True),
     # Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
     # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
-    Dense(units=x_num_signals, activation='sigmoid'),
+    # Dense(units=x_num_signals, activation='sigmoid'),
+    Dense(
+        units=x_num_signals,
+        activation='sigmoid',
+        # kernel_initializer=tf.initializers.zeros()
+    )
 ])
+
+# model = tf.keras.Sequential([
+#     # Take the last time-step.
+#     # Shape [batch, time, features] => [batch, 1, features]
+#     tf.keras.layers.Lambda(lambda x: x[:, -1:, :]),
+#     # Shape => [batch, 1, out_steps*features]
+#     tf.keras.layers.Dense(shift_steps * x_num_signals,
+#                           kernel_initializer=tf.initializers.zeros()),
+#     # # Shape => [batch, out_steps, features]
+#     # tf.keras.layers.Reshape([OUT_STEPS, num_features])
+# ])
 
 model.compile(
     loss=tf.losses.MeanSquaredError(),
@@ -115,7 +128,7 @@ model.compile(
 
 model.fit(
     x=generator,
-    epochs=20,
+    epochs=10,
     steps_per_epoch=100,
     validation_data=(
         np.expand_dims(x_validate, axis=0),

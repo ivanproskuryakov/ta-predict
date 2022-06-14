@@ -1,5 +1,8 @@
 from binance import Client
 
+sequence_length = 50
+shift_steps = 10
+
 DB_URL = {
     "dev": "postgresql://postgres:12aqw12@localhost/ta_dev"
 }

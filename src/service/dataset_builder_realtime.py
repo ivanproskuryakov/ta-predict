@@ -47,6 +47,7 @@ def build_dataset(market: str, asset: str, interval: str):
             item['volume_maker'],
 
             item['quote_asset_volume'],
+            item['price_diff'],
             # datetime.utcfromtimestamp(item['time_open']),
         ])
 
@@ -70,9 +71,12 @@ def build_dataset(market: str, asset: str, interval: str):
         'volume_maker',
 
         'quote_asset_volume',
+        'price_diff',
         # 'epoch',
     ])
 
-    df = estimate_ta_fill_na(df_ohlc)
+    # df = estimate_ta_fill_na(df_ohlc)
 
-    return df, item
+    df_na = df_ohlc.fillna(0)
+
+    return df_na, item

@@ -3,12 +3,11 @@ import tensorflow as tf
 
 from src.service.predictor_unseen import make_prediction
 from src.service.dataset_builder_realtime import build_dataset
-from src.parameters import market
+from src.parameters import market, shift_steps
 
 asset = 'BTC'
 interval = '15m'
-tail = 50
-shift_steps = 1
+tail = 100
 
 # Predict
 # ------------------------------------------------------------------------
@@ -24,7 +23,7 @@ y = make_prediction(x, model)
 plt.figure(figsize=(16, 8))
 
 plt.xlim(left=0)
-plt.xlim(right=100)
+plt.xlim(right=200)
 
 plt.rcParams['axes.facecolor'] = 'white'
 plt.rcParams['axes.edgecolor'] = 'white'
@@ -46,7 +45,7 @@ plt.grid(which='major', alpha=0.5)
 
 # b = plt.subplot(2, 1, 2)
 plt.plot(
-    y['open'].tail(50).values,
+    y['open'].tail(100).values,
     color='green',
     label=f'predict {interval}',
     marker='.'

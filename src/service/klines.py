@@ -4,6 +4,7 @@ from binance import Client
 from datetime import datetime
 
 from src.parameters import API_KEY, API_SECRET
+from src.service.util import diff_percentage
 
 
 class KLines:
@@ -73,6 +74,7 @@ class KLines:
                 'price_high': price_high,
                 'price_low': price_low,
                 'price_close': price_close,
+                'price_diff': diff_percentage(price_close, price_open),
 
                 'time_open': time_open,
                 'time_close': time_close,
