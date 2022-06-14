@@ -15,7 +15,7 @@ width = 200
 filepath_model = f'data/ta_{market}_shift3.keras'
 filepath_checkpoint = f'data/ta_{market}_shift3.checkpoint'
 
-interval = '5m'
+interval = '15m'
 asset = 'BTC'
 
 print(f'training interval: {interval} {asset}')
@@ -54,7 +54,7 @@ model = tf.keras.models.Sequential([
     # LSTM(df_num_signals, return_sequences=False),
     # Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
     # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
-    Dense(units=1),
+    Dense(units=df_num_signals),
 ])
 
 model.compile(

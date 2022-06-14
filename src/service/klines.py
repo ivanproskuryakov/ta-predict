@@ -4,6 +4,7 @@ from binance import Client
 from datetime import datetime
 
 from src.parameters import API_KEY, API_SECRET
+from src.service.util import diff_percentage
 
 
 class KLines:
@@ -48,10 +49,7 @@ class KLines:
         )
         collection = []
 
-        for i in range(1, len(klines)):
-            current = klines[i]
-            previous = klines[i - 1]
-
+        for current in klines:
             time_open = current[0] / 1000
             price_open = self.round(current[1], 10)
             price_high = self.round(current[2], 10)
@@ -65,11 +63,7 @@ class KLines:
             volume_maker = self.round(float(current[9]), 0)
             volume_taker = self.round(volume - volume_maker, 1)
 
-            # --
             avg_current = self.price_average(current)
-            avg_previous = self.price_average(previous)
-            avg_diff = self.round(avg_current - avg_previous)
-
             date = datetime.utcfromtimestamp(time_open)
 
             item = {
@@ -87,7 +81,7 @@ class KLines:
                 'time_minute': date.minute,
 
                 'avg_current': avg_current,
-                'avg_percentage': self.round(avg_diff * 100 / avg_current, 4),
+                'avg_percentage': diff_percentage(price_close, price_open),
 
                 'trades': trades,
                 'volume': volume,
