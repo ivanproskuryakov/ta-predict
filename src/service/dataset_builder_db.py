@@ -45,12 +45,14 @@ def build_dataset(market: str, asset: str, interval: str):
         interval=interval
     )
 
-    df_ta_na = estimate_ta_fill_na(df_ohlc)
+    df = df_ohlc.fillna(0)
+
+    # df_ta_na = estimate_ta_fill_na(df_na)
 
     # Data Scaling
     # ------------------------------------------------------------------------
 
     scaler = MinMaxScaler()
-    scaled = scaler.fit_transform(df_ta_na)
+    scaled = scaler.fit_transform(df)
 
-    return pd.DataFrame(scaled, None, df_ta_na.keys())
+    return pd.DataFrame(scaled, None, df.keys())

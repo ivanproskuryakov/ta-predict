@@ -15,7 +15,7 @@ np.set_printoptions(precision=6)
 # Variables
 # ------------------------------------------------------------------------
 sequence_length = 100
-shift_steps = 1
+shift_steps = 10
 interval = '15m'
 asset = 'BTC'
 
@@ -34,7 +34,6 @@ df = build_dataset(
 )
 
 x_num_signals = df.shape[1]
-y_num_signals = 10
 
 x = df.shift(-shift_steps).iloc[:-shift_steps]
 y = df.iloc[:-shift_steps]
@@ -68,7 +67,7 @@ generator = batch_generator_random(
     x_data=x_train,
     y_data=y_train,
     x_num_signals=x_num_signals,
-    y_num_signals=y_num_signals,
+    y_num_signals=x_num_signals,
     batch_size=1000,
     sequence_length=sequence_length
 )
@@ -105,7 +104,7 @@ model = tf.keras.models.Sequential([
     # LSTM(df_num_signals, return_sequences=False),
     # Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
     # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
-    Dense(units=y_num_signals, activation='sigmoid'),
+    Dense(units=x_num_signals, activation='sigmoid'),
 ])
 
 model.compile(
@@ -116,8 +115,8 @@ model.compile(
 
 model.fit(
     x=generator,
-    epochs=200,
-    steps_per_epoch=1000,
+    epochs=20,
+    steps_per_epoch=100,
     validation_data=(
         np.expand_dims(x_validate, axis=0),
         np.expand_dims(y_validate, axis=0)
