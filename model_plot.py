@@ -3,7 +3,7 @@ import tensorflow as tf
 
 from src.service.predictor_unseen import make_prediction
 from src.service.dataset_builder_realtime import build_dataset
-from src.parameters import market, shift_steps, tail
+from src.parameters import market, tail
 
 asset = 'BTC'
 interval = '15m'
@@ -11,7 +11,7 @@ interval = '15m'
 # Predict
 # ------------------------------------------------------------------------
 
-model = tf.keras.models.load_model(f'data/ta_{shift_steps}.keras')
+model = tf.keras.models.load_model(f'data/ta_multi.keras')
 x, last_item = build_dataset(market, asset, interval)
 
 y = make_prediction(x, model)

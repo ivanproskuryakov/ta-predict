@@ -1,8 +1,10 @@
 import pandas as pd
 import json
+from datetime import datetime
 
 from src.service.estimator import estimate_ta_fill_na
 from src.service.klines import KLines
+from src.service.util import diff_percentage
 
 
 def build_dataset(market: str, asset: str, interval: str):
@@ -25,18 +27,20 @@ def build_dataset(market: str, asset: str, interval: str):
 
     for item in collection:
         time_open = item['time_open'] / 1000
-        # date = datetime.utcfromtimestamp(time_open)
+        date = datetime.utcfromtimestamp(time_open)
+        diff = diff_percentage(item['price_close'], item['price_open'])
 
         prepared.append([
             item['price_open'],
             item['price_high'],
             item['price_low'],
             item['price_close'],
+            diff,
 
-            # date.month,
-            # date.day,
-            # date.hour,
-            # date.minute,
+            date.month,
+            date.day,
+            date.hour,
+            date.minute,
 
             # item['avg_percentage'],
             # item['avg_current'],
@@ -47,7 +51,7 @@ def build_dataset(market: str, asset: str, interval: str):
             item['volume_maker'],
 
             item['quote_asset_volume'],
-            item['price_diff'],
+
             # datetime.utcfromtimestamp(item['time_open']),
         ])
 
@@ -56,11 +60,12 @@ def build_dataset(market: str, asset: str, interval: str):
         'high',
         'low',
         'close',
+        'price_diff',
 
-        # 'time_month',
-        # 'time_day',
-        # 'time_hour',
-        # 'time_minute',
+        'time_month',
+        'time_day',
+        'time_hour',
+        'time_minute',
 
         # 'avg_percentage',
         # 'avg_current',
@@ -69,14 +74,10 @@ def build_dataset(market: str, asset: str, interval: str):
         'volume',
         'volume_taker',
         'volume_maker',
-
         'quote_asset_volume',
-        'price_diff',
         # 'epoch',
     ])
 
-    # df = estimate_ta_fill_na(df_ohlc)
+    df = estimate_ta_fill_na(df_ohlc)
 
-    df_na = df_ohlc.fillna(0)
-
-    return df_na, item
+    return df, item

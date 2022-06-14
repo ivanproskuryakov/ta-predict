@@ -13,14 +13,13 @@ interval = '15m'
 # Predict
 # ------------------------------------------------------------------------
 
-model = tf.keras.models.load_model(f'data/ta_{shift_steps}.keras')
+model = tf.keras.models.load_model(f'data/ta_multi.keras')
 x, last_item = build_dataset(market, asset, interval)
 
-x = x[:-2]
+scaler = MinMaxScaler()
 
-for i in range(2):
+for i in range(5):
     print('......')
-    scaler = MinMaxScaler()
     scaled = scaler.fit_transform(x)
 
     x_df_scaled = pd.DataFrame(scaled, None, x.keys())
