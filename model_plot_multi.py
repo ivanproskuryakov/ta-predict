@@ -1,11 +1,9 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import pandas as pd
-import numpy as np
 
-from sklearn.preprocessing import MinMaxScaler
 from src.service.dataset_builder_realtime import build_dataset
-from src.parameters import market, shift_steps, tail
+from src.parameters import market, tail
+from src.service.predictor_unseen import make_prediction
 
 asset = 'BTC'
 interval = '15m'
@@ -13,24 +11,12 @@ interval = '15m'
 # Predict
 # ------------------------------------------------------------------------
 
-model = tf.keras.models.load_model(f'data/ta_multi.keras')
+model = tf.keras.models.load_model(f'data/ta_USDT.keras')
 x, last_item = build_dataset(market, asset, interval)
 
-scaler = MinMaxScaler()
-
 for i in range(5):
-    print('......')
-    scaled = scaler.fit_transform(x)
-
-    x_df_scaled = pd.DataFrame(scaled, None, x.keys())
-    x_df_scaled_expanded = np.expand_dims(x_df_scaled, axis=0)
-
-    y = model.predict(x_df_scaled_expanded, verbose=0)
-    y_inverse = scaler.inverse_transform(y[0])
-
-    y = pd.DataFrame(y_inverse, None, columns=x.columns)
-
-    x.loc[len(x)] = y.loc[len(y) - 1]
+    y = make_prediction(x.tail(200), model)
+    x = x.append(y.loc[len(y) - 1], ignore_index=True)
 
 # Plot
 # ------------------------------------------------------------------------
@@ -60,7 +46,7 @@ plt.grid(which='major', alpha=0.5)
 
 # b = plt.subplot(2, 1, 2)
 plt.plot(
-    y['open'].tail(tail).values,
+    x['open'].tail(tail).values,
     color='green',
     label=f'predict {interval}',
     marker='.'

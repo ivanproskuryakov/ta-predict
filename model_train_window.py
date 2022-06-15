@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from keras.layers import Dense, GRU, LSTM
+from keras.layers import Dense, GRU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 from src.service.dataset_builder_db import build_dataset_window_many
@@ -9,21 +9,21 @@ from src.parameters import market
 
 # Variables
 # ------------------------------------------------------------------------
-width = 200
+width = 100
 
-filepath_model = f'data/ta_{market}.keras'
-filepath_checkpoint = f'data/ta_{market}.checkpoint'
+filepath_model = f'data/ta.keras'
+filepath_checkpoint = f'data/ta.checkpoint'
 
 interval = '5m'
 assets = [
     'BTC',
     "ETH",
-    # "BNB",
-    # "NEO",
-    # "LTC",
-    # "ADA",
-    # "XRP",
-    # "EOS",
+    "BNB",
+    "NEO",
+    "LTC",
+    "ADA",
+    "XRP",
+    "EOS",
 ]
 
 print(f'training interval: {interval} {assets}')
@@ -109,7 +109,7 @@ window = WindowGenerator(
 
 model.fit(
     window.train,
-    epochs=200,
+    epochs=500,
     validation_data=window.val,
     callbacks=[
         callback_early_stopping,
