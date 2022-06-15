@@ -35,8 +35,8 @@ def build_dataset_window(market: str, asset: str, interval: str):
 
 
 def build_dataset_window_many(market: str, assets: list[str], interval: str):
-    train = pd.DataFrame()
-    validate = pd.DataFrame()
+    train = []
+    validate = []
 
     for asset in assets:
         df_train, df_validate = build_dataset_window(
@@ -45,12 +45,11 @@ def build_dataset_window_many(market: str, assets: list[str], interval: str):
             interval=interval
         )
 
-        if train.empty:
-            train = df_train
-            validate = df_validate
-        else:
-            train.append(df_train)
-            validate.append(df_validate)
+        train.append(df_train)
+        validate.append(df_validate)
+
+    train = pd.concat(train)
+    validate = pd.concat(validate)
 
     return train, validate
 

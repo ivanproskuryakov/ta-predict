@@ -17,7 +17,7 @@ filepath_checkpoint = f'data/ta_{market}.checkpoint'
 interval = '5m'
 assets = [
     'BTC',
-    # "ETH",
+    "ETH",
     # "BNB",
     # "NEO",
     # "LTC",
@@ -65,7 +65,7 @@ callback_checkpoint = ModelCheckpoint(
 
 model = tf.keras.models.Sequential([
     GRU(
-        units=50,
+        units=500,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
@@ -109,7 +109,7 @@ window = WindowGenerator(
 
 model.fit(
     window.train,
-    epochs=2,
+    epochs=200,
     validation_data=window.val,
     callbacks=[
         callback_early_stopping,
