@@ -11,12 +11,13 @@ interval = '15m'
 # Predict
 # ------------------------------------------------------------------------
 
-model = tf.keras.models.load_model(f'data/ta_USDT.keras')
+model = tf.keras.models.load_model(f'data/ta.keras')
 x, last_item = build_dataset(market, asset, interval)
 
-x = x.tail(200)
+# x = x[:-2]
 
-y = make_prediction(x, model)
+for i in range(2):
+    x = make_prediction(x[-200:], model)
 
 # Plot
 # ------------------------------------------------------------------------
@@ -46,7 +47,7 @@ plt.grid(which='major', alpha=0.5)
 
 # b = plt.subplot(2, 1, 2)
 plt.plot(
-    y['open'].tail(tail).values,
+    x['open'].tail(tail).values,
     color='green',
     label=f'predict {interval}',
     marker='.'
