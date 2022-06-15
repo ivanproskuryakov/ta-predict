@@ -17,13 +17,13 @@ filepath_checkpoint = f'data/ta_{market}.checkpoint'
 interval = '5m'
 assets = [
     'BTC',
-    "ETH",
-    "BNB",
-    "NEO",
-    "LTC",
-    "ADA",
-    "XRP",
-    "EOS",
+    # "ETH",
+    # "BNB",
+    # "NEO",
+    # "LTC",
+    # "ADA",
+    # "XRP",
+    # "EOS",
 ]
 
 print(f'training interval: {interval} {assets}')
@@ -48,7 +48,6 @@ callback_early_stopping = EarlyStopping(
     mode='min',
     verbose=1
 )
-
 callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
     factor=0.2,
@@ -56,7 +55,6 @@ callback_reduce_lr = ReduceLROnPlateau(
     patience=5,
     verbose=1,
 )
-
 callback_checkpoint = ModelCheckpoint(
     filepath=filepath_checkpoint,
     monitor='val_loss',
@@ -64,16 +62,17 @@ callback_checkpoint = ModelCheckpoint(
     save_weights_only=True,
     save_best_only=True
 )
+
 model = tf.keras.models.Sequential([
     GRU(
-        units=500,
+        units=50,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
     # LSTM(df_num_signals, return_sequences=False),
     # Dense(units=df_num_signals, activation='linear'-, input_dim=df_num_signals),
     # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
-    Dense(units=9),
+    Dense(units=10),
 ])
 
 model.compile(
@@ -88,7 +87,7 @@ model.compile(
 window = WindowGenerator(
     input_width=width,
     label_width=width,
-    shift=5,
+    shift=1,
     batch_size=500,
     label_columns=[
         'open',
@@ -102,7 +101,7 @@ window = WindowGenerator(
         'volume_maker',
         'quote_asset_volume',
 
-        # 'diff',
+        'diff',
     ],
     train_df=train_df,
     val_df=validate_df,
@@ -110,7 +109,7 @@ window = WindowGenerator(
 
 model.fit(
     window.train,
-    epochs=500,
+    epochs=2,
     validation_data=window.val,
     callbacks=[
         callback_early_stopping,

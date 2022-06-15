@@ -11,7 +11,7 @@ interval = '15m'
 # Predict
 # ------------------------------------------------------------------------
 
-model = tf.keras.models.load_model(f'data/ta_multi.keras')
+model = tf.keras.models.load_model(f'data/ta_USDT.keras')
 x, last_item = build_dataset(market, asset, interval)
 
 x = x.tail(200)

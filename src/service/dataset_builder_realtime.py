@@ -35,12 +35,11 @@ def build_dataset(market: str, asset: str, interval: str):
             item['price_high'],
             item['price_low'],
             item['price_close'],
-            diff,
 
-            date.month,
-            date.day,
-            date.hour,
-            date.minute,
+            # date.month,
+            # date.day,
+            # date.hour,
+            # date.minute,
 
             # item['avg_percentage'],
             # item['avg_current'],
@@ -49,8 +48,9 @@ def build_dataset(market: str, asset: str, interval: str):
             item['volume'],
             item['volume_taker'],
             item['volume_maker'],
-
             item['quote_asset_volume'],
+
+            diff,
 
             # datetime.utcfromtimestamp(item['time_open']),
         ])
@@ -60,12 +60,11 @@ def build_dataset(market: str, asset: str, interval: str):
         'high',
         'low',
         'close',
-        'price_diff',
 
-        'time_month',
-        'time_day',
-        'time_hour',
-        'time_minute',
+        # 'time_month',
+        # 'time_day',
+        # 'time_hour',
+        # 'time_minute',
 
         # 'avg_percentage',
         # 'avg_current',
@@ -75,6 +74,8 @@ def build_dataset(market: str, asset: str, interval: str):
         'volume_taker',
         'volume_maker',
         'quote_asset_volume',
+
+        'price_diff',
         # 'epoch',
     ])
 

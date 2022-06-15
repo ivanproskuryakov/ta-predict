@@ -4,6 +4,7 @@ import ray
 
 from sklearn.preprocessing import MinMaxScaler
 from src.service.dataset_builder_realtime import build_dataset
+from src.service.estimator import estimate_ta_fill_na
 
 
 def make_prediction(x_df, model):
@@ -18,7 +19,37 @@ def make_prediction(x_df, model):
     # Predict
     # ------------------------------------------------------------------------
     y = model.predict(x_df_scaled_expanded, verbose=0)
-    y_inverse = scaler.inverse_transform(y[0])
+
+    df = pd.DataFrame(y[0], None, [
+        'open',
+        'high',
+        'low',
+        'close',
+
+        # 'time_month',
+        # 'time_day',
+        # 'time_hour',
+        # 'time_minute',
+
+        # 'avg_percentage',
+        # 'avg_current',
+
+        'trades',
+        'volume',
+        'volume_taker',
+        'volume_maker',
+        'quote_asset_volume',
+        # 'epoch',
+
+        'price_diff',
+    ])
+
+    df = estimate_ta_fill_na(df)
+
+    y_inverse = scaler.inverse_transform(df)
+
+    # print(y_inverse)
+    # exit()
 
     y_df = pd.DataFrame(y_inverse, None, x_df.keys())
 
@@ -43,6 +74,7 @@ def data_load_parallel_all(assets: [], market: str, interval: str):
         fns.append(data_load_remote.remote(asset, market, interval))
 
     return ray.get(fns)
+
 
 def data_load_parallel_all(assets: [], market: str, interval: str):
     fns = []
