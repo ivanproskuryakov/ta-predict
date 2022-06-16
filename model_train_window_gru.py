@@ -14,16 +14,16 @@ width = 100
 filepath_model = f'data/gru.keras'
 filepath_checkpoint = f'data/gru.checkpoint'
 
-interval = '15m'
+interval = '5m'
 assets = [
     'BTC',
-    # 'ETH',
-    # "BNB",
-    # "NEO",
-    # "LTC",
-    # "ADA",
-    # "XRP",
-    # "EOS",
+    'ETH',
+    "BNB",
+    "NEO",
+    "LTC",
+    "ADA",
+    "XRP",
+    "EOS",
 ]
 
 print(f'training interval: {interval} {assets}')
@@ -52,7 +52,7 @@ callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
     factor=0.2,
     min_lr=0,
-    patience=5,
+    patience=10,
     verbose=1,
 )
 callback_checkpoint = ModelCheckpoint(
@@ -84,7 +84,7 @@ model = tf.keras.models.Sequential([
     # LSTM(df_num_signals, return_sequences=False),
     # Dense(units=df_num_signals, activation='linear'-, input_dim=df_num_signals),
     # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
-    Dense(units=4),
+    Dense(units=4, activation='relu'),
 ])
 
 model.compile(
@@ -99,7 +99,7 @@ model.compile(
 window = WindowGenerator(
     input_width=width,
     label_width=width,
-    shift=1,
+    shift=3,
     batch_size=500,
     label_columns=[
         'open',
