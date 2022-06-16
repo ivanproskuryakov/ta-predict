@@ -22,7 +22,7 @@ def build_dataset(market: str, asset: str, interval: str):
     # file = open('data/ohlc.json', 'w')
     # file.write(json.dumps(collection))
 
-    file = open('data/ohlc.json', 'r')
+    file = open('model/ohlc.json', 'r')
     collection = json.loads(file.read())
 
     for item in collection:

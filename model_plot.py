@@ -11,12 +11,12 @@ interval = '15m'
 # Predict
 # ------------------------------------------------------------------------
 
-model = tf.keras.models.load_model(f'data/ta.keras')
+model = tf.keras.models.load_model(f'model/ta_lstm_m.keras')
 x, last_item = build_dataset(market, asset, interval)
 
 # x = x[:-2]
 
-for i in range(2):
+for i in range(1):
     x = make_prediction(x[-200:], model)
 
 # Plot

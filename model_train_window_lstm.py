@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from keras.layers import Dense, GRU
+from keras.layers import Dense, LSTM
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 from src.service.dataset_builder_db import build_dataset_window_many
@@ -64,8 +64,8 @@ callback_checkpoint = ModelCheckpoint(
 )
 
 model = tf.keras.models.Sequential([
-    GRU(
-        units=500,
+    LSTM(
+        units=50,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
@@ -109,7 +109,7 @@ window = WindowGenerator(
 
 model.fit(
     window.train,
-    epochs=500,
+    epochs=5,
     validation_data=window.val,
     callbacks=[
         callback_early_stopping,
