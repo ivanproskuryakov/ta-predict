@@ -65,19 +65,19 @@ callback_checkpoint = ModelCheckpoint(
 
 model = tf.keras.models.Sequential([
     GRU(
-        units=50,
+        units=150,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
     Dropout(0.2),
     GRU(
-        units=50,
+        units=150,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
     Dropout(0.2),
     GRU(
-        units=50,
+        units=150,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
