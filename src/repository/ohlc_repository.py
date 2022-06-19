@@ -46,10 +46,10 @@ class OhlcRepository:
                     item.price_low,
                     item.price_close,
 
-                    # item.time_month,
-                    # item.time_day,
-                    # item.time_hour,
-                    # item.time_minute,
+                    item.time_month,
+                    item.time_day,
+                    item.time_hour,
+                    item.time_minute,
 
                     item.trades,
                     item.volume,
@@ -68,10 +68,10 @@ class OhlcRepository:
             'low',
             'close',
 
-            # 'time_month',
-            # 'time_day',
-            # 'time_hour',
-            # 'time_minute',
+            'time_month',
+            'time_day',
+            'time_hour',
+            'time_minute',
 
             'trades',
             'volume',
@@ -107,19 +107,16 @@ class OhlcRepository:
             ohlc.time_open = np.round(item['time_open'], 0)
             ohlc.time_close = np.round(item['time_close'], 0)
 
-            # ohlc.time_month = item['time_month']
-            # ohlc.time_day = item['time_day']
-            # ohlc.time_hour = item['time_hour']
-            # ohlc.time_minute = item['time_minute']
+            ohlc.time_month = item['time_month']
+            ohlc.time_day = item['time_day']
+            ohlc.time_hour = item['time_hour']
+            ohlc.time_minute = item['time_minute']
 
             ohlc.price_open = item['price_open']
             ohlc.price_low = item['price_low']
             ohlc.price_high = item['price_high']
             ohlc.price_close = item['price_close']
             ohlc.price_diff = item['price_diff']
-
-            # ohlc.avg_current = item['avg_current']
-            # ohlc.avg_percentage = item['avg_percentage']
 
             ohlc.trades = item['trades']
             ohlc.volume = item['volume']

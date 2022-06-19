@@ -1,11 +1,16 @@
 from binance import Client
 
+DB_BITCOIN = '/home/ivan/.bitcoin/blocks'
+DB_ETHEREUM = '/home/ivan/.ethereum/geth/chaindata'
 DB_URL = {
     "dev": "postgresql://postgres:@localhost/ta_dev",
 }
+
 shift_steps = 4
 tail = 100
 sequence_length = 100
+ASSET = 'BTC'
+market = 'USDT'
 
 assets = [
     "BTC",
@@ -352,9 +357,6 @@ assets = [
 
 API_KEY = "y95Lhdr2WXTVCbD44gpDhcOHKQaUr1LVNIOFhk1SIhxq4nzCdVoLB0obXWLcyRio"
 API_SECRET = "nBmXWlMBreF5uttkRVDxKbEbYtByJiW322iUtGMUCvDsHha9k5tMRjKCSmZtHFsb"
-
-ASSET = 'BTC'
-market = 'USDT'
 
 intervals = [
     # Client.KLINE_INTERVAL_1MINUTE,

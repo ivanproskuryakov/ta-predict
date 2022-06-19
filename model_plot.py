@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
-from src.service.predictor_unseen import make_prediction
+from src.service.predictor_unseen import make_prediction_ohlc
 from src.service.dataset_builder_realtime import build_dataset
 from src.parameters import market, tail
 
@@ -11,13 +11,10 @@ interval = '15m'
 # Predict
 # ------------------------------------------------------------------------
 
-model = tf.keras.models.load_model(f'model/ta_lstm_m.keras')
+model = tf.keras.models.load_model(f'model/ta.keras')
 x, last_item = build_dataset(market, asset, interval)
 
-# x = x[:-2]
-
-for i in range(1):
-    x = make_prediction(x[-200:], model)
+y = make_prediction_ohlc(x, model)
 
 # Plot
 # ------------------------------------------------------------------------
@@ -36,18 +33,17 @@ plt.grid(True)
 plt.grid(which='minor', alpha=0.2)
 plt.grid(which='major', alpha=0.5)
 
-#
-# a = plt.subplot(2, 1, 1)
-# a.plot(
-#     x_df_open['open'].tail(tail).values,
-#     color='blue',
-#     label='real',
-#     marker='.'
-# )
-
-# b = plt.subplot(2, 1, 2)
-plt.plot(
+a = plt.subplot(2, 1, 1)
+a.plot(
     x['open'].tail(tail).values,
+    color='blue',
+    label='real',
+    marker='.'
+)
+
+b = plt.subplot(2, 1, 2)
+plt.plot(
+    y['close'].tail(tail).values,
     color='green',
     label=f'predict {interval}',
     marker='.'

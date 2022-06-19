@@ -65,26 +65,14 @@ callback_checkpoint = ModelCheckpoint(
 
 model = tf.keras.models.Sequential([
     GRU(
-        units=150,
-        return_sequences=True,
-        input_shape=(None, df_num_signals)
-    ),
-    Dropout(0.2),
-    GRU(
-        units=150,
-        return_sequences=True,
-        input_shape=(None, df_num_signals)
-    ),
-    Dropout(0.2),
-    GRU(
-        units=150,
+        units=500,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
     # LSTM(df_num_signals, return_sequences=False),
-    # Dense(units=df_num_signals, activation='linear'-, input_dim=df_num_signals),
+    # Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
     # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
-    Dense(units=4, activation='relu'),
+    Dense(units=1, activation='linear', input_dim=df_num_signals),
 ])
 
 model.compile(
@@ -99,12 +87,12 @@ model.compile(
 window = WindowGenerator(
     input_width=width,
     label_width=width,
-    shift=3,
-    batch_size=500,
+    shift=1,
+    batch_size=100,
     label_columns=[
-        'open',
-        'high',
-        'low',
+        # 'open',
+        # 'high',
+        # 'low',
         'close',
 
         # 'trades',
@@ -118,6 +106,9 @@ window = WindowGenerator(
     train_df=train_df,
     val_df=validate_df,
 )
+
+latest = tf.train.latest_checkpoint('data')
+model.load_weights(latest)
 
 model.fit(
     window.train,

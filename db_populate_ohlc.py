@@ -10,7 +10,7 @@ klines = KLines()
 
 interval = '5m'
 assets = [
-    # 'BTC',
+    'BTC',
     "ETH",
     "BNB",
     "NEO",
