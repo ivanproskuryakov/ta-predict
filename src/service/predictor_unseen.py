@@ -53,7 +53,7 @@ def make_prediction(x_df, model):
     return y_df
 
 
-def make_prediction_ohlc(x_df, model):
+def make_prediction_ohlc_close(x_df, model):
     # Scale
     # ------------------------------------------------------------------------
     scaler = MinMaxScaler()
@@ -68,20 +68,34 @@ def make_prediction_ohlc(x_df, model):
 
     df = pd.DataFrame(y[0], None, [
         'open',
-        'high',
-        'low',
-        'close',
+        # 'high',
+        # 'low',
+        # 'close',
     ])
+
+    df['open'] = 0
+    df['high'] = 0
+    df['low'] = 0
+    df['close'] = y[0]
+
+    df['time_month'] = 0
+    df['time_day'] = 0
+    df['time_hour'] = 0
+    df['time_minute'] = 0
 
     df['trades'] = 0
     df['volume'] = 0
     df['volume_taker'] = 0
     df['volume_maker'] = 0
     df['quote_asset_volume'] = 0
+
     df['price_diff'] = 0
 
+    # print(df)
+    # exit()
+
     df = estimate_ta_fill_na(df)
-    
+
     y_inverse = scaler.inverse_transform(df)
 
     y_df = pd.DataFrame(y_inverse, None, x_df.keys())

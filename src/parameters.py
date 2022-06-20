@@ -1,6 +1,5 @@
 from binance import Client
 
-DB_BITCOIN = '/home/ivan/.bitcoin/blocks'
 DB_ETHEREUM = '/home/ivan/.ethereum/geth/chaindata'
 DB_URL = {
     "dev": "postgresql://postgres:@localhost/ta_dev",

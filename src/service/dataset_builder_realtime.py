@@ -12,18 +12,18 @@ def build_dataset(market: str, asset: str, interval: str):
     start_at = '1 week ago UTC'
     prepared = []
 
-    # collection = klines.build_klines(
-    #     market,
-    #     asset,
-    #     interval,
-    #     start_at
-    # )
-    #
+    collection = klines.build_klines(
+        market,
+        asset,
+        interval,
+        start_at
+    )
+
     # file = open('data/ohlc.json', 'w')
     # file.write(json.dumps(collection))
-
-    file = open('model/ohlc.json', 'r')
-    collection = json.loads(file.read())
+    #
+    # file = open('data/ohlc.json', 'r')
+    # collection = json.loads(file.read())
 
     for item in collection:
         time_open = item['time_open'] / 1000
@@ -36,10 +36,10 @@ def build_dataset(market: str, asset: str, interval: str):
             item['price_low'],
             item['price_close'],
 
-            # date.month,
-            # date.day,
-            # date.hour,
-            # date.minute,
+            date.month,
+            date.day,
+            date.hour,
+            date.minute,
 
             # item['avg_percentage'],
             # item['avg_current'],
@@ -61,10 +61,10 @@ def build_dataset(market: str, asset: str, interval: str):
         'low',
         'close',
 
-        # 'time_month',
-        # 'time_day',
-        # 'time_hour',
-        # 'time_minute',
+        'time_month',
+        'time_day',
+        'time_hour',
+        'time_minute',
 
         # 'avg_percentage',
         # 'avg_current',

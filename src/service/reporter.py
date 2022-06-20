@@ -11,8 +11,6 @@ def render_console_table(report):
         "last real",
         "p1",
         "p2",
-        "p3",
-        "p4",
         "trades",
         "date",
         "url",
@@ -24,11 +22,14 @@ def render_console_table(report):
         date = datetime.fromtimestamp(last_item["time_open"])
 
         # Measure
-        last_real = x_df['open'].tail(1).values[0]
+        last_real = x_df['close'].tail(1).values[0]
 
-        tail = y_df['open'].tail(4).values
+        tail = y_df['close'].tail(2).values
+
+        # print(tail)
+
         last = tail[0]
-        prediction = tail[3]
+        prediction = tail[1]
 
         diff = diff_percentage(v2=prediction, v1=last)
 
@@ -39,8 +40,6 @@ def render_console_table(report):
                 last_real,
                 f'{tail[0]:.4f}',
                 f'{tail[1]:.4f}',
-                f'{tail[2]:.4f}',
-                f'{tail[3]:.4f}',
                 last_item["trades"],
                 date.strftime("%Y %m %d %H:%M:%S"),
                 f'https://www.binance.com/en/trade/{asset}_USDT',
