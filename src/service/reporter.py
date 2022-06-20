@@ -7,10 +7,11 @@ def render_console_table(report):
     table = []
     headers = [
         "asset",
-        "diff %",
-        "last real",
-        "p1",
-        "p2",
+        "%",
+        "x1o",
+        "x2c",
+        "y1c",
+        "y2c",
         "trades",
         "date",
         "url",
@@ -19,30 +20,37 @@ def render_console_table(report):
     for item in report:
         asset, last_item, x_df, y_df = item
 
+        y_tail = y_df.tail(2)
+        x_tail = x_df.tail(2)
+
+        x1 = x_tail.iloc[0]
+        x2 = x_tail.iloc[1]
+        y1 = y_tail.iloc[0]
+        y2 = y_tail.iloc[1]
+
+        # print(asset)
+        # print('-------')
+        # print(x_tail)
+        # print(x_df)
+        # print(y_tail)
+        # print(y_df)
+
         date = datetime.fromtimestamp(last_item["time_open"])
 
-        # Measure
-        last_real = x_df['close'].tail(1).values[0]
+        diff = diff_percentage(v2=y2['close'], v1=y1['close'])
 
-        tail = y_df['close'].tail(2).values
+        table.append([
+            asset,
+            paint_diff(diff),
 
-        # print(tail)
+            f'{x1["open"]:.4f}',
+            f'{x2["close"]:.4f}',
+            f'{y1["close"]:.4f}',
+            f'{y2["close"]:.4f}',
 
-        last = tail[0]
-        prediction = tail[1]
-
-        diff = diff_percentage(v2=prediction, v1=last)
-
-        if diff > 0.6:
-            table.append([
-                asset,
-                paint_diff(diff),
-                last_real,
-                f'{tail[0]:.4f}',
-                f'{tail[1]:.4f}',
-                last_item["trades"],
-                date.strftime("%Y %m %d %H:%M:%S"),
-                f'https://www.binance.com/en/trade/{asset}_USDT',
-            ])
+            x2["trades"],
+            date.strftime("%Y %m %d %H:%M:%S"),
+            f'https://www.binance.com/en/trade/{asset}_USDT',
+        ])
 
     print(tabulate(table, headers, tablefmt="simple", numalign="right"))

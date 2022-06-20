@@ -13,14 +13,16 @@ model = tf.keras.models.load_model('model/ta.keras')
 print(interval)
 print("------------------------------------------------------------------------------------------")
 
-items = data_load_parallel_all(assets=assets, market=market, interval=interval)
+collection = data_load_parallel_all(assets=assets, market=market, interval=interval)
 
 report = []
 
-for item in items:
-    asset, x_df, last_item = item
+for data in collection:
+    asset, x_df, last_item = data
 
     y_df = make_prediction_ohlc_close(x_df, model)
+
+    print(x_df, y_df)
 
     report.append((asset, last_item, x_df, y_df))
 

@@ -26,9 +26,9 @@ def build_dataset(market: str, asset: str, interval: str):
     # collection = json.loads(file.read())
 
     for item in collection:
-        time_open = item['time_open'] / 1000
-        date = datetime.utcfromtimestamp(time_open)
         diff = diff_percentage(item['price_close'], item['price_open'])
+
+        # print(item['time_month'], item['time_day'], item['time_hour'], item['time_minute'])
 
         prepared.append([
             item['price_open'],
@@ -36,13 +36,10 @@ def build_dataset(market: str, asset: str, interval: str):
             item['price_low'],
             item['price_close'],
 
-            date.month,
-            date.day,
-            date.hour,
-            date.minute,
-
-            # item['avg_percentage'],
-            # item['avg_current'],
+            item['time_month'],
+            item['time_day'],
+            item['time_hour'],
+            item['time_minute'],
 
             item['trades'],
             item['volume'],
@@ -51,8 +48,6 @@ def build_dataset(market: str, asset: str, interval: str):
             item['quote_asset_volume'],
 
             diff,
-
-            # datetime.utcfromtimestamp(item['time_open']),
         ])
 
     df_ohlc = pd.DataFrame(prepared, None, [
@@ -66,9 +61,6 @@ def build_dataset(market: str, asset: str, interval: str):
         'time_hour',
         'time_minute',
 
-        # 'avg_percentage',
-        # 'avg_current',
-
         'trades',
         'volume',
         'volume_taker',
@@ -76,7 +68,6 @@ def build_dataset(market: str, asset: str, interval: str):
         'quote_asset_volume',
 
         'price_diff',
-        # 'epoch',
     ])
 
     df = estimate_ta_fill_na(df_ohlc)

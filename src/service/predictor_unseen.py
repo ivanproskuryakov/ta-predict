@@ -68,9 +68,6 @@ def make_prediction_ohlc_close(x_df, model):
 
     df = pd.DataFrame(y[0], None, [
         'open',
-        # 'high',
-        # 'low',
-        # 'close',
     ])
 
     df['open'] = 0
@@ -90,9 +87,6 @@ def make_prediction_ohlc_close(x_df, model):
     df['quote_asset_volume'] = 0
 
     df['price_diff'] = 0
-
-    # print(df)
-    # exit()
 
     df = estimate_ta_fill_na(df)
 

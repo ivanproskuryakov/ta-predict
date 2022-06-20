@@ -66,6 +66,8 @@ class KLines:
             # avg_current = self.price_average(current)
             date = datetime.utcfromtimestamp(time_open)
 
+            # print(date.month, date.day, date.hour, date.minute)
+
             item = {
                 'price_open': price_open,
                 'price_high': price_high,
@@ -80,9 +82,6 @@ class KLines:
                 'time_hour': date.hour,
                 'time_day': date.day,
                 'time_minute': date.minute,
-
-                # 'avg_current': avg_current,
-                # 'avg_percentage': diff_percentage(price_close, price_open),
 
                 'trades': trades,
                 'volume': volume,
