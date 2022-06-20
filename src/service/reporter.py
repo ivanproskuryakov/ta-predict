@@ -39,18 +39,19 @@ def render_console_table(report):
 
         diff = diff_percentage(v2=y2['close'], v1=y1['close'])
 
-        table.append([
-            asset,
-            paint_diff(diff),
+        if diff > 2:
+            table.append([
+                asset,
+                paint_diff(diff),
 
-            f'{x1["open"]:.4f}',
-            f'{x2["close"]:.4f}',
-            f'{y1["close"]:.4f}',
-            f'{y2["close"]:.4f}',
+                f'{x1["open"]:.4f}',
+                f'{x2["close"]:.4f}',
+                f'{y1["close"]:.4f}',
+                f'{y2["close"]:.4f}',
 
-            x2["trades"],
-            date.strftime("%Y %m %d %H:%M:%S"),
-            f'https://www.binance.com/en/trade/{asset}_USDT',
-        ])
+                x2["trades"],
+                date.strftime("%Y %m %d %H:%M:%S"),
+                f'https://www.binance.com/en/trade/{asset}_USDT',
+            ])
 
     print(tabulate(table, headers, tablefmt="simple", numalign="right"))

@@ -22,8 +22,6 @@ for data in collection:
 
     y_df = make_prediction_ohlc_close(x_df, model)
 
-    print(x_df, y_df)
-
     report.append((asset, last_item, x_df, y_df))
 
 render_console_table(report)
