@@ -1,10 +1,14 @@
 import sys
 import tensorflow as tf
-
-from src.service.predictor_unseen import data_load_parallel_all, make_prediction_ohlc_close
+import numpy as np
+import pandas as pd
 
 from src.parameters import market, assets
 from src.service.reporter import render_console_table
+from src.service.predictor_unseen import data_load_parallel_all, make_prediction_ohlc_close
+
+np.set_printoptions(precision=4)
+pd.set_option("display.precision", 4)
 
 interval = sys.argv[1]
 

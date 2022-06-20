@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
-from src.service.predictor_unseen import make_prediction_ohlc
+from src.service.predictor_unseen import make_prediction_ohlc_close
 from src.service.dataset_builder_realtime import build_dataset
 from src.parameters import market, tail
 
@@ -14,7 +14,7 @@ interval = '15m'
 model = tf.keras.models.load_model(f'model/ta.keras')
 x, last_item = build_dataset(market, asset, interval)
 
-y = make_prediction_ohlc(x, model)
+y = make_prediction_ohlc_close(x, model)
 
 # Plot
 # ------------------------------------------------------------------------

@@ -1,18 +1,24 @@
+import pandas as pd
+
 from datetime import datetime
 from tabulate import tabulate
-from src.service.util import diff_percentage, paint_diff
+
+from src.service.util import diff_percentage
 
 
 def render_console_table(report):
-    table = []
+    data = []
     headers = [
         "asset",
-        "%",
+        "diff",
+        "trades",
+        "volume",
+        "volume_market",
+
         "x1o",
         "x2c",
         "y1c",
         "y2c",
-        "trades",
         "date",
         "h",
         "m",
@@ -42,21 +48,33 @@ def render_console_table(report):
 
         diff = diff_percentage(v2=y2['close'], v1=y1['close'])
 
-        if diff > 2:
-            table.append([
-                asset,
-                paint_diff(diff),
+        volume_market = x2["volume"] * x1["open"]
 
-                f'{x1["open"]:.4f}',
-                f'{x2["close"]:.4f}',
-                f'{y1["close"]:.4f}',
-                f'{y2["close"]:.4f}',
+        data.append([
+            asset,
+            diff,
+            x2["trades"],
+            x2["volume"],
+            volume_market,
 
-                x2["trades"],
-                date.strftime("%Y %m %d %H:%M:%S"),
-                f'{x2["time_hour"]:.0f}',
-                f'{x2["time_minute"]:.0f}',
-                f'https://www.binance.com/en/trade/{asset}_USDT',
-            ])
+            f'{x1["open"]:.4f}',
+            f'{x2["close"]:.4f}',
+            f'{y1["close"]:.4f}',
+            f'{y2["close"]:.4f}',
 
-    print(tabulate(table, headers, tablefmt="simple", numalign="right"))
+            date.strftime("%Y %m %d %H:%M:%S"),
+            f'{x2["time_hour"]:.0f}',
+            f'{x2["time_minute"]:.0f}',
+            f'https://www.binance.com/en/trade/{asset}_USDT',
+        ])
+
+    df = pd.DataFrame(data, None, headers)
+
+    # df.sort_values(by=['diff'], ascending=True)
+    df.sort_values(by=['trades'], inplace=True, ascending=True)
+
+    df = df.reset_index(drop=True)
+
+    # df.sort_values(by=['diff', 'trades', 'volume'])
+
+    print(tabulate(df.values, headers, tablefmt="simple", numalign="right"))
