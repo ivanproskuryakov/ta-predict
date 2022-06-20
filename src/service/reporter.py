@@ -14,6 +14,8 @@ def render_console_table(report):
         "y2c",
         "trades",
         "date",
+        "h",
+        "m",
         "url",
     ]
 
@@ -28,6 +30,7 @@ def render_console_table(report):
         y1 = y_tail.iloc[0]
         y2 = y_tail.iloc[1]
 
+        # print(x2)
         # print(asset)
         # print('-------')
         # print(x_tail)
@@ -51,6 +54,8 @@ def render_console_table(report):
 
                 x2["trades"],
                 date.strftime("%Y %m %d %H:%M:%S"),
+                f'{x2["time_hour"]:.0f}',
+                f'{x2["time_minute"]:.0f}',
                 f'https://www.binance.com/en/trade/{asset}_USDT',
             ])
 
