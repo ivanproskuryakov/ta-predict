@@ -17,13 +17,13 @@ filepath_checkpoint = f'data/gru.checkpoint'
 interval = '5m'
 assets = [
     'BTC',
-    'ETH',
-    "BNB",
-    "NEO",
-    "LTC",
-    "ADA",
-    "XRP",
-    "EOS",
+    # 'ETH',
+    # "BNB",
+    # "NEO",
+    # "LTC",
+    # "ADA",
+    # "XRP",
+    # "EOS",
 ]
 
 print(f'training interval: {interval} {assets}')
@@ -107,8 +107,8 @@ window = WindowGenerator(
     val_df=validate_df,
 )
 
-latest = tf.train.latest_checkpoint('data')
-model.load_weights(latest)
+# latest = tf.train.latest_checkpoint('data')
+# model.load_weights(latest)
 
 model.fit(
     window.train,

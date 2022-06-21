@@ -11,6 +11,25 @@ sequence_length = 100
 ASSET = 'BTC'
 market = 'USDT'
 
+assets_down = [
+    "BTCUP",
+    "BTCDOWN",
+    "ETHUP",
+    "ETHDOWN",
+    "ADAUP",
+    "ADADOWN",
+    "LINKUP",
+    "LINKDOWN",
+    "BNBUP",
+    "BNBDOWN",
+    "TRXUP",
+    "TRXDOWN",
+    "XRPUP",
+    "XRPDOWN",
+    "DOTUP",
+    "DOTDOWN",
+]
+
 assets = [
     "BTC",
     "ETH",

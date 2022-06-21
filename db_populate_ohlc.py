@@ -10,14 +10,23 @@ klines = KLines()
 
 interval = '5m'
 assets = [
-    'BTC',
-    "ETH",
-    "BNB",
-    "NEO",
-    "LTC",
-    "ADA",
-    "XRP",
-    "EOS",
+    # 'BTC',
+    # "BTCUP",
+    # "BTCDOWN",
+    "ETHUP",
+    "ETHDOWN",
+    "ADAUP",
+    "ADADOWN",
+    "LINKUP",
+    "LINKDOWN",
+    "BNBUP",
+    "BNBDOWN",
+    "TRXUP",
+    "TRXDOWN",
+    "XRPUP",
+    "XRPDOWN",
+    "DOTUP",
+    "DOTDOWN",
 ]
 
 for asset in assets:

@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from src.entity.ohlc import Ohlc
 from src.connector.db_connector import db_connect
-from src.service.util import diff_percentage
+from src.parameters import assets_down
 
 
 # https://docs.sqlalchemy.org/en/14/orm/session_basics.html
@@ -28,63 +28,27 @@ class OhlcRepository:
             asset: str,
             interval: str,
     ):
-        list = []
+        dfs = []
+        df = self.get_df_full(
+            exchange=exchange,
+            market=market,
+            asset=asset,
+            interval=interval
+        )
+        dfs.append(df)
 
-        with Session(self.connection) as session:
-            collection = session.query(Ohlc) \
-                .filter(Ohlc.exchange == exchange) \
-                .filter(Ohlc.market == market) \
-                .filter(Ohlc.interval == interval) \
-                .filter(Ohlc.asset == asset) \
-                .order_by(Ohlc.time_open) \
-                .all()
+        for asset in assets_down:
+            df = self.get_df_ohlc(
+                exchange=exchange,
+                market=market,
+                asset=asset,
+                interval=interval
+            )
+            dfs.append(df)
 
-            for item in collection:
-                list.append([
-                    item.price_open,
-                    item.price_high,
-                    item.price_low,
-                    item.price_close,
+        df_final = pd.concat(dfs)
 
-                    item.time_month,
-                    item.time_day,
-                    item.time_hour,
-                    item.time_minute,
-
-                    item.trades,
-                    item.volume,
-                    item.volume_taker,
-                    item.volume_maker,
-                    item.quote_asset_volume,
-
-                    item.price_diff,
-
-                    # datetime.utcfromtimestamp(collection[i]['time_open']),
-                ])
-
-        df = pd.DataFrame(list, None, [
-            'open',
-            'high',
-            'low',
-            'close',
-
-            'time_month',
-            'time_day',
-            'time_hour',
-            'time_minute',
-
-            'trades',
-            'volume',
-            'volume_taker',
-            'volume_maker',
-            'quote_asset_volume',
-
-            'diff',
-
-            # 'epoch',
-        ])
-
-        return df
+        return df_final
 
     def create_many(
             self,
@@ -130,3 +94,85 @@ class OhlcRepository:
         with Session(self.connection) as session:
             session.add_all(data)
             session.commit()
+
+    def get_df_ohlc(
+            self,
+            exchange: str,
+            asset: str,
+            market: str,
+            interval: str,
+
+    ):
+        session = Session(bind=self.connection)
+
+        sql = session.query(
+            Ohlc.price_open.label(f'open_{asset}'),
+            Ohlc.price_high.label(f'high_{asset}'),
+            Ohlc.price_low.label(f'low_{asset}'),
+            Ohlc.price_close.label(f'close_{asset}'),
+
+            Ohlc.trades.label(f'trades_{asset}'),
+            Ohlc.volume.label(f'volume_{asset}'),
+            Ohlc.volume_taker.label(f'volume_taker_{asset}'),
+            Ohlc.volume_maker.label(f'volume_maker_{asset}'),
+            Ohlc.quote_asset_volume.label(f'quote_asset_volume_{asset}'),
+
+            Ohlc.price_diff,
+        ) \
+            .filter(Ohlc.exchange == exchange) \
+            .filter(Ohlc.market == market) \
+            .filter(Ohlc.interval == interval) \
+            .filter(Ohlc.asset == asset) \
+            .order_by(Ohlc.time_open.desc()) \
+            .statement
+
+        df = pd.read_sql(
+            sql=sql,
+            con=self.connection
+        )
+
+        return df
+
+    def get_df_full(
+            self,
+            exchange: str,
+            market: str,
+            asset: str,
+            interval: str,
+
+    ):
+        session = Session(bind=self.connection)
+
+        sql = session.query(
+            Ohlc.price_open.label('open'),
+            Ohlc.price_high.label('high'),
+            Ohlc.price_low.label('low'),
+            Ohlc.price_close.label('close'),
+
+            Ohlc.time_month,
+            Ohlc.time_day,
+            Ohlc.time_hour,
+            Ohlc.time_minute,
+
+            Ohlc.trades,
+            Ohlc.volume,
+            Ohlc.volume_taker,
+            Ohlc.volume_maker,
+            Ohlc.quote_asset_volume,
+
+            Ohlc.price_diff,
+
+        ) \
+            .filter(Ohlc.exchange == exchange) \
+            .filter(Ohlc.market == market) \
+            .filter(Ohlc.interval == interval) \
+            .filter(Ohlc.asset == asset) \
+            .order_by(Ohlc.time_open.desc()) \
+            .statement
+
+        df = pd.read_sql(
+            sql=sql,
+            con=self.connection
+        )
+
+        return df
