@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 import pandas as pd
 
-from src.parameters import market, assets
+from src.parameters_usdt import market, assets
 from src.service.reporter import render_console_table
 from src.service.predictor_unseen import data_load_parallel_all, make_prediction_ohlc_close
 
