@@ -22,12 +22,12 @@ assets_down = [
     "LINKDOWN",
     "BNBUP",
     "BNBDOWN",
-    "TRXUP",
-    "TRXDOWN",
-    "XRPUP",
-    "XRPDOWN",
-    "DOTUP",
-    "DOTDOWN",
+    # "TRXUP",
+    # "TRXDOWN",
+    # "XRPUP",
+    # "XRPDOWN",
+    # "DOTUP",
+    # "DOTDOWN",
 ]
 
 assets = [

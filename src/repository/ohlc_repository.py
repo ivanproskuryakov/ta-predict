@@ -118,7 +118,7 @@ class OhlcRepository:
             Ohlc.volume_maker.label(f'volume_maker_{asset}'),
             Ohlc.quote_asset_volume.label(f'quote_asset_volume_{asset}'),
 
-            Ohlc.price_diff,
+            Ohlc.price_diff.label(f'price_diff{asset}'),
         ) \
             .filter(Ohlc.exchange == exchange) \
             .filter(Ohlc.market == market) \

@@ -36,37 +36,30 @@ def render_console_table(report):
         y1 = y_tail.iloc[0]
         y2 = y_tail.iloc[1]
 
-        # print(x2)
-        # print(asset)
-        # print('-------')
-        # print(x_tail)
-        # print(x_df)
-        # print(y_tail)
-        # print(y_df)
-
         date = datetime.fromtimestamp(last_item["time_open"])
 
         diff = diff_percentage(v2=y2['close'], v1=y1['close'])
 
         volume_market = x2["volume"] * x1["open"]
 
-        data.append([
-            asset,
-            diff,
-            x2["trades"],
-            x2["volume"],
-            volume_market,
+        if diff > 0:
+            data.append([
+                asset,
+                diff,
+                x2["trades"],
+                x2["volume"],
+                volume_market,
 
-            f'{x1["open"]:.4f}',
-            f'{x2["close"]:.4f}',
-            f'{y1["close"]:.4f}',
-            f'{y2["close"]:.4f}',
+                f'{x1["open"]:.4f}',
+                f'{x2["close"]:.4f}',
+                f'{y1["close"]:.4f}',
+                f'{y2["close"]:.4f}',
 
-            date.strftime("%Y %m %d %H:%M:%S"),
-            f'{x2["time_hour"]:.0f}',
-            f'{x2["time_minute"]:.0f}',
-            f'https://www.binance.com/en/trade/{asset}_USDT',
-        ])
+                date.strftime("%Y %m %d %H:%M:%S"),
+                f'{x2["time_hour"]:.0f}',
+                f'{x2["time_minute"]:.0f}',
+                f'https://www.binance.com/en/trade/{asset}_USDT',
+            ])
 
     df = pd.DataFrame(data, None, headers)
 

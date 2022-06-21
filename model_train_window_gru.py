@@ -17,7 +17,7 @@ filepath_checkpoint = f'data/gru.checkpoint'
 interval = '5m'
 assets = [
     'BTC',
-    # 'ETH',
+    'ETH',
     # "BNB",
     # "NEO",
     # "LTC",
@@ -25,8 +25,6 @@ assets = [
     # "XRP",
     # "EOS",
 ]
-
-print(f'training interval: {interval} {assets}')
 
 # Data load & train
 # ------------------------------------------------------------------------
@@ -38,6 +36,8 @@ train_df, validate_df = build_dataset_window_many(
 )
 
 df_num_signals = train_df.shape[1]
+
+print(f'training: {interval} {assets} {df_num_signals}')
 
 # Model definition
 # ------------------------------------------------------------------------
