@@ -29,7 +29,7 @@ class OhlcRepository:
             interval: str,
     ):
         dfs = []
-        df = self.get_df_full(
+        df = self.get_df_full_desc(
             exchange=exchange,
             market=market,
             asset=asset,
@@ -38,7 +38,7 @@ class OhlcRepository:
         dfs.append(df)
 
         for asset in assets_down:
-            df = self.get_df_ohlc(
+            df = self.get_df_ohlc_desc(
                 exchange=exchange,
                 market=market,
                 asset=asset,
@@ -47,8 +47,9 @@ class OhlcRepository:
             dfs.append(df)
 
         df_final = pd.concat(dfs)
+        df_final_asc = df_final[::-1].reset_index()
 
-        return df_final
+        return df_final_asc
 
     def create_many(
             self,
@@ -95,7 +96,7 @@ class OhlcRepository:
             session.add_all(data)
             session.commit()
 
-    def get_df_ohlc(
+    def get_df_ohlc_desc(
             self,
             exchange: str,
             asset: str,
@@ -133,7 +134,7 @@ class OhlcRepository:
 
         return df
 
-    def get_df_full(
+    def get_df_full_desc(
             self,
             exchange: str,
             market: str,

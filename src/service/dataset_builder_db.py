@@ -1,4 +1,5 @@
 import pandas as pd
+
 from sklearn.preprocessing import MinMaxScaler
 
 from src.service.estimator import estimate_ta_fill_na
