@@ -71,7 +71,7 @@ def render_console_table(report):
     df = pd.DataFrame(data, None, headers)
 
     # df.sort_values(by=['diff'], ascending=True)
-    df.sort_values(by=['trades'], inplace=True, ascending=True)
+    df.sort_values(by=['diff'], inplace=True, ascending=True)
 
     df = df.reset_index(drop=True)
 
