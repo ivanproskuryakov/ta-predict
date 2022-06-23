@@ -21,7 +21,7 @@ assets = [
     # "BNB",
     # "NEO",
     # "LTC",
-    # "ADA",
+    "ADA",
     # "XRP",
     # "EOS",
 ]
@@ -43,14 +43,15 @@ print(f'training: {interval} {assets} {df_num_signals}')
 # ------------------------------------------------------------------------
 
 callback_early_stopping = EarlyStopping(
-    monitor='val_loss',
+    # monitor='val_loss',
+    monitor='mean_absolute_error',
     patience=10,
     mode='min',
     verbose=1
 )
 callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
-    factor=0.2,
+    factor=0.5,
     min_lr=0,
     patience=10,
     verbose=1,
@@ -65,13 +66,10 @@ callback_checkpoint = ModelCheckpoint(
 
 model = tf.keras.models.Sequential([
     GRU(
-        units=500,
+        units=600,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
-    # LSTM(df_num_signals, return_sequences=False),
-    # Dense(units=df_num_signals, activation='linear', input_dim=df_num_signals),
-    # Dense(units=df_num_signals, activation='relu', input_dim=df_num_signals),
     Dense(units=1, activation='linear', input_dim=df_num_signals),
 ])
 
@@ -107,12 +105,12 @@ window = WindowGenerator(
     val_df=validate_df,
 )
 
-# latest = tf.train.latest_checkpoint('data')
-# model.load_weights(latest)
+latest = tf.train.latest_checkpoint('data')
+model.load_weights(latest)
 
 model.fit(
     window.train,
-    epochs=100,
+    epochs=50,
     validation_data=window.val,
     callbacks=[
         callback_early_stopping,
