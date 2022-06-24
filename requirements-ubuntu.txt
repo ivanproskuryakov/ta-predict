@@ -14,6 +14,5 @@ deprecated
 SQLAlchemy
 psycopg2-binary
 pytest
-ray
 tabulate
 blockchain-parser

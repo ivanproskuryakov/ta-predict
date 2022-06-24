@@ -14,5 +14,4 @@ deprecated
 SQLAlchemy
 psycopg2
 pytest
-ray
 tabulate
