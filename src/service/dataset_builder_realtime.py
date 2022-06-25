@@ -1,13 +1,11 @@
 import pandas as pd
-import json
-from datetime import datetime
 
 from src.service.estimator import estimate_ta_fill_na
 from src.service.klines import KLines
 from src.service.util import diff_percentage
 
 
-def build_dataset(market: str, asset: str, interval: str):
+def build_dataset(market: str, asset: str, interval: str, df_down: pd.DataFrame):
     klines = KLines()
     start_at = '1 week ago UTC'
     prepared = []
@@ -69,7 +67,39 @@ def build_dataset(market: str, asset: str, interval: str):
 
         'price_diff',
     ])
+    df = pd.concat([df_ohlc, df_down])
+    df = estimate_ta_fill_na(df)
 
-    df = estimate_ta_fill_na(df_ohlc)
+    print(df.shape[1])
+    print(df.keys())
+    exit()
 
     return df, item
+
+
+def build_dataset_down(market: str, asset: str, interval: str):
+    klines = KLines()
+    start_at = '1 week ago UTC'
+    prepared = []
+
+    collection = klines.build_klines(
+        market,
+        asset,
+        interval,
+        start_at
+    )
+
+    for item in collection:
+        prepared.append([
+            item['price_open'],
+            item['price_close'],
+            item['trades'],
+        ])
+
+    df = pd.DataFrame(prepared, None, [
+        f'open_{asset}',
+        f'close_{asset}',
+        f'trades_{asset}',
+    ])
+
+    return df

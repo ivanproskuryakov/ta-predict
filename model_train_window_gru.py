@@ -18,11 +18,11 @@ interval = '5m'
 assets = [
     'BTC',
     'ETH',
-    # "BNB",
+    "BNB",
     # "NEO",
     # "LTC",
     "ADA",
-    # "XRP",
+    "XRP",
     # "EOS",
 ]
 
@@ -36,6 +36,8 @@ train_df, validate_df = build_dataset_window_many(
 )
 
 df_num_signals = train_df.shape[1]
+
+print(train_df.keys())
 
 print(f'training: {interval} {assets} {df_num_signals}')
 
@@ -66,7 +68,7 @@ callback_checkpoint = ModelCheckpoint(
 
 model = tf.keras.models.Sequential([
     GRU(
-        units=600,
+        units=1000,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
@@ -105,12 +107,12 @@ window = WindowGenerator(
     val_df=validate_df,
 )
 
-latest = tf.train.latest_checkpoint('data')
-model.load_weights(latest)
+# latest = tf.train.latest_checkpoint('data')
+# model.load_weights(latest)
 
 model.fit(
     window.train,
-    epochs=50,
+    epochs=10,
     validation_data=window.val,
     callbacks=[
         callback_early_stopping,
