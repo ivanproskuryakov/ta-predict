@@ -1,6 +1,7 @@
 from src.repository.trade_repository import TradeRepository
 
 from binance import Client
+from src.entity.trade import Trade
 from src.parameters import API_KEY, API_SECRET
 
 
@@ -15,7 +16,7 @@ class Trader:
             api_secret=API_SECRET,
         )
 
-    def trade_open(
+    def trade_buy(
             self,
             asset: str,
             market: str,
@@ -35,14 +36,38 @@ class Trader:
             recvWindow=5000,
         )
 
-        print(order)
-
-        trade = self.trade_repository.create(
+        trade = self.trade_repository.create_buy(
             asset=asset,
             market=market,
             interval=interval,
             price_buy=price,
             quantity=quantity,
+            order=order,
+        )
+
+        return trade
+
+    def trade_sell(
+            self,
+            trade: Trade,
+            price: float
+    ):
+        symbol = f'{trade.asset}{trade.market}'
+
+        order = self.client.create_test_order(
+            price=price,
+            quantity=trade.buy_quantity,
+            symbol=symbol,
+            side='SELL',
+            type='LIMIT',
+            timeInForce='GTC',
+            recvWindow=5000,
+        )
+
+        trade = self.trade_repository.update(
+            trade=trade,
+            price_sell=price,
+            order=order,
         )
 
         return trade
