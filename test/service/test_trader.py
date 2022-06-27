@@ -9,8 +9,8 @@ def test_order_open():
     asset = 'BTC'
     market = 'USDT'
     interval = '1h'
-    price = 2000.0001
-    amount = 0.002
+    price = 10000
+    amount = 0.001
 
     trade_new = trader.trade_open(
         asset,

@@ -21,14 +21,28 @@ class Trader:
             market: str,
             interval: str,
             price: float,
-            amount: float,
+            quantity: float,
     ):
+        symbol = f'{asset}{market}'
+
+        order = self.client.create_test_order(
+            price=price,
+            quantity=quantity,
+            symbol=symbol,
+            side='BUY',
+            type='LIMIT',
+            timeInForce='GTC',
+            recvWindow=5000,
+        )
+
+        print(order)
+
         trade = self.trade_repository.create(
             asset=asset,
             market=market,
             interval=interval,
             price_buy=price,
-            amount=amount,
+            quantity=quantity,
         )
 
         return trade

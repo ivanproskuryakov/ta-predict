@@ -14,7 +14,7 @@ class Trade(Base):
     interval = Column(String)
 
     buy_price = Column(Float(precision=32, decimal_return_scale=None))
-    buy_amount = Column(Float(precision=32, decimal_return_scale=None))
+    buy_quantity = Column(Float(precision=32, decimal_return_scale=None))
     buy_time = Column(BigInteger)
 
     sell_price = Column(Float(precision=32, decimal_return_scale=None))

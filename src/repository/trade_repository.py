@@ -17,7 +17,7 @@ class TradeRepository:
             market: str,
             interval: str,
             price_buy: float,
-            amount: float,
+            quantity: float,
     ):
         trade = Trade()
 
@@ -25,7 +25,7 @@ class TradeRepository:
         trade.market = market
         trade.interval = interval
         trade.buy_price = price_buy
-        trade.buy_amount = amount
+        trade.buy_quantity = quantity
         trade.buy_time = time.time()
 
         with Session(self.connection) as session:
