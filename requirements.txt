@@ -15,3 +15,4 @@ SQLAlchemy
 psycopg2
 pytest
 tabulate
+faker
