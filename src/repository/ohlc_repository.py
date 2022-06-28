@@ -37,6 +37,8 @@ class OhlcRepository:
         )
         dfs.append(df)
 
+        # print(len(df))
+
         for asset in assets_down:
             df = self.get_df_ohlc_desc(
                 exchange=exchange,
@@ -46,10 +48,14 @@ class OhlcRepository:
             )
             dfs.append(df)
 
-        df_final = pd.concat(dfs)
+        df_final = pd.concat(dfs, axis=1)
         df_final_asc = df_final[::-1]
 
-        #.reset_index()
+        # print(len(df_final_asc))
+        #
+        # exit()
+
+        # .reset_index()
         # df_final_asc_index = df_final[::-1].reset_index()
         #
         # print(df_final)
@@ -115,14 +121,14 @@ class OhlcRepository:
 
         sql = session.query(
             Ohlc.price_open.label(f'open_{asset}'),
-            # Ohlc.price_high.label(f'high_{asset}'),
-            # Ohlc.price_low.label(f'low_{asset}'),
+            Ohlc.price_high.label(f'high_{asset}'),
+            Ohlc.price_low.label(f'low_{asset}'),
             Ohlc.price_close.label(f'close_{asset}'),
 
             Ohlc.trades.label(f'trades_{asset}'),
-            # Ohlc.volume.label(f'volume_{asset}'),
-            # Ohlc.volume_taker.label(f'volume_taker_{asset}'),
-            # Ohlc.volume_maker.label(f'volume_maker_{asset}'),
+            Ohlc.volume.label(f'volume_{asset}'),
+            Ohlc.volume_taker.label(f'volume_taker_{asset}'),
+            Ohlc.volume_maker.label(f'volume_maker_{asset}'),
             # Ohlc.quote_asset_volume.label(f'quote_asset_volume_{asset}'),
             #
             # Ohlc.price_diff.label(f'price_diff{asset}'),

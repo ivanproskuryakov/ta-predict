@@ -11,8 +11,8 @@ from src.parameters import market
 # ------------------------------------------------------------------------
 width = 100
 
-filepath_model = f'data/gru.keras'
-filepath_checkpoint = f'data/gru.checkpoint'
+filepath_model = f'data/gru-a.keras'
+filepath_checkpoint = f'data/gru-a.checkpoint'
 
 interval = '5m'
 assets = [
@@ -20,9 +20,9 @@ assets = [
     # 'ETH',
     "BNB",
     # "NEO",
-    # "LTC",
+    "LTC",
     "ADA",
-    # "XRP",
+    "XRP",
     # "EOS",
 ]
 
@@ -68,7 +68,7 @@ callback_checkpoint = ModelCheckpoint(
 
 model = tf.keras.models.Sequential([
     GRU(
-        units=1000,
+        units=600,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
@@ -88,7 +88,7 @@ window = WindowGenerator(
     input_width=width,
     label_width=width,
     shift=1,
-    batch_size=100,
+    batch_size=200,
     label_columns=[
         # 'open',
         # 'high',
