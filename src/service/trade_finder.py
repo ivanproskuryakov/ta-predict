@@ -1,11 +1,19 @@
-from src.repository.trade_repository import TradeRepository
+import pandas as pd
 from datetime import datetime
+
+from src.repository.trade_repository import TradeRepository
+
 
 class TradeFinder:
     trade_repository = TradeRepository
 
     def __init__(self):
         self.trade_repository = TradeRepository()
+
+    def pick_best_trade(self, df: pd.DataFrame):
+        print(df)
+
+        return False
 
     def trade_between(
             self,

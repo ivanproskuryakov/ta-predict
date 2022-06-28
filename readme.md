@@ -14,8 +14,8 @@ pip install --force-reinstall -r requirements.txt
 python -m venv .env
 source .env/bin/activate
 
-python model_train.py
-python model_predict.py
+ENV=dev python model_train.py
+ENV=dev python model_predict.py 15m
 python model_plot.py
 
 python -m pytest test/
