@@ -67,12 +67,21 @@ def build_dataset(market: str, asset: str, interval: str, df_down: pd.DataFrame)
 
         'price_diff',
     ])
-    df = pd.concat([df_ohlc, df_down])
+
+    # df = pd.merge(df_ohlc, df_down, left_index=True, right_index=True)
+
+    df = pd.concat([df_ohlc, df_down], axis=1)
+
+    # print(df_ohlc)
+    # print(df_down)
+    # print(df)
+    # exit()
+
     df = estimate_ta_fill_na(df)
 
-    print(df.shape[1])
-    print(df.keys())
-    exit()
+    # print(df.shape[1])
+    # print(df.keys())
+    # exit()
 
     return df, item
 

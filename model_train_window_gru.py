@@ -17,11 +17,11 @@ filepath_checkpoint = f'data/gru.checkpoint'
 interval = '5m'
 assets = [
     'BTC',
-    'ETH',
-    # "BNB",
+    # 'ETH',
+    "BNB",
     # "NEO",
     # "LTC",
-    # "ADA",
+    "ADA",
     # "XRP",
     # "EOS",
 ]

@@ -67,29 +67,9 @@ def make_prediction_ohlc_close(x_df, model):
     # ------------------------------------------------------------------------
     y = model.predict(x_df_scaled_expanded, verbose=0)
 
-    df = pd.DataFrame(y[0], None, [
-        'open',
-    ])
+    df = pd.DataFrame(0, index=np.arange(len(y[0])), columns=x_df.keys())
 
-    df['open'] = 0
-    df['high'] = 0
-    df['low'] = 0
     df['close'] = y[0]
-
-    df['time_month'] = 0
-    df['time_day'] = 0
-    df['time_hour'] = 0
-    df['time_minute'] = 0
-
-    df['trades'] = 0
-    df['volume'] = 0
-    df['volume_taker'] = 0
-    df['volume_maker'] = 0
-    df['quote_asset_volume'] = 0
-
-    df['price_diff'] = 0
-
-    df = estimate_ta_fill_na(df)
 
     y_inverse = scaler.inverse_transform(df)
 
@@ -110,15 +90,6 @@ def data_load_remote(asset: str, market: str, interval: str, df_down: pd.DataFra
     return asset, data, last_item
 
 
-def data_load_parallel_all(assets: [], market: str, interval: str):
-    fns = []
-
-    for asset in assets:
-        fns.append(data_load_remote.remote(asset, market, interval))
-
-    return ray.get(fns)
-
-
 def data_load_down(market: str, interval: str):
     dfs = []
 
@@ -130,7 +101,7 @@ def data_load_down(market: str, interval: str):
         )
         dfs.append(df)
 
-    df_final = pd.concat(dfs)
+    df_final = pd.concat(dfs, axis=1)
 
     return df_final
 
@@ -139,8 +110,6 @@ def data_load_parallel_all(assets: [], market: str, interval: str):
     fns = []
 
     df_down = data_load_down(market=market, interval=interval)
-
-    print(df_down)
 
     for asset in assets:
         fns.append(data_load_remote.remote(asset, market, interval, df_down))

@@ -42,24 +42,23 @@ def render_console_table(report):
 
         volume_market = x2["volume"] * x1["open"]
 
-        if diff > 0:
-            data.append([
-                asset,
-                diff,
-                x2["trades"],
-                x2["volume"],
-                volume_market,
+        data.append([
+            asset,
+            diff,
+            x2["trades"],
+            x2["volume"],
+            volume_market,
 
-                f'{x1["open"]:.4f}',
-                f'{x2["close"]:.4f}',
-                f'{y1["close"]:.4f}',
-                f'{y2["close"]:.4f}',
+            f'{x1["open"]:.4f}',
+            f'{x2["close"]:.4f}',
+            f'{y1["close"]:.4f}',
+            f'{y2["close"]:.4f}',
 
-                date.strftime("%Y %m %d %H:%M:%S"),
-                f'{x2["time_hour"]:.0f}',
-                f'{x2["time_minute"]:.0f}',
-                f'https://www.binance.com/en/trade/{asset}_USDT',
-            ])
+            date.strftime("%Y %m %d %H:%M:%S"),
+            f'{x2["time_hour"]:.0f}',
+            f'{x2["time_minute"]:.0f}',
+            f'https://www.binance.com/en/trade/{asset}_USDT',
+        ])
 
     df = pd.DataFrame(data, None, headers)
 
