@@ -1,14 +1,9 @@
-from binance import Client
-
 DB_ETHEREUM = '/home/ivan/.ethereum/geth/chaindata'
 DB_URL = {
     "dev": "postgresql://postgres:@localhost/ta_dev",
     "test": "postgresql://postgres:@localhost/ta_test",
 }
 
-shift_steps = 4
-tail = 100
-sequence_length = 100
 ASSET = 'BTC'
 market = 'USDT'
 
