@@ -1,14 +1,25 @@
 import pandas as pd
+from yachalk import chalk
 
 from datetime import datetime
 from tabulate import tabulate
 
-from src.service.util import diff_percentage, paint_diff
+from src.service.util import diff_percentage
 
 
 class Reporter():
     def render_console_table(self, df):
-        print(tabulate(df.values, df.keys(), tablefmt="simple", numalign="right"))
+        df['diff'] = df['diff'].apply(lambda x: chalk.green(x) if x > 0.1 else x)
+        # df['diff'] = df['diff'].apply(lambda x: chalk.red(x) if x < 0.1 else x)
+
+        table = tabulate(
+            tabular_data=df.values,
+            headers=df.keys(),
+            tablefmt="simple",
+            numalign="right"
+        )
+
+        print(table)
 
     def build_report(self, data) -> pd.DataFrame:
         report = []
@@ -48,7 +59,7 @@ class Reporter():
 
             report.append([
                 asset,
-                paint_diff(diff),
+                diff,
                 x2["trades"],
                 x2["volume"],
                 volume_market,
