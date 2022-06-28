@@ -1,5 +1,5 @@
 from src.repository.trade_repository import TradeRepository
-
+from datetime import datetime
 
 class TradeFinder:
     trade_repository = TradeRepository
@@ -9,8 +9,8 @@ class TradeFinder:
 
     def trade_between(
             self,
-            start_at: float,
-            end_at: float,
+            start_at: datetime,
+            end_at: datetime,
     ):
         trade = self.trade_repository.find_between(
             start_at=start_at,

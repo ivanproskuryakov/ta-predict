@@ -1,4 +1,3 @@
-import time
 from datetime import datetime, timedelta
 
 from sqlalchemy.orm import Session
@@ -76,13 +75,13 @@ class TradeRepository:
 
     def find_between(
             self,
-            start_at: float,
-            end_at: float,
+            start_at: datetime,
+            end_at: datetime,
     ) -> Trade:
         with Session(self.connection) as session:
             trade = session.query(Trade) \
-                .where(Trade.buy_time <= start_at) \
-                .where(Trade.buy_time >= end_at) \
+                .where(Trade.interval_end >= start_at) \
+                .where(Trade.interval_end <= end_at) \
                 .order_by(Trade.id.desc()) \
                 .first()
             session.close()
