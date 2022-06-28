@@ -163,10 +163,10 @@ class OhlcRepository:
             Ohlc.price_low.label('low'),
             Ohlc.price_close.label('close'),
 
-            Ohlc.time_month,
-            Ohlc.time_day,
-            Ohlc.time_hour,
-            Ohlc.time_minute,
+            # Ohlc.time_month,
+            # Ohlc.time_day,
+            # Ohlc.time_hour,
+            # Ohlc.time_minute,
 
             Ohlc.trades,
             Ohlc.volume,
@@ -174,7 +174,7 @@ class OhlcRepository:
             Ohlc.volume_maker,
             Ohlc.quote_asset_volume,
 
-            Ohlc.price_diff,
+            # Ohlc.price_diff,
 
         ) \
             .filter(Ohlc.exchange == exchange) \

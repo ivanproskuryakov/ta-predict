@@ -68,20 +68,8 @@ def build_dataset(market: str, asset: str, interval: str, df_down: pd.DataFrame)
         'price_diff',
     ])
 
-    # df = pd.merge(df_ohlc, df_down, left_index=True, right_index=True)
-
     df = pd.concat([df_ohlc, df_down], axis=1)
-
-    # print(df_ohlc)
-    # print(df_down)
-    # print(df)
-    # exit()
-
     df = estimate_ta_fill_na(df)
-
-    # print(df.shape[1])
-    # print(df.keys())
-    # exit()
 
     return df, item
 
@@ -101,14 +89,26 @@ def build_dataset_down(market: str, asset: str, interval: str):
     for item in collection:
         prepared.append([
             item['price_open'],
+            item['price_high'],
+            item['price_low'],
             item['price_close'],
+
             item['trades'],
+            item['volume'],
+            item['volume_taker'],
+            item['volume_maker'],
         ])
 
     df = pd.DataFrame(prepared, None, [
         f'open_{asset}',
+        f'high_{asset}',
+        f'low_{asset}',
         f'close_{asset}',
+
         f'trades_{asset}',
+        f'volume_{asset}',
+        f'volume_taker_{asset}',
+        f'volume_maker_{asset}',
     ])
 
     return df
