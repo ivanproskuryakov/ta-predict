@@ -11,19 +11,25 @@ def test_order_buy():
     market = 'USDT'
     interval = '1h'
     price = 10000
-    amount = 0.001
+    quantity = 0.001
 
     trade_buy = trader.trade_buy(
-        asset,
-        market,
-        interval,
-        price,
-        amount,
+        asset=asset,
+        market=market,
+        interval=interval,
+        price=price,
+        quantity=quantity,
     )
     trade_last = trade_repository.find_last_trade()
 
     assert trade_buy.id == trade_last.id
+    assert trade_buy.buy_price == 10000
+    assert trade_buy.buy_quantity == 0.001
     assert trade_buy.buy_order == {}
+    assert trade_buy.interval_start.minute == 0
+    assert trade_buy.interval_start.second == 0
+    assert trade_buy.interval_end.minute == 0
+    assert trade_buy.interval_end.second == 0
 
 
 def test_order_sell():

@@ -1,4 +1,5 @@
 import time
+from datetime import datetime, timedelta
 
 from sqlalchemy.orm import Session
 from src.entity.trade import Trade
@@ -20,6 +21,10 @@ class TradeRepository:
             quantity: float,
             order: {},
     ) -> Trade:
+        now = datetime.utcnow()
+        interval_start = now.replace(minute=0, second=0, microsecond=0)
+        interval_end = interval_start + timedelta(hours=1)
+
         trade = Trade()
 
         trade.asset = asset
@@ -28,8 +33,11 @@ class TradeRepository:
 
         trade.buy_price = price_buy
         trade.buy_quantity = quantity
-        trade.buy_time = time.time()
+        trade.buy_time = now
         trade.buy_order = order
+
+        trade.interval_start = interval_start
+        trade.interval_end = interval_end
 
         with Session(self.connection) as session:
             session.expire_on_commit = False
@@ -45,7 +53,7 @@ class TradeRepository:
             order: {},
     ) -> Trade:
         trade.sell_price = price_sell
-        trade.sell_time = time.time()
+        trade.sell_time = datetime.utcnow()
         trade.sell_order = order
 
         with Session(self.connection) as session:
@@ -60,6 +68,21 @@ class TradeRepository:
     ) -> Trade:
         with Session(self.connection) as session:
             trade = session.query(Trade) \
+                .order_by(Trade.id.desc()) \
+                .first()
+            session.close()
+
+        return trade
+
+    def find_between(
+            self,
+            start_at: float,
+            end_at: float,
+    ) -> Trade:
+        with Session(self.connection) as session:
+            trade = session.query(Trade) \
+                .where(Trade.buy_time <= start_at) \
+                .where(Trade.buy_time >= end_at) \
                 .order_by(Trade.id.desc()) \
                 .first()
             session.close()

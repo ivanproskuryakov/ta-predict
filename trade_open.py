@@ -1,5 +1,15 @@
-from src.service.trader import Trader
+import time
 
-trader = Trader()
+from src.service.trade_finder import TradeFinder
 
-trader.order_open()
+repository = TradeFinder()
+
+start_at = time.time()
+end_at = start_at + 60
+
+trade = repository.trade_between(
+    start_at=start_at,
+    end_at=end_at
+)
+
+print(trade)

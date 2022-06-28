@@ -37,7 +37,7 @@ ENV=test python db_flush_sync.py
 ### Test
 
 ```
-ENV=test python -m pytest --log-cli-level DEBUG test/service/test_trader.py
+ENV=test python -m pytest --log-cli-level DEBUG -s test/service/test_trader.py
 ENV=test python -m pytest test/service/test_trader.py
 ENV=test python -m pytest -s test/service/test_trader.py
 
