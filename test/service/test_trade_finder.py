@@ -38,8 +38,8 @@ def test_pick_best_option():
 
     data = load_predictions()
 
-    df = reporter.build_report(data=data)
+    df = reporter.report_build(data=data)
 
     best = trade_finder.pick_best_option(df)
 
-    assert best.iloc[-1]['asset'] == 'BTC'
+    assert best['asset'] == 'BTC'

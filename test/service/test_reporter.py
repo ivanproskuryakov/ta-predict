@@ -2,11 +2,13 @@ from src.service.reporter import Reporter
 from fixture.prediction import load_predictions
 
 
-def test_pick_best_option():
+def test_report_prettify():
     reporter = Reporter()
 
     data = load_predictions()
 
-    df = reporter.build_report(data=data)
+    df = reporter.report_build(data=data)
 
-    reporter.render_console_table(df)
+    report = reporter.report_prettify(df)
+
+    assert len(report) == 1286

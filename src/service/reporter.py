@@ -8,7 +8,7 @@ from src.service.util import diff_percentage
 
 
 class Reporter():
-    def render_console_table(self, df):
+    def report_prettify(self, df):
         df['diff'] = df['diff'].apply(lambda x: chalk.green(x) if x > 0.1 else x)
         # df['diff'] = df['diff'].apply(lambda x: chalk.red(x) if x < 0.1 else x)
 
@@ -19,9 +19,9 @@ class Reporter():
             numalign="right"
         )
 
-        print(table)
+        return table
 
-    def build_report(self, data) -> pd.DataFrame:
+    def report_build(self, data) -> pd.DataFrame:
         report = []
         headers = [
             "asset",
