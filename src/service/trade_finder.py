@@ -10,10 +10,8 @@ class TradeFinder:
     def __init__(self):
         self.trade_repository = TradeRepository()
 
-    def pick_best_trade(self, df: pd.DataFrame):
-        print(df)
-
-        return False
+    def pick_best_option(self, df: pd.DataFrame):
+        return df.tail(1)
 
     def trade_between(
             self,

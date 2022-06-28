@@ -1,4 +1,5 @@
 import sys
+import json
 import tensorflow as tf
 import numpy as np
 import pandas as pd
@@ -12,11 +13,12 @@ from src.service.predictor_unseen import data_load_parallel_all, make_prediction
 np.set_printoptions(precision=4)
 pd.set_option("display.precision", 4)
 
+reporter = Reporter()
+trade_finder = TradeFinder()
+
 interval = sys.argv[1]
 start_at = datetime.now()
 data = []
-reporter = Reporter()
-trade_finder = TradeFinder()
 
 # --------
 
@@ -37,11 +39,10 @@ time_prediction = datetime.now() - start_at
 
 # --------
 
-
 df = reporter.build_report(data=data)
 reporter.render_console_table(df)
 
-trade_finder.pick_best_trade(df)
+trade_finder.pick_best_option(df)
 
 print(f'start: {start_at}')
 print(f'interval: {interval}')

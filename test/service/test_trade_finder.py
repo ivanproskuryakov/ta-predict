@@ -1,7 +1,10 @@
+import json
+import pandas as pd
 from datetime import timedelta
 
 from src.service.trade_finder import TradeFinder
 from src.fixture.trade import trade_create_buy
+from src.service.reporter import Reporter
 
 
 def test_find_trade_positive():
@@ -26,3 +29,34 @@ def test_find_trade_negative():
     trade = trade_finder.trade_between(time_from, time_end)
 
     assert trade is None
+
+
+def test_pick_best_trade():
+    reporter = Reporter()
+    trade_finder = TradeFinder()
+
+    assets = [
+        'BTC',
+        'ETH',
+        'IOTA',
+        'ONT',
+        'TUSD',
+        'XLM',
+    ]
+    data = []
+
+    for asset in assets:
+        file = open(f'test/fixture/prediction/prediction_{asset}_x_df.json', 'r')
+        x_df = pd.DataFrame.from_dict(json.loads(file.read()))
+        file = open(f'test/fixture/prediction/prediction_{asset}_y_df.json', 'r')
+        y_df = pd.DataFrame.from_dict(json.loads(file.read()))
+        file = open(f'test/fixture/prediction/prediction_{asset}_last_item.json', 'r')
+        last_item = json.loads(file.read())
+
+        data.append((asset, last_item, x_df, y_df))
+
+    df = reporter.build_report(data=data)
+
+    best = trade_finder.pick_best_option(df)
+
+    assert best.iloc[-1]['asset'] == 'BTC'
