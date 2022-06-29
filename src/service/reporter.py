@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 from tabulate import tabulate
 
-from src.service.util import diff_percentage
+from src.service.util import diff_percentage, paint_diff
 
 
 def render_console_table(report):
@@ -44,7 +44,7 @@ def render_console_table(report):
 
         data.append([
             asset,
-            diff,
+            paint_diff(diff),
             x2["trades"],
             x2["volume"],
             volume_market,

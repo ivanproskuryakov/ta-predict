@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import ray
+import concurrent.futures
 
 from sklearn.preprocessing import MinMaxScaler
 from src.service.dataset_builder_realtime import build_dataset, build_dataset_down
@@ -31,18 +31,6 @@ def make_prediction_ohlc_close(x_df, model):
     return y_df
 
 
-@ray.remote
-def data_load_remote(asset: str, market: str, interval: str, df_down: pd.DataFrame):
-    data, last_item = build_dataset(
-        market=market,
-        asset=asset,
-        interval=interval,
-        df_down=df_down
-    )
-
-    return asset, data, last_item
-
-
 def data_load_down(market: str, interval: str):
     dfs = []
 
@@ -60,11 +48,19 @@ def data_load_down(market: str, interval: str):
 
 
 def data_load_parallel_all(assets: [], market: str, interval: str):
-    fns = []
+    res = []
+    futures = []
 
     df_down = data_load_down(market=market, interval=interval)
 
-    for asset in assets:
-        fns.append(data_load_remote.remote(asset, market, interval, df_down))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
+        for asset in assets:
+            futures.append(
+                executor.submit(build_dataset, market, asset, interval, df_down)
+            )
 
-    return ray.get(fns)
+        for i in range(len(assets)):
+            data, last_item = futures[i].result()
+            res.append((assets[i], data, last_item))
+
+    return res

@@ -13,9 +13,9 @@ def diff_percentage(v2, v1):
 
 def paint_diff(diff: float):
     color = f'{diff:.4f}'
-    #
-    # if diff > 1:
-    #     color = chalk.green(f'{diff:.4f}%')
+
+    if diff > 0:
+        color = chalk.green(f'{diff:.4f}%')
     # if diff < -1:
     #     color = chalk.red(f'{diff:.4f}%')
 

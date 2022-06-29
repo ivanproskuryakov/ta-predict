@@ -2,6 +2,7 @@ import sys
 import tensorflow as tf
 import numpy as np
 import pandas as pd
+from datetime import datetime
 
 from src.parameters_usdt import market, assets
 from src.service.reporter import render_console_table
@@ -11,15 +12,14 @@ np.set_printoptions(precision=4)
 pd.set_option("display.precision", 4)
 
 interval = sys.argv[1]
+start_at = datetime.now()
+report = []
 
-model = tf.keras.models.load_model('model/gru-b.keras')
-
-print(interval)
-print("------------------------------------------------------------------------------------------")
+model = tf.keras.models.load_model('model/gru-a.keras')
 
 collection = data_load_parallel_all(assets=assets, market=market, interval=interval)
 
-report = []
+time_download = datetime.now() - start_at
 
 for data in collection:
     asset, x_df, last_item = data
@@ -28,4 +28,11 @@ for data in collection:
 
     report.append((asset, last_item, x_df, y_df))
 
+time_prediction = datetime.now() - start_at
+
 render_console_table(report)
+
+print(f'start: {start_at}')
+print(f'interval: {interval}')
+print(f'download: {time_download}')
+print(f'prediction: {time_prediction}')
