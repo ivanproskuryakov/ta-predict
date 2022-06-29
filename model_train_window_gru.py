@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from keras.layers import Dense, GRU, Dropout
+from keras.layers import Dense, GRU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 from src.service.dataset_builder_db import build_dataset_window_many
@@ -11,19 +11,19 @@ from src.parameters import market
 # ------------------------------------------------------------------------
 width = 100
 
-filepath_model = f'data/gru-a.keras'
-filepath_checkpoint = f'data/gru-a.checkpoint'
+filepath_model = f'data/gru-b.keras'
+filepath_checkpoint = f'data/gru-b.checkpoint'
 
 interval = '5m'
 assets = [
     'BTC',
-    # 'ETH',
+    'ETH',
     "BNB",
-    # "NEO",
+    "NEO",
     "LTC",
     "ADA",
     "XRP",
-    # "EOS",
+    "EOS",
 ]
 
 # Data load & train
@@ -45,8 +45,8 @@ print(f'training: {interval} {assets} {df_num_signals}')
 # ------------------------------------------------------------------------
 
 callback_early_stopping = EarlyStopping(
-    monitor='val_loss',
-    # monitor='mean_absolute_error',
+    # monitor='val_loss',
+    monitor='mean_absolute_error',
     patience=10,
     mode='min',
     verbose=1

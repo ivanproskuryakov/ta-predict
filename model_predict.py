@@ -12,7 +12,7 @@ pd.set_option("display.precision", 4)
 
 interval = sys.argv[1]
 
-model = tf.keras.models.load_model('model/gru-a.keras')
+model = tf.keras.models.load_model('model/gru-b.keras')
 
 print(interval)
 print("------------------------------------------------------------------------------------------")

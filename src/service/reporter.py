@@ -20,8 +20,8 @@ def render_console_table(report):
         "y1c",
         "y2c",
         "date",
-        "h",
-        "m",
+        # "h",
+        # "m",
         "url",
     ]
 
@@ -55,8 +55,8 @@ def render_console_table(report):
             f'{y2["close"]:.4f}',
 
             date.strftime("%Y %m %d %H:%M:%S"),
-            f'{x2["time_hour"]:.0f}',
-            f'{x2["time_minute"]:.0f}',
+            # f'{x2["time_hour"]:.0f}',
+            # f'{x2["time_minute"]:.0f}',
             f'https://www.binance.com/en/trade/{asset}_USDT',
         ])
 

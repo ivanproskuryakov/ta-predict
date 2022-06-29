@@ -34,10 +34,10 @@ def build_dataset(market: str, asset: str, interval: str, df_down: pd.DataFrame)
             item['price_low'],
             item['price_close'],
 
-            item['time_month'],
-            item['time_day'],
-            item['time_hour'],
-            item['time_minute'],
+            # item['time_month'],
+            # item['time_day'],
+            # item['time_hour'],
+            # item['time_minute'],
 
             item['trades'],
             item['volume'],
@@ -45,7 +45,7 @@ def build_dataset(market: str, asset: str, interval: str, df_down: pd.DataFrame)
             item['volume_maker'],
             item['quote_asset_volume'],
 
-            diff,
+            # diff,
         ])
 
     df_ohlc = pd.DataFrame(prepared, None, [
@@ -54,10 +54,10 @@ def build_dataset(market: str, asset: str, interval: str, df_down: pd.DataFrame)
         'low',
         'close',
 
-        'time_month',
-        'time_day',
-        'time_hour',
-        'time_minute',
+        # 'time_month',
+        # 'time_day',
+        # 'time_hour',
+        # 'time_minute',
 
         'trades',
         'volume',
@@ -65,7 +65,7 @@ def build_dataset(market: str, asset: str, interval: str, df_down: pd.DataFrame)
         'volume_maker',
         'quote_asset_volume',
 
-        'price_diff',
+        # 'price_diff',
     ])
 
     df = pd.concat([df_ohlc, df_down], axis=1)
