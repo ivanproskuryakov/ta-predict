@@ -1,13 +1,9 @@
-from binance import Client
-
 DB_ETHEREUM = '/home/ivan/.ethereum/geth/chaindata'
 DB_URL = {
     "dev": "postgresql://postgres:@localhost/ta_dev",
+    "test": "postgresql://postgres:@localhost/ta_test",
 }
 
-shift_steps = 4
-tail = 100
-sequence_length = 100
 ASSET = 'BTC'
 market = 'USDT'
 
@@ -357,24 +353,5 @@ assets = [
     "EPX",
 ]
 
-API_KEY = "y95Lhdr2WXTVCbD44gpDhcOHKQaUr1LVNIOFhk1SIhxq4nzCdVoLB0obXWLcyRio"
-API_SECRET = "nBmXWlMBreF5uttkRVDxKbEbYtByJiW322iUtGMUCvDsHha9k5tMRjKCSmZtHFsb"
-
-intervals = [
-    # Client.KLINE_INTERVAL_1MINUTE,
-    # Client.KLINE_INTERVAL_3MINUTE,
-    # Client.KLINE_INTERVAL_5MINUTE,
-    Client.KLINE_INTERVAL_15MINUTE,
-    # Client.KLINE_INTERVAL_30MINUTE,
-    #
-    # Client.KLINE_INTERVAL_1HOUR,
-    # Client.KLINE_INTERVAL_2HOUR,
-    # Client.KLINE_INTERVAL_4HOUR,
-]
-
-# INTERVAL = Client.KLINE_INTERVAL_1MINUTE
-# INTERVAL = Client.KLINE_INTERVAL_3MINUTE
-INTERVAL = Client.KLINE_INTERVAL_5MINUTE
-# INTERVAL = Client.KLINE_INTERVAL_15MINUTE
-# INTERVAL = Client.KLINE_INTERVAL_30MINUTE
-# INTERVAL = Client.KLINE_INTERVAL_1HOUR
+API_KEY = "3fsyKPDmwl0PbmaKxP7KcLMXmofKvMmhZLXyLbQTMmBz9cuk7j24fKR7ojCk4pnP"
+API_SECRET = "ql833Yws6Bx7yUHRRgDZzVffA8PIYbeqhxYLEGVFdjtNoF80kw8PtC41HOD3Ljxy"

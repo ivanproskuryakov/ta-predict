@@ -5,33 +5,50 @@ import pandas as pd
 from datetime import datetime
 
 from src.parameters_usdt import market, assets
-from src.service.reporter import render_console_table
+from src.service.reporter import Reporter
+from src.service.trade_finder import TradeFinder
 from src.service.predictor_unseen import data_load_parallel_all, make_prediction_ohlc_close
+
+# --------
 
 np.set_printoptions(precision=4)
 pd.set_option("display.precision", 4)
 
+reporter = Reporter()
+trade_finder = TradeFinder()
+
 interval = sys.argv[1]
 start_at = datetime.now()
-report = []
+data = []
+
+# --------
 
 model = tf.keras.models.load_model('model/gru-a.keras')
 
-collection = data_load_parallel_all(assets=assets, market=market, interval=interval)
+collection = data_load_parallel_all(
+    assets=assets,
+    market=market,
+    interval=interval
+)
 
 time_download = datetime.now() - start_at
 
-for data in collection:
-    asset, x_df, last_item = data
+for item in collection:
+    asset, x_df, last_item = item
 
     y_df = make_prediction_ohlc_close(x_df, model)
 
-    report.append((asset, last_item, x_df, y_df))
+    data.append((asset, last_item, x_df, y_df))
 
 time_prediction = datetime.now() - start_at
 
-render_console_table(report)
+# --------
 
+df = reporter.report_build(data=data)
+report = reporter.report_prettify(df)
+best = trade_finder.pick_best_option(df)
+
+print(report)
 print(f'start: {start_at}')
 print(f'interval: {interval}')
 print(f'download: {time_download}')
