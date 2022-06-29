@@ -16,7 +16,7 @@ class KLines:
 
         return self.round(avg)
 
-    def build_klines(self, market: str, asset: str, interval: str, start_at: int, end_at: int):
+    def build_klines(self, market: str, asset: str, interval: str, start_at: str, end_at: str):
         client = Client(
             api_key=API_KEY,
             api_secret=API_SECRET,
@@ -64,10 +64,7 @@ class KLines:
             volume_maker = self.round(float(current[9]), 0)
             volume_taker = self.round(volume - volume_maker, 1)
 
-            # avg_current = self.price_average(current)
             date = datetime.utcfromtimestamp(time_open)
-
-            # print(date.month, date.day, date.hour, date.minute)
 
             item = {
                 'price_open': price_open,

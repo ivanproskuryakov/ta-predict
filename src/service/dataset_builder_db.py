@@ -53,26 +53,3 @@ def build_dataset_window_many(market: str, assets: list[str], interval: str):
     validate = pd.concat(validate)
 
     return train, validate
-
-
-def build_dataset_random(market: str, asset: str, interval: str):
-    repository = OhlcRepository()
-
-    df_ohlc = repository.find_all_with_df(
-        exchange='binance',
-        market=market,
-        asset=asset,
-        interval=interval
-    )
-
-    df = df_ohlc.fillna(0)
-
-    # df_ta_na = estimate_ta_fill_na(df_na)
-
-    # Data Scaling
-    # ------------------------------------------------------------------------
-
-    scaler = MinMaxScaler()
-    scaled = scaler.fit_transform(df)
-
-    return pd.DataFrame(scaled, None, df.keys())

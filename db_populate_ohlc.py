@@ -9,7 +9,7 @@ market = 'USDT'
 # end_at = datetime.utcnow()
 # start_at = end_at - timedelta(365 * 8)  # 8 years
 
-start_at = '1404219084'
+start_at = '1656110684'
 end_at = '1656510684'
 
 repository = OhlcRepository()
