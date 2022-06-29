@@ -16,7 +16,7 @@ class KLines:
 
         return self.round(avg)
 
-    def build_klines(self, market: str, asset: str, interval: str, start_str: str):
+    def build_klines(self, market: str, asset: str, interval: str, start_at: int, end_at: int):
         client = Client(
             api_key=API_KEY,
             api_secret=API_SECRET,
@@ -45,7 +45,8 @@ class KLines:
         klines = client.get_historical_klines(
             symbol=symbol,
             interval=interval,
-            start_str=start_str
+            start_str=start_at,
+            end_str=end_at,
         )
         collection = []
 

@@ -38,6 +38,7 @@ train_df, validate_df = build_dataset_window_many(
 df_num_signals = train_df.shape[1]
 
 print(train_df.keys())
+exit()
 
 print(f'training: {interval} {assets} {df_num_signals}')
 
