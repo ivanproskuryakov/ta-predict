@@ -12,6 +12,7 @@ from src.parameters_btc import assets_btc
 
 class OhlcRepository:
     connection: Connection
+    df_len: [int] = []
 
     def __init__(self):
         self.connection = db_connect()
@@ -20,6 +21,9 @@ class OhlcRepository:
         with Session(self.connection) as session:
             session.add(ohlc)
             session.commit()
+
+    def get_df_len_min(self) -> int:
+        return min(self.df_len)
 
     def find_down_df(
             self,
@@ -34,6 +38,7 @@ class OhlcRepository:
                 asset=asset,
                 interval=interval
             )
+            self.df_len.append(len(df))
             dfs.append(df)
 
         df = pd.concat(dfs, axis=1)
@@ -54,6 +59,7 @@ class OhlcRepository:
                 asset=asset,
                 interval=interval
             )
+            self.df_len.append(len(df))
             dfs.append(df)
 
         df = pd.concat(dfs, axis=1)

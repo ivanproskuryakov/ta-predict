@@ -38,9 +38,6 @@ train_df, validate_df = dataset_builder_db.build_dataset_all(
 
 df_num_signals = train_df.shape[1]
 
-print(train_df.keys())
-exit()
-
 print(f'training: {interval} {assets} {df_num_signals}')
 
 # Model definition

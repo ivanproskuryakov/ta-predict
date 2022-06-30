@@ -7,8 +7,11 @@ from src.repository.ohlc_repository import OhlcRepository
 
 class DatasetBuilderDB:
     repository: OhlcRepository
+    scaler: MinMaxScaler
+    exchange: str = 'binance'
 
     def __init__(self):
+        self.scaler = MinMaxScaler()
         self.repository = OhlcRepository()
 
     def build_dataset_all(self, market: str, assets: list[str], interval: str) -> [
@@ -38,30 +41,32 @@ class DatasetBuilderDB:
         pd.DataFrame
     ]:
         df_ohlc = self.repository.get_df_full_desc(
-            exchange='binance',
+            exchange=self.exchange,
             market=market,
             asset=asset,
             interval=interval
         )
         df_down = self.repository.find_down_df(
-            exchange='binance',
+            exchange=self.exchange,
             interval=interval
         )
         df_btc = self.repository.get_df_btc_desc(
-            exchange='binance',
+            exchange=self.exchange,
             asset=asset,
             interval=interval
         )
+        min_len = self.repository.get_df_len_min()
 
         df = pd.concat([df_ohlc, df_down, df_btc], axis=1)
 
-        df_ta_na = estimate_ta_fill_na(df)
+        df_min = df[0:min_len]
+
+        df_ta_na = estimate_ta_fill_na(df_min)
 
         # Data Scaling
         # ------------------------------------------------------------------------
 
-        scaler = MinMaxScaler()
-        scaled = scaler.fit_transform(df_ta_na)
+        scaled = self.scaler.fit_transform(df_ta_na)
 
         df = pd.DataFrame(scaled, None, df_ta_na.keys())
 
