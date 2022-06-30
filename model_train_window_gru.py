@@ -3,9 +3,11 @@ import tensorflow as tf
 from keras.layers import Dense, GRU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
-from src.service.dataset_builder_db import build_dataset_window_many
+from src.service.dataset_builder_db import DatasetBuilderDB
 from src.service.generator_window import WindowGenerator
 from src.parameters import market
+
+dataset_builder_db = DatasetBuilderDB()
 
 # Variables
 # ------------------------------------------------------------------------
@@ -28,8 +30,7 @@ assets = [
 
 # Data load & train
 # ------------------------------------------------------------------------
-
-train_df, validate_df = build_dataset_window_many(
+train_df, validate_df = dataset_builder_db.build_dataset_all(
     market=market,
     assets=assets,
     interval=interval
@@ -95,14 +96,6 @@ window = WindowGenerator(
         # 'high',
         # 'low',
         'close',
-
-        # 'trades',
-        # 'volume',
-        # 'volume_taker',
-        # 'volume_maker',
-        # 'quote_asset_volume',
-        #
-        # 'diff',
     ],
     train_df=train_df,
     val_df=validate_df,

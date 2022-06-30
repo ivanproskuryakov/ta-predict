@@ -2,16 +2,16 @@ import numpy as np
 import pandas as pd
 
 from sqlalchemy.orm import Session
+from sqlalchemy.engine import Connection
 
 from src.entity.ohlc import Ohlc
 from src.connector.db_connector import db_connect
 from src.parameters import assets_down
+from src.parameters_btc import assets_btc
 
-
-# https://docs.sqlalchemy.org/en/14/orm/session_basics.html
 
 class OhlcRepository:
-    connection = None
+    connection: Connection
 
     def __init__(self):
         self.connection = db_connect()
@@ -21,48 +21,45 @@ class OhlcRepository:
             session.add(ohlc)
             session.commit()
 
-    def find_all_with_df(
+    def find_down_df(
             self,
             exchange: str,
-            market: str,
-            asset: str,
             interval: str,
-    ):
+    ) -> pd.DataFrame:
         dfs = []
-        df = self.get_df_full_desc(
-            exchange=exchange,
-            market=market,
-            asset=asset,
-            interval=interval
-        )
-        dfs.append(df)
-
-        # print(len(df))
 
         for asset in assets_down:
-            df = self.get_df_ohlc_desc(
+            df = self.get_df_down_desc(
                 exchange=exchange,
-                market=market,
                 asset=asset,
                 interval=interval
             )
             dfs.append(df)
 
-        df_final = pd.concat(dfs, axis=1)
-        df_final_asc = df_final[::-1]
+        df = pd.concat(dfs, axis=1)
+        df = df[::-1]
 
-        # print(len(df_final_asc))
-        #
-        # exit()
+        return df
 
-        # .reset_index()
-        # df_final_asc_index = df_final[::-1].reset_index()
-        #
-        # print(df_final)
-        # print(df_final_asc)
-        # print(df_final_asc_index)
+    def find_market_btc(
+            self,
+            exchange: str,
+            interval: str,
+    ) -> pd.DataFrame:
+        dfs = []
 
-        return df_final_asc
+        for asset in assets_btc:
+            df = self.get_df_btc_desc(
+                exchange=exchange,
+                asset=asset,
+                interval=interval
+            )
+            dfs.append(df)
+
+        df = pd.concat(dfs, axis=1)
+        df = df[::-1]
+
+        return df
 
     def create_many(
             self,
@@ -109,14 +106,14 @@ class OhlcRepository:
             session.add_all(data)
             session.commit()
 
-    def get_df_ohlc_desc(
+    def get_df_down_desc(
             self,
             exchange: str,
             asset: str,
-            market: str,
             interval: str,
 
     ):
+        market = 'USDT'
         session = Session(bind=self.connection)
 
         sql = session.query(
@@ -129,9 +126,39 @@ class OhlcRepository:
             Ohlc.volume.label(f'volume_{asset}'),
             Ohlc.volume_taker.label(f'volume_taker_{asset}'),
             Ohlc.volume_maker.label(f'volume_maker_{asset}'),
+
             # Ohlc.quote_asset_volume.label(f'quote_asset_volume_{asset}'),
-            #
             # Ohlc.price_diff.label(f'price_diff{asset}'),
+        ) \
+            .filter(Ohlc.exchange == exchange) \
+            .filter(Ohlc.market == market) \
+            .filter(Ohlc.interval == interval) \
+            .filter(Ohlc.asset == asset) \
+            .order_by(Ohlc.time_open.desc()) \
+            .statement
+
+        df = pd.read_sql(
+            sql=sql,
+            con=self.connection
+        )
+
+        return df
+
+    def get_df_btc_desc(
+            self,
+            exchange: str,
+            asset: str,
+            interval: str,
+    ):
+        market = 'BTC'
+        session = Session(bind=self.connection)
+
+        sql = session.query(
+            Ohlc.price_open.label(f'open_{market}_{asset}'),
+            Ohlc.price_close.label(f'close_{market}_{asset}'),
+
+            Ohlc.trades.label(f'trades_{market}_{asset}'),
+
         ) \
             .filter(Ohlc.exchange == exchange) \
             .filter(Ohlc.market == market) \
@@ -153,7 +180,6 @@ class OhlcRepository:
             market: str,
             asset: str,
             interval: str,
-
     ):
         session = Session(bind=self.connection)
 
@@ -163,10 +189,10 @@ class OhlcRepository:
             Ohlc.price_low.label('low'),
             Ohlc.price_close.label('close'),
 
-            # Ohlc.time_month,
-            # Ohlc.time_day,
-            # Ohlc.time_hour,
-            # Ohlc.time_minute,
+            Ohlc.time_month,
+            Ohlc.time_day,
+            Ohlc.time_hour,
+            Ohlc.time_minute,
 
             Ohlc.trades,
             Ohlc.volume,
@@ -174,8 +200,7 @@ class OhlcRepository:
             Ohlc.volume_maker,
             Ohlc.quote_asset_volume,
 
-            # Ohlc.price_diff,
-
+            Ohlc.price_diff,
         ) \
             .filter(Ohlc.exchange == exchange) \
             .filter(Ohlc.market == market) \

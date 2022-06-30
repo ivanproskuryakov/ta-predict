@@ -2,57 +2,61 @@ from datetime import datetime, timedelta
 
 from src.repository.ohlc_repository import OhlcRepository
 from src.service.klines import KLines
-
-exchange = 'binance'
-market = 'USDT'
+from src.parameters import assets_down
+from src.parameters_btc import assets_btc
 
 # end_at = datetime.utcnow()
 # start_at = end_at - timedelta(365 * 8)  # 8 years
 
-start_at = '1656110684'
-end_at = '1656510684'
-
 repository = OhlcRepository()
 klines = KLines()
 
-interval = '5m'
-assets = [
-    'BTC',
-    "BNB",
-    "NEO",
-    "LTC",
-    "ADA",
-    "XRP",
-    "EOS",
+start_at = '1650000000'
+end_at = '1656110684'
 
-    "BTCUP",
-    "BTCDOWN",
-    "ETHUP",
-    "ETHDOWN",
-    "ADAUP",
-    "ADADOWN",
-    "LINKUP",
-    "LINKDOWN",
-    "BNBUP",
-    "BNBDOWN",
-    "TRXUP",
-    "TRXDOWN",
-    "XRPUP",
-    "XRPDOWN",
-    "DOTUP",
-    "DOTDOWN",
+exchange = 'binance'
+interval = '5m'
+groups = [
+    {
+        "market": 'USDT',
+        "assets": [
+            'BTC',
+            "BNB",
+            "NEO",
+            "LTC",
+            "ADA",
+            "XRP",
+            "EOS",
+        ]
+    },
+    {
+        "market": 'USDT',
+        "assets": assets_down
+    },
+    {
+        "market": 'BTC',
+        "assets": assets_btc
+    }
 ]
 
-for asset in assets:
-    print(f'processing: {asset} {interval}')
-    collection = klines.build_klines(
-        market,
-        asset,
-        interval,
-        start_at,
-        end_at,
-    )
+for group in groups:
+    for asset in group["assets"]:
+        print(f'processing: {asset} {group["market"]} {interval}')
 
-    print(len(collection))
+        collection = klines.build_klines(
+            group["market"],
+            asset,
+            interval,
+            start_at,
+            end_at,
+        )
 
-    repository.create_many(exchange, market, asset, interval, collection)
+        print(len(collection))
+
+        repository.create_many(
+            exchange,
+            group["market"],
+            asset,
+            interval,
+            collection
+        )
