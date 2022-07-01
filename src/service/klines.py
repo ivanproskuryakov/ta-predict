@@ -1,20 +1,16 @@
-import numpy as np
 import datetime
 from binance import Client
 from datetime import datetime
 
 from src.parameters import API_KEY, API_SECRET
-from src.service.util import diff_percentage
+from src.service.util import diff_percentage, round
 
 
 class KLines:
-    def round(self, n: float, decimals=10):
-        return np.round(float(n), decimals)
-
     def price_average(self, k: float):
         avg = (float(k[1]) + float(k[2]) + float(k[3]) + float(k[4])) / 4
 
-        return self.round(avg)
+        return round(avg)
 
     def build_klines(self, market: str, asset: str, interval: str, start_at: str, end_at: str):
         client = Client(
@@ -52,17 +48,17 @@ class KLines:
 
         for current in klines:
             time_open = current[0] / 1000
-            price_open = self.round(current[1], 10)
-            price_high = self.round(current[2], 10)
-            price_low = self.round(current[3], 10)
-            price_close = self.round(current[4], 10)
-            volume = self.round(float(current[5]), 1)
+            price_open = round(current[1], 10)
+            price_high = round(current[2], 10)
+            price_low = round(current[3], 10)
+            price_close = round(current[4], 10)
+            volume = round(float(current[5]), 1)
             time_close = current[6] / 1000
 
-            quote_asset_volume = self.round(float(current[7]), 0)
-            trades = self.round(float(current[8]), 0)
-            volume_maker = self.round(float(current[9]), 0)
-            volume_taker = self.round(volume - volume_maker, 1)
+            quote_asset_volume = round(float(current[7]), 0)
+            trades = round(float(current[8]), 0)
+            volume_maker = round(float(current[9]), 0)
+            volume_taker = round(volume - volume_maker, 1)
 
             date = datetime.utcfromtimestamp(time_open)
 

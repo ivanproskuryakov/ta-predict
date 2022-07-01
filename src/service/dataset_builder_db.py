@@ -1,6 +1,6 @@
 import pandas as pd
-
 from sklearn.preprocessing import MinMaxScaler
+
 from src.service.estimator import estimate_ta_fill_na
 from src.repository.ohlc_repository import OhlcRepository
 
@@ -14,7 +14,14 @@ class DatasetBuilderDB:
         self.scaler = MinMaxScaler()
         self.repository = OhlcRepository()
 
-    def build_dataset_all(self, market: str, assets: list[str], interval: str) -> [
+    def build_dataset_all(
+            self,
+            market: str,
+            assets: list[str],
+            assets_down: list[str],
+            assets_btc: list[str],
+            interval: str
+    ) -> [
         pd.DataFrame,
         pd.DataFrame
     ]:
@@ -24,6 +31,8 @@ class DatasetBuilderDB:
         for asset in assets:
             df_train, df_validate = self.build_dataset_asset(
                 asset=asset,
+                assets_down=assets_down,
+                assets_btc=assets_btc,
                 market=market,
                 interval=interval
             )
@@ -36,11 +45,18 @@ class DatasetBuilderDB:
 
         return train, validate
 
-    def build_dataset_asset(self, market: str, asset: str, interval: str) -> [
+    def build_dataset_asset(
+            self,
+            market: str,
+            asset: str,
+            assets_down: list[str],
+            assets_btc: list[str],
+            interval: str
+    ) -> [
         pd.DataFrame,
         pd.DataFrame
     ]:
-        df_ohlc = self.repository.get_df_full_desc(
+        df_ohlc = self.repository.get_full_df(
             exchange=self.exchange,
             market=market,
             asset=asset,
@@ -48,13 +64,15 @@ class DatasetBuilderDB:
         )
         df_down = self.repository.find_down_df(
             exchange=self.exchange,
+            assets_down=assets_down,
             interval=interval
         )
-        df_btc = self.repository.get_df_btc_desc(
+        df_btc = self.repository.find_btc_df(
             exchange=self.exchange,
-            asset=asset,
+            assets_btc=assets_btc,
             interval=interval
         )
+
         min_len = self.repository.get_df_len_min()
 
         df = pd.concat([df_ohlc, df_down, df_btc], axis=1)

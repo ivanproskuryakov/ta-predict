@@ -1,5 +1,3 @@
-import json
-import pandas as pd
 from datetime import timedelta
 
 from src.service.trade_finder import TradeFinder
