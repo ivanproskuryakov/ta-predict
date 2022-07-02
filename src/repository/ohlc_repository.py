@@ -100,6 +100,8 @@ class OhlcRepository:
                 asset=asset,
                 interval=interval
             )
+            # print(asset)
+            # print(df)
             self.df_len.append(len(df))
             dfs.append(df)
 

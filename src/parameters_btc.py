@@ -10,7 +10,6 @@ assets_btc = [
     'DOGE',
     'DOT',
     'SOL',
-    'TRX',
     'EOS',
     'AVAX',
     'XLM',

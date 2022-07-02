@@ -75,10 +75,11 @@ class DatasetBuilderDB:
 
         min_len = self.repository.get_df_len_min()
 
-        # print('minimum length', min_len)
-        # print(df_ohlc)
-        # print(df_down)
-        # print(df_btc)
+        # `print`('minimum length', min_len)
+        # print(len(df_ohlc))
+        # print(len(df_down))
+        # print(len(df_btc))
+        # print(min_len)
 
         if len(df_ohlc) != min_len or len(df_down) != min_len or len(df_btc) != min_len:
             raise Exception("Data frame lengths are not equal")
