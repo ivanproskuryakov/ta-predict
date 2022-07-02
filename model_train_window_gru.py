@@ -5,7 +5,8 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 from src.service.dataset_builder_db import DatasetBuilderDB
 from src.service.generator_window import WindowGenerator
-from src.parameters import market
+from src.parameters import market, assets, assets_down
+from src.parameters_btc import assets_btc
 
 dataset_builder_db = DatasetBuilderDB()
 
@@ -17,22 +18,14 @@ filepath_model = f'data/gru-b.keras'
 filepath_checkpoint = f'data/gru-b.checkpoint'
 
 interval = '5m'
-assets = [
-    'BTC',
-    'ETH',
-    "BNB",
-    "NEO",
-    "LTC",
-    "ADA",
-    "XRP",
-    "EOS",
-]
 
 # Data load & train
 # ------------------------------------------------------------------------
 train_df, validate_df = dataset_builder_db.build_dataset_all(
     market=market,
     assets=assets,
+    assets_down=assets_down,
+    assets_btc=assets_btc,
     interval=interval
 )
 

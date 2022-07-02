@@ -18,8 +18,6 @@ ENV=dev python model_train.py
 ENV=dev python model_predict.py 15m
 python model_plot.py
 
-python -m pytest test/
-
 ```
 
 ### Postgres

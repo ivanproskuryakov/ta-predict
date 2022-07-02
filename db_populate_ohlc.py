@@ -1,8 +1,6 @@
-from datetime import datetime, timedelta
-
 from src.repository.ohlc_repository import OhlcRepository
 from src.service.klines import KLines
-from src.parameters import assets_down
+from src.parameters import assets_down, assets
 from src.parameters_btc import assets_btc
 
 # end_at = datetime.utcnow()
@@ -11,7 +9,7 @@ from src.parameters_btc import assets_btc
 repository = OhlcRepository()
 klines = KLines()
 
-start_at = '1650000000'
+start_at = '1610000000'
 end_at = '1656110684'
 
 exchange = 'binance'
@@ -19,15 +17,7 @@ interval = '5m'
 groups = [
     {
         "market": 'USDT',
-        "assets": [
-            'BTC',
-            "BNB",
-            "NEO",
-            "LTC",
-            "ADA",
-            "XRP",
-            "EOS",
-        ]
+        "assets": assets
     },
     {
         "market": 'USDT',

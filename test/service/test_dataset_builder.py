@@ -20,7 +20,7 @@ def test_build_dataset_all():
         'BTCUP',
         'BTCDOWN',
         'ETHUP',
-        'ETHDOWN',
+        'BNBUP',
     ]
     assets_btc = [
         'ETH',
@@ -33,7 +33,7 @@ def test_build_dataset_all():
     crate_ohlc_many(asset='BTCUP', market='USDT', interval='5m', tail_quantity=9)
     crate_ohlc_many(asset='BTCDOWN', market='USDT', interval='5m', tail_quantity=8)
     crate_ohlc_many(asset='ETHUP', market='USDT', interval='5m', tail_quantity=7)
-    crate_ohlc_many(asset='ETHDOWN', market='USDT', interval='5m', tail_quantity=6)
+    crate_ohlc_many(asset='BNBUP', market='USDT', interval='5m', tail_quantity=6)
 
     # BTC market
     crate_ohlc_many(asset='ETH', market='BTC', interval='5m', tail_quantity=5)
@@ -47,13 +47,19 @@ def test_build_dataset_all():
         interval='5m',
     )
 
-    assert train['open'].iloc[0] == 10000.0
-    assert train['open'].iloc[2] == 10002.0
-    assert train['open'].iloc[3] == 10000.0
-    assert train['open'].iloc[5] == 10002.0
+    # print(train.keys())
+    # print(len(train.keys()))
 
-    assert validate['open'].iloc[0] == 10003.0
-    assert validate['open'].iloc[1] == 10003.0
+    # print(train)
+
+    assert train['open'].iloc[0] == 0.0
+    assert train['open'].iloc[1] == 0.3333333333334849
+    assert train['open'].iloc[2] == 0.6666666666669698
+    # assert train['open'].iloc[3] == 10000.0
+    # assert train['open'].iloc[5] == 10002.0
+
+    assert validate['open'].iloc[0] == 1
+    assert validate['open'].iloc[1] == 1
 
     assert len(train) == 6
     assert len(train.keys()) == 86

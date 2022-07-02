@@ -105,6 +105,11 @@ class OhlcRepository:
 
         df = pd.concat(dfs, axis=1)
 
+        # print(df)
+        # print(self.df_len)
+        # print(assets_btc)
+        # exit()
+
         return df
 
     def get_down_asset_desc(
