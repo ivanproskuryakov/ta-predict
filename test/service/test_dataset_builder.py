@@ -26,18 +26,18 @@ def test_build_dataset_all():
         'ETH',
         'LTC',
     ]
-    for asset in assets:
-        crate_ohlc_many(asset=asset, market='USDT', interval='5m', quantity=10)
+    crate_ohlc_many(asset='BTC', market='USDT', interval='5m', tail_quantity=10)
+    crate_ohlc_many(asset='ETH', market='USDT', interval='5m', tail_quantity=10)
 
     # USDT market
-    crate_ohlc_many(asset='BTCUP', market='USDT', interval='5m', quantity=9)
-    crate_ohlc_many(asset='BTCDOWN', market='USDT', interval='5m', quantity=8)
-    crate_ohlc_many(asset='ETHUP', market='USDT', interval='5m', quantity=7)
-    crate_ohlc_many(asset='ETHDOWN', market='USDT', interval='5m', quantity=6)
+    crate_ohlc_many(asset='BTCUP', market='USDT', interval='5m', tail_quantity=9)
+    crate_ohlc_many(asset='BTCDOWN', market='USDT', interval='5m', tail_quantity=8)
+    crate_ohlc_many(asset='ETHUP', market='USDT', interval='5m', tail_quantity=7)
+    crate_ohlc_many(asset='ETHDOWN', market='USDT', interval='5m', tail_quantity=6)
 
     # BTC market
-    crate_ohlc_many(asset='ETH', market='BTC', interval='5m', quantity=5)
-    crate_ohlc_many(asset='LTC', market='BTC', interval='5m', quantity=4)
+    crate_ohlc_many(asset='ETH', market='BTC', interval='5m', tail_quantity=5)
+    crate_ohlc_many(asset='LTC', market='BTC', interval='5m', tail_quantity=4)
 
     train, validate = builder.build_dataset_all(
         market='USDT',
@@ -47,8 +47,15 @@ def test_build_dataset_all():
         interval='5m',
     )
 
+    assert train['open'].iloc[0] == 10000.0
+    assert train['open'].iloc[2] == 10002.0
+    assert train['open'].iloc[3] == 10000.0
+    assert train['open'].iloc[5] == 10002.0
+
+    assert validate['open'].iloc[0] == 10003.0
+    assert validate['open'].iloc[1] == 10003.0
+
     assert len(train) == 6
     assert len(train.keys()) == 86
-
     assert len(validate) == 2
-    assert len(train.keys()) == 86
+    assert len(validate.keys()) == 86

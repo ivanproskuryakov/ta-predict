@@ -3,27 +3,29 @@ import pandas as pd
 from datetime import datetime
 from src.repository.ohlc_repository import OhlcRepository
 from src.service.util import diff_percentage
-from src.service.util import round
 
 
-def crate_ohlc_many(asset: str, market: str, interval: str, quantity: int) -> pd.DataFrame:
+def crate_ohlc_many(asset: str, market: str, interval: str, tail_quantity: int) -> pd.DataFrame:
     ohlc_repository = OhlcRepository()
 
     collection = []
     time_open = 1650011400
     time_close = 1650011400
 
-    for i in range(quantity):
-        price_open = round(10000, 10)
-        price_high = round(10000, 10)
-        price_low = round(10000, 10)
-        price_close = round(10000, 10)
+    for i in range(10):
+        price_open = 10000 + i
+        price_high = 10000 + i
+        price_low = 10000 + i
+        price_close = 10000 + i
 
-        volume = round(10000, 0)
-        quote_asset_volume = round(10000, 0)
-        trades = round(10000, 0)
-        volume_maker = round(10000, 0)
-        volume_taker = round(10000, 0)
+        volume = 1 + i
+        quote_asset_volume = 1
+        trades = 1
+        volume_maker = 1
+        volume_taker = 1
+
+        time_open = time_open + 5 * 60 * i
+        time_close = time_close + 5 * 60 * i
 
         date = datetime.utcfromtimestamp(time_open)
 
@@ -51,6 +53,9 @@ def crate_ohlc_many(asset: str, market: str, interval: str, quantity: int) -> pd
         }
 
         collection.append(item)
+
+    collection = collection[-tail_quantity:]
+    # print(collection)
 
     df = ohlc_repository.create_many(
         exchange='binance',

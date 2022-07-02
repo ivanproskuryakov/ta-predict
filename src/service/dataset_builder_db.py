@@ -75,18 +75,27 @@ class DatasetBuilderDB:
 
         min_len = self.repository.get_df_len_min()
 
+        # print('...', min_len)
+        # print(df_down)
+        # print(df_btc)
+
         df = pd.concat([df_ohlc, df_down, df_btc], axis=1)
 
-        df_min = df[0:min_len]
+        df_asc = df[::-1].reset_index(drop=True)
 
-        df_ta_na = estimate_ta_fill_na(df_min)
+        # print(df_asc)
+        # exit()
+
+        df_min = df_asc[0:min_len]
+
+        df = estimate_ta_fill_na(df_min)
 
         # Data Scaling
         # ------------------------------------------------------------------------
 
-        scaled = self.scaler.fit_transform(df_ta_na)
+        # scaled = self.scaler.fit_transform(df_ta_na)
 
-        df = pd.DataFrame(scaled, None, df_ta_na.keys())
+        # df = pd.DataFrame(scaled, None, df_ta_na.keys())
 
         # Data split
         # --------------------------------------------------------

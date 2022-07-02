@@ -83,7 +83,6 @@ class OhlcRepository:
             dfs.append(df)
 
         df = pd.concat(dfs, axis=1)
-        df = df[::-1]
 
         return df
 
@@ -95,8 +94,6 @@ class OhlcRepository:
     ) -> pd.DataFrame:
         dfs = []
 
-        # print(assets_btc)
-
         for asset in assets_btc:
             df = self.get_df_btc_desc(
                 exchange=exchange,
@@ -107,7 +104,6 @@ class OhlcRepository:
             dfs.append(df)
 
         df = pd.concat(dfs, axis=1)
-        df = df[::-1]
 
         return df
 
