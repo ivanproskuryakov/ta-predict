@@ -3,6 +3,7 @@ DB_URL = {
     'dev': 'postgresql://postgres:@localhost/ta_dev',
 }
 
+price_height = 10000
 market = 'USDT'
 
 assets = [

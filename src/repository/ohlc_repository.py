@@ -5,6 +5,7 @@ from sqlalchemy.engine import Connection
 
 from src.entity.ohlc import Ohlc
 from src.connector.db_connector import db_connect
+from src.service.util import diff_price
 
 
 class OhlcRepository:
@@ -100,15 +101,18 @@ class OhlcRepository:
                 asset=asset,
                 interval=interval
             )
+            price = df[f'open_BTC_{asset}'].iloc[-1]
+            diff = diff_price(price)
+
+            df[f'open_BTC_{asset}'] = df[f'open_BTC_{asset}'].apply(lambda x: x * diff)
+            df[f'close_BTC_{asset}'] = df[f'close_BTC_{asset}'].apply(lambda x: x * diff)
+
             self.df_len.append(len(df))
             dfs.append(df)
 
         df = pd.concat(dfs, axis=1)
 
-        # print(df)
-        # print(self.df_len)
-        # print(assets_btc)
-        # exit()
+        print(df)
 
         return df
 
