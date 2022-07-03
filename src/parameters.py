@@ -26,21 +26,20 @@ assets_down = [
     'BTCDOWN',
     'ETHUP',
 
-    # 'ETHDOWN',
-    # 'ADAUP',
-    # 'ADADOWN',
-    # 'LINKUP',
-    # 'LINKDOWN',
+    'ETHDOWN',
+    'ADAUP',
+    'ADADOWN',
+    'LINKUP',
+    'LINKDOWN',
 
     'BNBUP',
-
-    # 'BNBDOWN',
-    # 'TRXUP',
-    # 'TRXDOWN',
-    # 'XRPUP',
-    # 'XRPDOWN',
-    # 'DOTUP',
-    # 'DOTDOWN',
+    'BNBDOWN',
+    'TRXUP',
+    'TRXDOWN',
+    'XRPUP',
+    'XRPDOWN',
+    'DOTUP',
+    'DOTDOWN',
 ]
 
 API_KEY = '***REMOVED***'
