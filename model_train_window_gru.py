@@ -37,8 +37,8 @@ print(f'training: {interval} {assets} {df_num_signals}')
 # ------------------------------------------------------------------------
 
 callback_early_stopping = EarlyStopping(
-    # monitor='val_loss',
-    monitor='mean_absolute_error',
+    monitor='val_loss',
+    # monitor='mean_absolute_error',
     patience=10,
     mode='min',
     verbose=1
@@ -96,7 +96,7 @@ window = WindowGenerator(
 
 model.fit(
     window.train,
-    epochs=2,
+    epochs=50,
     validation_data=window.val,
     callbacks=[
         callback_early_stopping,
