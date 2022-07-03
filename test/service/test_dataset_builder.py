@@ -26,18 +26,19 @@ def test_build_dataset_all():
         'ETH',
         'LTC',
     ]
-    crate_ohlc_many(asset='BTC', market='USDT', interval='5m', tail_quantity=10)
-    crate_ohlc_many(asset='ETH', market='USDT', interval='5m', tail_quantity=10)
+
+    crate_ohlc_many(asset='BTC', market='USDT', interval='5m', quantity=10)
+    crate_ohlc_many(asset='ETH', market='USDT', interval='5m', quantity=10)
 
     # USDT market
-    crate_ohlc_many(asset='BTCUP', market='USDT', interval='5m', tail_quantity=9)
-    crate_ohlc_many(asset='BTCDOWN', market='USDT', interval='5m', tail_quantity=8)
-    crate_ohlc_many(asset='ETHUP', market='USDT', interval='5m', tail_quantity=7)
-    crate_ohlc_many(asset='BNBUP', market='USDT', interval='5m', tail_quantity=6)
+    crate_ohlc_many(asset='BTCUP', market='USDT', interval='5m', quantity=10)
+    crate_ohlc_many(asset='BTCDOWN', market='USDT', interval='5m', quantity=10)
+    crate_ohlc_many(asset='ETHUP', market='USDT', interval='5m', quantity=10)
+    crate_ohlc_many(asset='BNBUP', market='USDT', interval='5m', quantity=10)
 
     # BTC market
-    crate_ohlc_many(asset='ETH', market='BTC', interval='5m', tail_quantity=5)
-    crate_ohlc_many(asset='LTC', market='BTC', interval='5m', tail_quantity=4)
+    crate_ohlc_many(asset='ETH', market='BTC', interval='5m', quantity=10)
+    crate_ohlc_many(asset='LTC', market='BTC', interval='5m', quantity=10)
 
     train, validate = builder.build_dataset_all(
         market='USDT',
@@ -47,21 +48,14 @@ def test_build_dataset_all():
         interval='5m',
     )
 
-    # print(train.keys())
-    # print(len(train.keys()))
-
-    # print(train)
-
     assert train['open'].iloc[0] == 0.0
-    assert train['open'].iloc[1] == 0.3333333333334849
-    assert train['open'].iloc[2] == 0.6666666666669698
-    # assert train['open'].iloc[3] == 10000.0
-    # assert train['open'].iloc[5] == 10002.0
+    assert train['open'].iloc[1] == 0.11111111111108585
+    assert train['open'].iloc[2] == 0.2222222222221717
 
     assert validate['open'].iloc[0] == 1
     assert validate['open'].iloc[1] == 1
 
-    assert len(train) == 6
+    assert len(train) == 18
     assert len(train.keys()) == 86
     assert len(validate) == 2
     assert len(validate.keys()) == 86
