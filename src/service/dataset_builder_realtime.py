@@ -5,16 +5,20 @@ from src.service.klines import KLines
 from src.service.util import diff_percentage
 
 
-def build_dataset(market: str, asset: str, interval: str, df_down: pd.DataFrame):
+def build_dataset(
+        market: str, asset: str, interval: str, start_at: str,
+        df_down: pd.DataFrame,
+        df_btc: pd.DataFrame
+):
     klines = KLines()
-    start_at = '1 week ago UTC'
     prepared = []
 
     collection = klines.build_klines(
         market,
         asset,
         interval,
-        start_at
+        start_at,
+        # end_at
     )
 
     # file = open('data/ohlc.json', 'w')
@@ -25,8 +29,6 @@ def build_dataset(market: str, asset: str, interval: str, df_down: pd.DataFrame)
 
     for item in collection:
         diff = diff_percentage(item['price_close'], item['price_open'])
-
-        # print(item['time_month'], item['time_day'], item['time_hour'], item['time_minute'])
 
         prepared.append([
             item['price_open'],
@@ -68,15 +70,14 @@ def build_dataset(market: str, asset: str, interval: str, df_down: pd.DataFrame)
         'price_diff',
     ])
 
-    df = pd.concat([df_ohlc, df_down], axis=1)
+    df = pd.concat([df_ohlc, df_down, df_btc], axis=1)
     df = estimate_ta_fill_na(df)
 
     return df, item
 
 
-def build_dataset_down(market: str, asset: str, interval: str):
+def build_dataset_down(market: str, asset: str, interval: str, start_at: str):
     klines = KLines()
-    start_at = '1 week ago UTC'
     prepared = []
 
     collection = klines.build_klines(
@@ -109,6 +110,35 @@ def build_dataset_down(market: str, asset: str, interval: str):
         f'volume_{asset}',
         f'volume_taker_{asset}',
         f'volume_maker_{asset}',
+    ])
+
+    return df
+
+
+def build_dataset_btc(market: str, asset: str, interval: str, start_at: str):
+    klines = KLines()
+    prepared = []
+
+    collection = klines.build_klines(
+        market,
+        asset,
+        interval,
+        start_at
+    )
+
+    for item in collection:
+        prepared.append([
+            item['price_open'],
+            item['price_close'],
+
+            item['trades'],
+        ])
+
+    df = pd.DataFrame(prepared, None, [
+        f'open_{asset}',
+        f'close_{asset}',
+
+        f'trades_{asset}',
     ])
 
     return df

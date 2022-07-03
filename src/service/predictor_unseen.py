@@ -3,8 +3,9 @@ import pandas as pd
 import concurrent.futures
 
 from sklearn.preprocessing import MinMaxScaler
-from src.service.dataset_builder_realtime import build_dataset, build_dataset_down
+from src.service.dataset_builder_realtime import build_dataset, build_dataset_down, build_dataset_btc
 from src.parameters import assets_down
+from src.parameters_btc import assets_btc
 
 
 def make_prediction_ohlc_close(x_df, model):
@@ -31,7 +32,7 @@ def make_prediction_ohlc_close(x_df, model):
     return y_df
 
 
-def data_load_down(market: str, interval: str):
+def data_load_down(market: str, interval: str, start_at: str):
     dfs = []
 
     for asset in assets_down:
@@ -39,6 +40,24 @@ def data_load_down(market: str, interval: str):
             market=market,
             asset=asset,
             interval=interval,
+            start_at=start_at
+        )
+        dfs.append(df)
+
+    df_final = pd.concat(dfs, axis=1)
+
+    return df_final
+
+
+def data_load_btc(market: str, interval: str, start_at: str):
+    dfs = []
+
+    for asset in assets_btc:
+        df = build_dataset_btc(
+            market=market,
+            asset=asset,
+            interval=interval,
+            start_at=start_at,
         )
         dfs.append(df)
 
@@ -50,13 +69,20 @@ def data_load_down(market: str, interval: str):
 def data_load_parallel_all(assets: [], market: str, interval: str):
     res = []
     futures = []
+    start_at = '1 week ago UTC'
 
-    df_down = data_load_down(market=market, interval=interval)
+    df_down = data_load_down(market=market, interval=interval, start_at=start_at)
+    df_btc = data_load_btc(market=market, interval=interval, start_at=start_at)
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
         for asset in assets:
             futures.append(
-                executor.submit(build_dataset, market, asset, interval, df_down)
+                executor.submit(
+                    build_dataset, market, asset, interval,
+                    start_at,
+                    df_down,
+                    df_btc
+                )
             )
 
         for i in range(len(assets)):
