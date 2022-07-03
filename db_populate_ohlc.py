@@ -9,8 +9,8 @@ from src.parameters_btc import assets_btc
 repository = OhlcRepository()
 klines = KLines()
 
-start_at = '1590000000'
-end_at = '1660000000'
+start_at = '1610000000'
+end_at = '1656110684'
 
 exchange = 'binance'
 interval = '5m'
