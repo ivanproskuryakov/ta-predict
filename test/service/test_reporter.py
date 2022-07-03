@@ -11,4 +11,6 @@ def test_report_prettify():
 
     report = reporter.report_prettify(df)
 
-    assert len(report) == 1296
+    pos = report.find('volume_market')
+
+    assert pos == 40

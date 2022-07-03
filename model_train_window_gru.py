@@ -96,7 +96,7 @@ window = WindowGenerator(
 
 model.fit(
     window.train,
-    epochs=50,
+    epochs=2,
     validation_data=window.val,
     callbacks=[
         callback_early_stopping,

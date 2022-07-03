@@ -12,7 +12,14 @@ class KLines:
 
         return round(avg)
 
-    def build_klines(self, market: str, asset: str, interval: str, start_at: str, end_at: str):
+    def build_klines(
+            self,
+            market: str,
+            asset: str,
+            interval: str,
+            start_at: str,
+            end_at: str = None,
+    ):
         client = Client(
             api_key=API_KEY,
             api_secret=API_SECRET,

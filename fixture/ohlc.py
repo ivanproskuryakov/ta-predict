@@ -5,14 +5,14 @@ from src.repository.ohlc_repository import OhlcRepository
 from src.service.util import diff_percentage
 
 
-def crate_ohlc_many(asset: str, market: str, interval: str, price: float, tail_quantity: int) -> pd.DataFrame:
+def crate_ohlc_many(asset: str, market: str, interval: str, price: float, quantity: int) -> pd.DataFrame:
     ohlc_repository = OhlcRepository()
 
     collection = []
     time_open = 1650011400
     time_close = 1650011400
 
-    for i in range(10):
+    for i in range(quantity):
         price_open = price + i
         price_high = price + i
         price_low = price + i
@@ -53,9 +53,6 @@ def crate_ohlc_many(asset: str, market: str, interval: str, price: float, tail_q
         }
 
         collection.append(item)
-
-    collection = collection[-tail_quantity:]
-    # print(collection)
 
     df = ohlc_repository.create_many(
         exchange='binance',
