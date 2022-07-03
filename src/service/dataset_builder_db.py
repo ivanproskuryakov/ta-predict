@@ -75,26 +75,12 @@ class DatasetBuilderDB:
 
         min_len = self.repository.get_df_len_min()
 
-        # `print`('minimum length', min_len)
-        # print(len(df_ohlc))
-        # print(len(df_down))
-        # print(len(df_btc))
-        # print(min_len)
-
         if len(df_ohlc) != min_len or len(df_down) != min_len or len(df_btc) != min_len:
             raise Exception("Data frame lengths are not equal")
 
         df = pd.concat([df_ohlc, df_down, df_btc], axis=1)
 
         df_asc = df[::-1].reset_index(drop=True)
-
-        # print(df_asc)
-        # exit()
-
-        # df_min = df_asc[0:min_len]
-
-        # print(asset)
-        # print(df_min)
 
         df_ta_na = estimate_ta_fill_na(df_asc)
 

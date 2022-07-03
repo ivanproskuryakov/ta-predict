@@ -5,9 +5,13 @@ import pandas as pd
 from datetime import datetime
 
 from src.parameters_usdt import market, assets
+from src.parameters_btc import assets_btc
+from src.parameters import assets_down
+
 from src.service.reporter import Reporter
 from src.service.trade_finder import TradeFinder
-from src.service.predictor_unseen import data_load_parallel_all, make_prediction_ohlc_close
+from src.service.dataset_builder_api import build_dataset_all
+from src.service.predictor_unseen import make_prediction_ohlc_close
 
 # --------
 
@@ -25,8 +29,10 @@ data = []
 
 model = tf.keras.models.load_model('model/gru-b.keras')
 
-collection = data_load_parallel_all(
+collection = build_dataset_all(
     assets=assets,
+    assets_btc=assets_btc,
+    assets_down=assets_down,
     market=market,
     interval=interval
 )
