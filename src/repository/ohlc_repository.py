@@ -63,6 +63,14 @@ class OhlcRepository:
             con=self.connection
         )
 
+        price = df['open'].iloc[-1]
+        diff = diff_price(price)
+
+        df['open'] = df['open'].apply(lambda x: x * diff)
+        df['high'] = df['high'].apply(lambda x: x * diff)
+        df['low'] = df['low'].apply(lambda x: x * diff)
+        df['close'] = df['close'].apply(lambda x: x * diff)
+
         return df
 
     def find_down_df(
@@ -181,7 +189,6 @@ class OhlcRepository:
             Ohlc.price_close.label(f'close_{market}_{asset}'),
 
             Ohlc.trades.label(f'trades_{market}_{asset}'),
-
         ) \
             .filter(Ohlc.exchange == exchange) \
             .filter(Ohlc.market == market) \
