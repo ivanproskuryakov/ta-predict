@@ -53,8 +53,8 @@ time_prediction = datetime.now() - start_at
 # --------
 
 df = reporter.report_build(data=data)
+best = trade_finder.pick_best_option(df)
 report = reporter.report_prettify(df)
-# best = trade_finder.pick_best_option(df)
 
 print(report)
 print(f'start: {start_at}')
