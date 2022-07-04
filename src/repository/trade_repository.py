@@ -16,6 +16,7 @@ class TradeRepository:
             asset: str,
             market: str,
             interval: str,
+            diff: float,
             price_buy: float,
             quantity: float,
             order: {},
@@ -29,6 +30,7 @@ class TradeRepository:
         trade.asset = asset
         trade.market = market
         trade.interval = interval
+        trade.diff = diff
 
         trade.buy_price = price_buy
         trade.buy_quantity = quantity

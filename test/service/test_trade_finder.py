@@ -5,9 +5,11 @@ from src.fixture.trade import trade_create_buy
 from src.service.reporter import Reporter
 from fixture.prediction import load_predictions
 
+reporter = Reporter()
+trade_finder = TradeFinder()
+
 
 def test_find_trade_positive():
-    trade_finder = TradeFinder()
     trade_buy = trade_create_buy()
 
     time_from = trade_buy.interval_end - timedelta(minutes=15)
@@ -19,7 +21,6 @@ def test_find_trade_positive():
 
 
 def test_find_trade_negative():
-    trade_finder = TradeFinder()
     trade_buy = trade_create_buy()
 
     time_from = trade_buy.interval_end - timedelta(minutes=25)
@@ -30,14 +31,13 @@ def test_find_trade_negative():
     assert trade is None
 
 
-def test_pick_best_option():
-    reporter = Reporter()
-    trade_finder = TradeFinder()
-
+def test_pick_best_options():
     data = load_predictions()
 
     df = reporter.report_build(data=data)
 
-    best = trade_finder.pick_best_option(df)
+    db_best = trade_finder.pick_best_options(df)
+
+    best = db_best.loc[0]
 
     assert best['asset'] == 'BTC'

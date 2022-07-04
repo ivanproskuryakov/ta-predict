@@ -23,7 +23,7 @@ assets = [
 ]
 
 assets_down = [
-    'BTCUP',
+    # 'BTCUP',
     'BTCDOWN',
     'ETHUP',
 

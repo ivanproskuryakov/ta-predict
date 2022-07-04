@@ -1,12 +1,40 @@
 from src.service.trader import Trader
+from src.service.reporter import Reporter
+from src.service.trade_finder import TradeFinder
+
 from src.repository.trade_repository import TradeRepository
 from src.fixture.trade import trade_create_buy
+from fixture.prediction import load_predictions
+
+trader = Trader()
+reporter = Reporter()
+trade_finder = TradeFinder()
+trade_repository = TradeRepository()
 
 
-def test_order_buy():
-    trader = Trader()
-    trade_repository = TradeRepository()
+def test_trade_buy_many():
+    data = load_predictions()
+    df = reporter.report_build(data=data)
+    df_best = trade_finder.pick_best_options(df)
 
+    trades = trader.trade_buy_many(
+        df=df_best,
+        limit=2
+    )
+
+    assert trades[0].asset == 'BTC'
+    assert trades[1].asset == 'ONT'
+
+    assert trades[0].buy_price == 20977.69
+    assert trades[0].diff == 1.02
+    assert trades[0].buy_quantity == 0.04767
+
+    assert trades[1].buy_price == 0.25
+    assert trades[1].diff == 0.15
+    assert trades[1].buy_quantity == 4000.0
+
+
+def test_trade_buy():
     asset = 'BTC'
     market = 'USDT'
     interval = '1h'
@@ -32,9 +60,7 @@ def test_order_buy():
     assert trade_buy.interval_end.second == 0
 
 
-def test_order_sell():
-    trader = Trader()
-    trade_repository = TradeRepository()
+def test_trade_sell():
     trade_buy = trade_create_buy()
 
     price = trade_buy.buy_price * 0.01 + trade_buy.buy_price

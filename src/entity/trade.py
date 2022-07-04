@@ -15,6 +15,8 @@ class Trade(Base):
     interval_start = Column(DateTime)
     interval_end = Column(DateTime)
 
+    diff = Column(Float(precision=32, decimal_return_scale=None))
+
     buy_price = Column(Float(precision=32, decimal_return_scale=None))
     buy_quantity = Column(Float(precision=32, decimal_return_scale=None))
     buy_time = Column(DateTime)

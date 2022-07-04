@@ -10,14 +10,14 @@ class TradeFinder:
     def __init__(self):
         self.trade_repository = TradeRepository()
 
-    def pick_best_option(self, df: pd.DataFrame):
+    def pick_best_options(self, df: pd.DataFrame) -> pd.DataFrame:
         df = df.query('diff > 0')
 
         df = df.sort_values(by=['trades'], ascending=False)
 
         df = df.reset_index(drop=True)
 
-        return df.loc[0]
+        return df
 
     def trade_between(
             self,

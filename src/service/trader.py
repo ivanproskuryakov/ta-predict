@@ -1,13 +1,18 @@
+import pandas as pd
+
 from src.repository.trade_repository import TradeRepository
 
 from binance import Client
 from src.entity.trade import Trade
 from src.parameters import API_KEY, API_SECRET
+from src.service.util import round
 
 
 class Trader:
     client = Client
+    market: str = 'USDT'
     trade_repository = TradeRepository
+    trade_volume: float = 1000  # USDT
 
     def __init__(self):
         self.trade_repository = TradeRepository()
@@ -16,11 +21,40 @@ class Trader:
             api_secret=API_SECRET,
         )
 
+    def trade_buy_many(
+            self,
+            df: pd.DataFrame,
+            limit: int
+    ) -> list[Trade]:
+        trades = []
+
+        for i in range(0, limit):
+            asset = df.iloc[i]['asset']
+            price = round(df.iloc[i]['x2c'], 2)
+            diff = round(df.iloc[i]['diff'], 2)
+            quantity = round(self.trade_volume / float(price), 5)
+
+            # print(asset, price, quantity)
+
+            trade = self.trade_buy(
+                asset=asset,
+                market=self.market,
+                interval='1h',
+                price=price,
+                diff=diff,
+                quantity=quantity,
+            )
+
+            trades.append(trade)
+
+        return trades
+
     def trade_buy(
             self,
             asset: str,
             market: str,
             interval: str,
+            diff: float,
             price: float,
             quantity: float,
     ):
@@ -40,6 +74,7 @@ class Trader:
             asset=asset,
             market=market,
             interval=interval,
+            diff=diff,
             price_buy=price,
             quantity=quantity,
             order=order,
