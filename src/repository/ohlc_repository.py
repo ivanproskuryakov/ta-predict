@@ -10,6 +10,7 @@ from src.service.util import diff_price
 
 class OhlcRepository:
     connection: Connection
+    market: str = 'BTC'
     df_len: [int] = []
 
     def __init__(self):
