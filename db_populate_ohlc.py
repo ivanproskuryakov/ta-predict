@@ -1,10 +1,11 @@
+from binance import enums
+
 from src.repository.ohlc_repository import OhlcRepository
 from src.service.klines import KLines
-from src.parameters import assets_down, assets
-from src.parameters_btc import assets_btc
 
-# end_at = datetime.utcnow()
-# start_at = end_at - timedelta(365 * 8)  # 8 years
+from src.parameters import assets_down, assets
+from src.parameters_btc import assets_btc, market_btc
+from src.parameters_futures import assets_futures, market_futures
 
 repository = OhlcRepository()
 klines = KLines()
@@ -17,16 +18,24 @@ interval = '5m'
 groups = [
     {
         "market": 'USDT',
-        "assets": assets
+        "assets": assets,
+        "type": enums.HistoricalKlinesType.SPOT
     },
     {
         "market": 'USDT',
-        "assets": assets_down
+        "assets": assets_down,
+        "type": enums.HistoricalKlinesType.SPOT
     },
     {
-        "market": 'BTC',
-        "assets": assets_btc
-    }
+        "market": market_btc,
+        "assets": assets_btc,
+        "type": enums.HistoricalKlinesType.SPOT
+    },
+    {
+        "market": market_futures,
+        "assets": assets_futures,
+        "type": enums.HistoricalKlinesType.FUTURES
+    },
 ]
 
 for group in groups:
@@ -36,6 +45,7 @@ for group in groups:
         collection = klines.build_klines(
             group["market"],
             asset,
+            group["type"],
             interval,
             start_at,
             end_at,

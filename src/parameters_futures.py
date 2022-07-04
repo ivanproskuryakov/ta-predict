@@ -1,4 +1,4 @@
-market = 'USDT'
+market_futures = 'USDT'
 
 assets_futures = [
     'BTC',

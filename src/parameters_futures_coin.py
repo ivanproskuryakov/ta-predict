@@ -1,4 +1,4 @@
-market = 'USD_PERP'
+market_futures_coin = 'USD_PERP'
 
 assets_futures_coin = [
     'BTC',

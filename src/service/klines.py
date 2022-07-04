@@ -1,5 +1,5 @@
 import datetime
-from binance import Client
+from binance import Client, enums
 from datetime import datetime
 
 from src.parameters import API_KEY, API_SECRET
@@ -16,6 +16,7 @@ class KLines:
             self,
             market: str,
             asset: str,
+            klines_type: enums.HistoricalKlinesType,
             interval: str,
             start_at: str,
             end_at: str = None,
@@ -48,6 +49,7 @@ class KLines:
         klines = client.get_historical_klines(
             symbol=symbol,
             interval=interval,
+            klines_type=klines_type,
             start_str=start_at,
             end_str=end_at,
         )

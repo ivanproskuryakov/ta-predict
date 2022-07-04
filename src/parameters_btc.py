@@ -1,4 +1,4 @@
-market = 'BTC'
+market_btc = 'BTC'
 
 assets_btc = [
     'ETH',
