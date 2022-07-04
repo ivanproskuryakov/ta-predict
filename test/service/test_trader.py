@@ -39,6 +39,7 @@ def test_trade_buy():
     market = 'USDT'
     interval = '1h'
     price = 10000
+    diff = 0.00001
     quantity = 0.001
 
     trade_buy = trader.trade_buy(
@@ -46,6 +47,7 @@ def test_trade_buy():
         market=market,
         interval=interval,
         price=price,
+        diff=diff,
         quantity=quantity,
     )
     trade_last = trade_repository.find_last_trade()
@@ -53,6 +55,7 @@ def test_trade_buy():
     assert trade_buy.id == trade_last.id
     assert trade_buy.buy_price == 10000
     assert trade_buy.buy_quantity == 0.001
+    assert trade_buy.diff == 0.00001
     assert trade_buy.buy_order == {}
     assert trade_buy.interval_start.minute == 0
     assert trade_buy.interval_start.second == 0

@@ -9,12 +9,14 @@ def trade_create_buy():
     interval = '1h'
     price = 10000
     quantity = 0.001
+    diff = 0
     order = {}
 
     trade = trade_repository.create_buy(
         asset=asset,
         market=market,
         interval=interval,
+        diff=diff,
         price_buy=price,
         quantity=quantity,
         order=order,
