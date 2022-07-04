@@ -4,6 +4,7 @@ import concurrent.futures
 from src.service.estimator import estimate_ta_fill_na
 from src.service.klines import KLines
 from src.service.util import diff_percentage
+from src.service.util import diff_price
 
 
 class DatasetBuilderAPI:
@@ -90,7 +91,7 @@ class DatasetBuilderAPI:
                 diff,
             ])
 
-        df_ohlc = pd.DataFrame(prepared, None, [
+        df = pd.DataFrame(prepared, None, [
             'open',
             'high',
             'low',
@@ -110,7 +111,16 @@ class DatasetBuilderAPI:
             'price_diff',
         ])
 
-        df = pd.concat([df_ohlc, df_down, df_btc], axis=1)
+        price = df['open'].iloc[-1]
+        diff = diff_price(price)
+
+        df['open'] = df['open'].apply(lambda x: x * diff)
+        df['high'] = df['high'].apply(lambda x: x * diff)
+        df['low'] = df['low'].apply(lambda x: x * diff)
+        df['close'] = df['close'].apply(lambda x: x * diff)
+
+        df = pd.concat([df, df_down, df_btc], axis=1)
+
         df = estimate_ta_fill_na(df)
 
         return df, item
@@ -151,6 +161,14 @@ class DatasetBuilderAPI:
             f'volume_maker_{asset}',
         ])
 
+        price = df[f'open_{asset}'].iloc[-1]
+        diff = diff_price(price)
+
+        df[f'open_{asset}'] = df[f'open_{asset}'].apply(lambda x: x * diff)
+        df[f'high_{asset}'] = df[f'high_{asset}'].apply(lambda x: x * diff)
+        df[f'low_{asset}'] = df[f'low_{asset}'].apply(lambda x: x * diff)
+        df[f'close_{asset}'] = df[f'close_{asset}'].apply(lambda x: x * diff)
+
         return df
 
     def build_dataset_btc(self, asset: str) -> pd.DataFrame:
@@ -167,21 +185,33 @@ class DatasetBuilderAPI:
         for item in collection:
             prepared.append([
                 item['price_open'],
+                item['price_high'],
+                item['price_low'],
                 item['price_close'],
 
                 item['trades'],
             ])
 
         df = pd.DataFrame(prepared, None, [
-            f'open_{asset}',
-            f'close_{asset}',
+            f'open_BTC_{asset}',
+            f'high_BTC_{asset}',
+            f'low_BTC_{asset}',
+            f'close_BTC_{asset}',
 
-            f'trades_{asset}',
+            f'trades_BTC_{asset}',
         ])
+
+        price = df[f'open_BTC_{asset}'].iloc[-1]
+        diff = diff_price(price)
+
+        df[f'open_BTC_{asset}'] = df[f'open_BTC_{asset}'].apply(lambda x: x * diff)
+        df[f'high_BTC_{asset}'] = df[f'high_BTC_{asset}'].apply(lambda x: x * diff)
+        df[f'low_BTC_{asset}'] = df[f'low_BTC_{asset}'].apply(lambda x: x * diff)
+        df[f'close_BTC_{asset}'] = df[f'close_BTC_{asset}'].apply(lambda x: x * diff)
 
         return df
 
-    def __data_load_down(self,):
+    def __data_load_down(self, ):
         res = []
         futures = []
 

@@ -11,7 +11,7 @@ assets_btc = [
     'DOT',
     'SOL',
     'EOS',
-    'AVAX',
+    # 'AVAX',
     'XLM',
     'ATOM',
 ]

@@ -2,17 +2,29 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 
 from src.service.predictor_unseen import make_prediction_ohlc_close
-from src.service.dataset_builder_realtime import build_dataset
-from src.parameters import market, tail
+from src.service.dataset_builder_api import DatasetBuilderAPI
+from src.parameters import market
+from src.parameters_btc import assets_btc
+from src.parameters import assets_down
 
-asset = 'BTC'
+tail = 100
+assets = [
+    'BTC'
+]
 interval = '15m'
+dataset_builder = DatasetBuilderAPI(
+    assets,
+    assets_btc,
+    assets_down,
+    interval,
+    market,
+)
 
 # Predict
 # ------------------------------------------------------------------------
 
 model = tf.keras.models.load_model(f'model/ta.keras')
-x, last_item = build_dataset(market, asset, interval)
+x, last_item = dataset_builder.build_dataset_all()
 
 y = make_prediction_ohlc_close(x, model)
 

@@ -5,10 +5,12 @@ from sqlalchemy.engine import Connection
 
 from src.entity.ohlc import Ohlc
 from src.connector.db_connector import db_connect
+from src.service.util import diff_price
 
 
 class OhlcRepository:
     connection: Connection
+    market: str = 'BTC'
     df_len: [int] = []
 
     def __init__(self):
@@ -62,6 +64,14 @@ class OhlcRepository:
             con=self.connection
         )
 
+        price = df['open'].iloc[-1]
+        diff = diff_price(price)
+
+        df['open'] = df['open'].apply(lambda x: x * diff)
+        df['high'] = df['high'].apply(lambda x: x * diff)
+        df['low'] = df['low'].apply(lambda x: x * diff)
+        df['close'] = df['close'].apply(lambda x: x * diff)
+
         return df
 
     def find_down_df(
@@ -79,10 +89,21 @@ class OhlcRepository:
                 interval=interval
             )
 
+            price = df[f'open_{asset}'].iloc[-1]
+            diff = diff_price(price)
+
+            df[f'open_{asset}'] = df[f'open_{asset}'].apply(lambda x: x * diff)
+            df[f'high_{asset}'] = df[f'high_{asset}'].apply(lambda x: x * diff)
+            df[f'low_{asset}'] = df[f'low_{asset}'].apply(lambda x: x * diff)
+            df[f'close_{asset}'] = df[f'close_{asset}'].apply(lambda x: x * diff)
+
             self.df_len.append(len(df))
             dfs.append(df)
 
         df = pd.concat(dfs, axis=1)
+
+        # print('find_down_df')
+        # print(df)
 
         return df
 
@@ -100,17 +121,18 @@ class OhlcRepository:
                 asset=asset,
                 interval=interval
             )
-            # print(asset)
-            # print(df)
+            price = df[f'open_BTC_{asset}'].iloc[-1]
+            diff = diff_price(price)
+
+            df[f'open_BTC_{asset}'] = df[f'open_BTC_{asset}'].apply(lambda x: x * diff)
+            df[f'high_BTC_{asset}'] = df[f'high_BTC_{asset}'].apply(lambda x: x * diff)
+            df[f'low_BTC_{asset}'] = df[f'low_BTC_{asset}'].apply(lambda x: x * diff)
+            df[f'close_BTC_{asset}'] = df[f'close_BTC_{asset}'].apply(lambda x: x * diff)
+
             self.df_len.append(len(df))
             dfs.append(df)
 
         df = pd.concat(dfs, axis=1)
-
-        # print(df)
-        # print(self.df_len)
-        # print(assets_btc)
-        # exit()
 
         return df
 
@@ -163,10 +185,11 @@ class OhlcRepository:
 
         sql = session.query(
             Ohlc.price_open.label(f'open_{market}_{asset}'),
+            Ohlc.price_high.label(f'high_{market}_{asset}'),
+            Ohlc.price_low.label(f'low_{market}_{asset}'),
             Ohlc.price_close.label(f'close_{market}_{asset}'),
 
             Ohlc.trades.label(f'trades_{market}_{asset}'),
-
         ) \
             .filter(Ohlc.exchange == exchange) \
             .filter(Ohlc.market == market) \
