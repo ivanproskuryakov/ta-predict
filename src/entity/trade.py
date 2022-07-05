@@ -15,6 +15,7 @@ class Trade(Base):
     interval_start = Column(DateTime)
     interval_end = Column(DateTime)
 
+    trades = Column(Float(precision=32, decimal_return_scale=None))
     diff_predicted = Column(Float(precision=32, decimal_return_scale=None))
     diff_real = Column(Float(precision=32, decimal_return_scale=None))
     is_positive = Column(Boolean)

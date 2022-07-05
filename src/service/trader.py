@@ -21,24 +21,24 @@ class Trader:
             api_secret=API_SECRET,
         )
 
-    def trade_buy_many(self, df: pd.DataFrame, limit: int) -> list[Trade]:
+    def trade_buy_many(self, df: pd.DataFrame, limit: int, interval: str) -> list[Trade]:
         trades = []
 
-        df_len = len(df) - 1
+        df_len = len(df)
 
         if limit > df_len:
             limit = df_len
 
         for i in range(0, limit):
             asset = df.iloc[i]['asset']
-            price = round(df.iloc[i]['close_price'], 5)
-            diff = round(df.iloc[i]['diff'], 2)
+            price = round(df.iloc[i]['close_price'], 4)
+            diff = round(df.iloc[i]['diff'], 4)
             quantity = round(self.trade_volume / float(price), 4)
 
             trade = self.trade_buy(
                 asset=asset,
                 market=self.market,
-                interval='1h',
+                interval=interval,
                 price=price,
                 diff=diff,
                 quantity=quantity,

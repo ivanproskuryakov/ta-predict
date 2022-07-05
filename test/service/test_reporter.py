@@ -11,6 +11,6 @@ def test_report_prettify():
 
     report = reporter.report_prettify(df)
 
-    pos = report.find('volume_market')
+    pos = report.find('close_price')
 
-    assert pos == 40
+    assert pos == 20

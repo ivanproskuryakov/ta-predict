@@ -1,7 +1,7 @@
 import pandas as pd
 
-
 class TradeFinder:
+
     def pick_best_options(self, df: pd.DataFrame, diff: float) -> pd.DataFrame:
         df = df.query(f'diff > {diff}')
 

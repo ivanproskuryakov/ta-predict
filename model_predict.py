@@ -57,7 +57,7 @@ time_prediction = datetime.now() - start_at
 df = reporter.report_build(data=data)
 df_best = trade_finder.pick_best_options(df, diff=0)
 report = reporter.report_prettify(df)
-trader.trade_buy_many(df=df_best, limit=20)
+trader.trade_buy_many(df=df_best, limit=20, interval=interval)
 
 print(report)
 print(f'start: {start_at}')

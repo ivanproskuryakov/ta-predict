@@ -18,8 +18,17 @@ class TradeRepository:
             price_buy: float, quantity: float, order: {},
     ) -> Trade:
         now = datetime.utcnow()
-        interval_start = now.replace(minute=0, second=0, microsecond=0)
+
+        interval_start = now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
         interval_end = interval_start + timedelta(hours=1)
+
+        if interval == '30m':
+            if now.minute < 30:
+                interval_start = now.replace(minute=30, second=0, microsecond=0)
+                interval_end = interval_start + timedelta(minutes=30)
+            if now.minute > 30:
+                interval_start = now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+                interval_end = interval_start + timedelta(minutes=30)
 
         trade = Trade()
 

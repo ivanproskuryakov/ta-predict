@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from src.service.trader import Trader
 from src.service.reporter import Reporter
 from src.service.trade_finder import TradeFinder
@@ -19,22 +21,23 @@ def test_trade_buy_many():
 
     trades = trader.trade_buy_many(
         df=df_best,
-        limit=2
+        limit=2,
+        interval='1h'
     )
 
     assert trades[0].asset == 'BTC'
     assert trades[1].asset == 'ONT'
 
     assert trades[0].buy_price == 20977.69
-    assert trades[0].diff == 1.02
-    assert trades[0].buy_quantity == 0.04767
+    assert trades[0].diff_predicted == 1.0215
+    assert trades[0].buy_quantity == 0.0477
 
-    assert trades[1].buy_price == 0.25
-    assert trades[1].diff == 0.15
-    assert trades[1].buy_quantity == 4000.0
+    assert trades[1].buy_price == 0.2521
+    assert trades[1].diff_predicted == 0.1535
+    assert trades[1].buy_quantity == 3966.6799
 
 
-def test_trade_buy():
+def test_trade_buy_1h():
     asset = 'BTC'
     market = 'USDT'
     interval = '1h'
@@ -55,12 +58,55 @@ def test_trade_buy():
     assert trade_buy.id == trade_last.id
     assert trade_buy.buy_price == 10000
     assert trade_buy.buy_quantity == 0.001
-    assert trade_buy.diff == 0.00001
+    assert trade_buy.diff_predicted == 0.00001
+    assert trade_buy.interval == '1h'
+
     assert trade_buy.buy_order == {}
+
     assert trade_buy.interval_start.minute == 0
     assert trade_buy.interval_start.second == 0
     assert trade_buy.interval_end.minute == 0
     assert trade_buy.interval_end.second == 0
+
+
+def test_trade_buy_30m():
+    asset = 'BTC'
+    market = 'USDT'
+    interval = '30m'
+    price = 10000
+    diff = 0.00001
+    quantity = 0.001
+    now = datetime.utcnow()
+
+    trade_buy = trader.trade_buy(
+        asset=asset,
+        market=market,
+        interval=interval,
+        price=price,
+        diff=diff,
+        quantity=quantity,
+    )
+    trade_last = trade_repository.find_last_trade()
+
+    assert trade_buy.id == trade_last.id
+    assert trade_buy.buy_price == 10000
+    assert trade_buy.buy_quantity == 0.001
+    assert trade_buy.diff_predicted == 0.00001
+    assert trade_buy.interval == '30m'
+
+    assert trade_buy.buy_order == {}
+
+    if now.minute > 30:
+        assert trade_buy.interval_start.minute == 0
+        assert trade_buy.interval_start.second == 0
+        assert trade_buy.interval_end.minute == 30
+        assert trade_buy.interval_end.second == 0
+
+    if now.minute < 30:
+        assert trade_buy.interval_start.minute == 30
+        assert trade_buy.interval_start.second == 0
+        assert trade_buy.interval_end.minute == 0
+        assert trade_buy.interval_end.second == 0
 
 
 def test_trade_sell():
