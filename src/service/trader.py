@@ -29,7 +29,7 @@ class Trader:
         if limit > df_len:
             limit = df_len
 
-        for i in range(0, limit - 1):
+        for i in range(0, limit):
             asset = df.iloc[i]['asset']
             price_close = round(df.iloc[i]['close_price'], 8)
             diff = round(df.iloc[i]['diff'], 4)
