@@ -1,5 +1,6 @@
 import pandas as pd
 import concurrent.futures
+from binance import enums
 
 from src.service.estimator import estimate_ta_fill_na
 from src.service.klines import KLines
@@ -62,10 +63,11 @@ class DatasetBuilderAPI:
         prepared = []
 
         collection = klines.build_klines(
-            self.market,
-            asset,
-            self.interval,
-            self.start_at,
+            market=self.market,
+            asset=asset,
+            klines_type=enums.HistoricalKlinesType.SPOT,
+            interval=self.interval,
+            start_at=self.start_at,
         )
 
         for item in collection:
@@ -130,10 +132,11 @@ class DatasetBuilderAPI:
         prepared = []
 
         collection = klines.build_klines(
-            self.market,
-            asset,
-            self.interval,
-            self.start_at
+            market=self.market,
+            asset=asset,
+            klines_type=enums.HistoricalKlinesType.SPOT,
+            interval=self.interval,
+            start_at=self.start_at,
         )
 
         for item in collection:
@@ -176,10 +179,11 @@ class DatasetBuilderAPI:
         prepared = []
 
         collection = klines.build_klines(
-            self.market,
-            asset,
-            self.interval,
-            self.start_at
+            market=self.market,
+            asset=asset,
+            klines_type=enums.HistoricalKlinesType.SPOT,
+            interval=self.interval,
+            start_at=self.start_at,
         )
 
         for item in collection:

@@ -15,7 +15,7 @@ trade_repository = TradeRepository()
 def test_trade_buy_many():
     data = load_predictions()
     df = reporter.report_build(data=data)
-    df_best = trade_finder.pick_best_options(df)
+    df_best = trade_finder.pick_best_options(df, diff=0)
 
     trades = trader.trade_buy_many(
         df=df_best,

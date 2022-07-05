@@ -10,6 +10,7 @@ from src.parameters import assets_down
 
 from src.service.reporter import Reporter
 from src.service.trade_finder import TradeFinder
+from src.service.trader import Trader
 from src.service.dataset_builder_api import DatasetBuilderAPI
 from src.service.predictor_unseen import make_prediction_ohlc_close
 
@@ -20,6 +21,7 @@ pd.set_option("display.precision", 4)
 
 interval = sys.argv[1]
 
+trader = Trader()
 reporter = Reporter()
 trade_finder = TradeFinder()
 dataset_builder = DatasetBuilderAPI(
@@ -53,8 +55,9 @@ time_prediction = datetime.now() - start_at
 # --------
 
 df = reporter.report_build(data=data)
-df_best = trade_finder.pick_best_options(df)
+df_best = trade_finder.pick_best_options(df, diff=0)
 report = reporter.report_prettify(df)
+trader.trade_buy_many(df=df_best, limit=20)
 
 print(report)
 print(f'start: {start_at}')

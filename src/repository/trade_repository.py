@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from src.entity.trade import Trade
 from src.connector.db_connector import db_connect
+from src.service.util import diff_percentage
 
 
 class TradeRepository:
@@ -13,13 +14,8 @@ class TradeRepository:
 
     def create_buy(
             self,
-            asset: str,
-            market: str,
-            interval: str,
-            diff: float,
-            price_buy: float,
-            quantity: float,
-            order: {},
+            asset: str, market: str, interval: str, diff: float,
+            price_buy: float, quantity: float, order: {},
     ) -> Trade:
         now = datetime.utcnow()
         interval_start = now.replace(minute=0, second=0, microsecond=0)
@@ -30,7 +26,7 @@ class TradeRepository:
         trade.asset = asset
         trade.market = market
         trade.interval = interval
-        trade.diff = diff
+        trade.diff_predicted = diff
 
         trade.buy_price = price_buy
         trade.buy_quantity = quantity
@@ -47,15 +43,12 @@ class TradeRepository:
 
         return trade
 
-    def update(
-            self,
-            trade: Trade,
-            price_sell: float,
-            order: {},
-    ) -> Trade:
+    def update(self, trade: Trade, price_sell: float, order: {}) -> Trade:
         trade.sell_price = price_sell
         trade.sell_time = datetime.utcnow()
         trade.sell_order = order
+        trade.diff_real = diff_percentage(price_sell, trade.buy_price)
+        trade.is_positive = trade.diff_real > 0
 
         with Session(self.connection) as session:
             session.expire_on_commit = False
@@ -64,9 +57,7 @@ class TradeRepository:
 
         return trade
 
-    def find_last_trade(
-            self,
-    ) -> Trade:
+    def find_last_trade(self) -> Trade:
         with Session(self.connection) as session:
             trade = session.query(Trade) \
                 .order_by(Trade.id.desc()) \
@@ -75,11 +66,17 @@ class TradeRepository:
 
         return trade
 
-    def find_between(
-            self,
-            start_at: datetime,
-            end_at: datetime,
-    ) -> Trade:
+    def find_opened(self) -> [Trade]:
+        with Session(self.connection) as session:
+            trade = session.query(Trade) \
+                .where(Trade.sell_price.is_(None)) \
+                .order_by(Trade.id.desc()) \
+                .all()
+            session.close()
+
+        return trade
+
+    def find_between_single(self, start_at: datetime, end_at: datetime) -> Trade:
         with Session(self.connection) as session:
             trade = session.query(Trade) \
                 .where(Trade.interval_end >= start_at) \
@@ -90,10 +87,7 @@ class TradeRepository:
 
         return trade
 
-    def find_id(
-            self,
-            trade_id: int
-    ) -> Trade:
+    def find_id(self, trade_id: int) -> Trade:
         with Session(self.connection) as session:
             trade = session.query(Trade) \
                 .where(Trade.id == trade_id) \

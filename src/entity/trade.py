@@ -1,4 +1,4 @@
-from sqlalchemy import Column, BigInteger, String, Float, JSON, DateTime
+from sqlalchemy import Column, BigInteger, String, Float, JSON, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -15,7 +15,9 @@ class Trade(Base):
     interval_start = Column(DateTime)
     interval_end = Column(DateTime)
 
-    diff = Column(Float(precision=32, decimal_return_scale=None))
+    diff_predicted = Column(Float(precision=32, decimal_return_scale=None))
+    diff_real = Column(Float(precision=32, decimal_return_scale=None))
+    is_positive = Column(Boolean)
 
     buy_price = Column(Float(precision=32, decimal_return_scale=None))
     buy_quantity = Column(Float(precision=32, decimal_return_scale=None))

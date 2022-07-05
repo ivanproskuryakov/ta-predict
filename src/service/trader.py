@@ -21,20 +21,19 @@ class Trader:
             api_secret=API_SECRET,
         )
 
-    def trade_buy_many(
-            self,
-            df: pd.DataFrame,
-            limit: int
-    ) -> list[Trade]:
+    def trade_buy_many(self, df: pd.DataFrame, limit: int) -> list[Trade]:
         trades = []
+
+        df_len = len(df) - 1
+
+        if limit > df_len:
+            limit = df_len
 
         for i in range(0, limit):
             asset = df.iloc[i]['asset']
-            price = round(df.iloc[i]['x2c'], 2)
+            price = round(df.iloc[i]['close_price'], 5)
             diff = round(df.iloc[i]['diff'], 2)
-            quantity = round(self.trade_volume / float(price), 5)
-
-            # print(asset, price, quantity)
+            quantity = round(self.trade_volume / float(price), 4)
 
             trade = self.trade_buy(
                 asset=asset,
@@ -58,17 +57,19 @@ class Trader:
             price: float,
             quantity: float,
     ):
-        symbol = f'{asset}{market}'
+        # symbol = f'{asset}{market}'
 
-        order = self.client.create_test_order(
-            price=price,
-            quantity=quantity,
-            symbol=symbol,
-            side='BUY',
-            type='LIMIT',
-            timeInForce='GTC',
-            recvWindow=5000,
-        )
+        # order = self.client.create_test_order(
+        #     price=price,
+        #     quantity=quantity,
+        #     symbol=symbol,
+        #     side='BUY',
+        #     type='LIMIT',
+        #     timeInForce='GTC',
+        #     recvWindow=5000,
+        # )
+
+        order = {}
 
         trade = self.trade_repository.create_buy(
             asset=asset,
@@ -82,11 +83,7 @@ class Trader:
 
         return trade
 
-    def trade_sell(
-            self,
-            trade: Trade,
-            price: float
-    ):
+    def trade_sell(self, trade: Trade, price: float):
         symbol = f'{trade.asset}{trade.market}'
 
         order = self.client.create_test_order(

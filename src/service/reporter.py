@@ -26,14 +26,17 @@ class Reporter():
         headers = [
             "asset",
             "diff",
+            "close_price_modified",
+            "close_price",
             "trades",
             "volume",
-            "volume_market",
+            # "volume_market",
 
-            "x1o",
-            "x2c",
-            "y1c",
-            "y2c",
+            # "x1o",
+            # "x2c",
+            # "y1c",
+            # "y2c",
+
             "date",
             "h",
             "m",
@@ -55,19 +58,23 @@ class Reporter():
 
             diff = diff_percentage(v2=y2['close'], v1=y1['close'])
 
-            volume_market = x2["volume"] * x1["open"]
+            # print(last_item)
+
+            # volume_market = x2["volume"] * x1["open"]
 
             report.append([
                 asset,
                 diff,
+                x2['close'],
+                last_item["price_close"],
                 x2["trades"],
                 x2["volume"],
-                volume_market,
+                # volume_market,
 
-                f'{x1["open"]:.4f}',
-                f'{x2["close"]:.4f}',
-                f'{y1["close"]:.4f}',
-                f'{y2["close"]:.4f}',
+                # f'{x1["open"]:.4f}',
+                # f'{x2["close"]:.4f}',
+                # f'{y1["close"]:.4f}',
+                # f'{y2["close"]:.4f}',
 
                 date.strftime("%Y %m %d %H:%M:%S"),
                 f'{x2["time_hour"]:.0f}',
