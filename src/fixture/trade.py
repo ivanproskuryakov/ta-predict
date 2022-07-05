@@ -8,6 +8,7 @@ def trade_create_buy():
     market = 'USDT'
     interval = '1h'
     price = 10000
+    trades = 10000
     quantity = 0.001
     diff = 0
     order = {}
@@ -15,6 +16,7 @@ def trade_create_buy():
     trade = trade_repository.create_buy(
         asset=asset,
         market=market,
+        trades=trades,
         interval=interval,
         diff=diff,
         price_buy=price,

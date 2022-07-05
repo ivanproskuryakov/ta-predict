@@ -31,10 +31,12 @@ def test_trade_buy_many():
     assert trades[0].buy_price == 20977.69
     assert trades[0].diff_predicted == 1.0215
     assert trades[0].buy_quantity == 0.0477
+    assert trades[0].trades == 3703.0
 
     assert trades[1].buy_price == 0.2521
     assert trades[1].diff_predicted == 0.1535
     assert trades[1].buy_quantity == 3966.6799
+    assert trades[1].trades == 47.0
 
 
 def test_trade_buy_1h():
@@ -42,6 +44,7 @@ def test_trade_buy_1h():
     asset = 'BTC'
     market = 'USDT'
     interval = '1h'
+    trades = 10000
     price = 10000
     diff = 0.00001
     quantity = 0.001
@@ -50,6 +53,7 @@ def test_trade_buy_1h():
         asset=asset,
         market=market,
         interval=interval,
+        trades=trades,
         price=price,
         diff=diff,
         quantity=quantity,
@@ -60,6 +64,7 @@ def test_trade_buy_1h():
     assert trade_buy.buy_price == 10000
     assert trade_buy.buy_quantity == 0.001
     assert trade_buy.diff_predicted == 0.00001
+    assert trade_buy.trades == 10000
     assert trade_buy.interval == '1h'
     assert trade_buy.interval_start.hour == now.hour + 1
 
@@ -75,6 +80,7 @@ def test_trade_buy_30m():
     asset = 'BTC'
     market = 'USDT'
     interval = '30m'
+    trades = 10000
     price = 10000
     diff = 0.00001
     quantity = 0.001
@@ -83,6 +89,7 @@ def test_trade_buy_30m():
     trade_buy = trader.trade_buy(
         asset=asset,
         market=market,
+        trades=trades,
         interval=interval,
         price=price,
         diff=diff,

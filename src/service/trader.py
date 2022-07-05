@@ -33,11 +33,15 @@ class Trader:
             asset = df.iloc[i]['asset']
             price_close = round(df.iloc[i]['close_price'], 8)
             diff = round(df.iloc[i]['diff'], 4)
+            trades_amount = round(df.iloc[i]['trades'], 0)
             quantity = round(self.trade_volume / float(price_close), 4)
+
+            print(trades)
 
             trade = self.trade_buy(
                 asset=asset,
                 market=self.market,
+                trades=trades_amount,
                 interval=interval,
                 price=price_close,
                 diff=diff,
@@ -53,6 +57,7 @@ class Trader:
             asset: str,
             market: str,
             interval: str,
+            trades: float,
             diff: float,
             price: float,
             quantity: float,
@@ -75,6 +80,7 @@ class Trader:
             asset=asset,
             market=market,
             interval=interval,
+            trades=trades,
             diff=diff,
             price_buy=price,
             quantity=quantity,

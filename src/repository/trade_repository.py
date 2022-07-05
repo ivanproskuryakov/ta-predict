@@ -14,7 +14,7 @@ class TradeRepository:
 
     def create_buy(
             self,
-            asset: str, market: str, interval: str, diff: float,
+            asset: str, market: str, interval: str, diff: float, trades: float,
             price_buy: float, quantity: float, order: {},
     ) -> Trade:
         now = datetime.utcnow()
@@ -36,6 +36,7 @@ class TradeRepository:
         trade.market = market
         trade.interval = interval
         trade.diff_predicted = diff
+        trade.trades = trades
 
         trade.buy_price = price_buy
         trade.buy_quantity = quantity
