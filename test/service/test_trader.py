@@ -38,6 +38,7 @@ def test_trade_buy_many():
 
 
 def test_trade_buy_1h():
+    now = datetime.utcnow()
     asset = 'BTC'
     market = 'USDT'
     interval = '1h'
@@ -60,6 +61,7 @@ def test_trade_buy_1h():
     assert trade_buy.buy_quantity == 0.001
     assert trade_buy.diff_predicted == 0.00001
     assert trade_buy.interval == '1h'
+    assert trade_buy.interval_start.hour == now.hour + 1
 
     assert trade_buy.buy_order == {}
 
