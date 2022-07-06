@@ -58,7 +58,11 @@ df = reporter.report_build(data=data)
 df_best = trade_finder.pick_best_options(df, diff=0)
 report = reporter.report_prettify(df)
 
-trader.trade_buy_many(df=df_best, limit=20, interval=interval)
+trader.trade_buy_many(
+    df=df_best,
+    limit=20,
+    interval=interval,
+)
 
 print(report)
 
