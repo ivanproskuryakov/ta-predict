@@ -1,21 +1,26 @@
 import pandas as pd
 
-from src.repository.trade_repository import TradeRepository
-
 from binance import Client
+
+from src.repository.trade_repository import TradeRepository
+from src.repository.exchange_repository import ExchangeRepository
+
 from src.entity.trade import Trade
 from src.parameters import API_KEY, API_SECRET
-from src.service.util import round
+from src.service.util import round, get_precision
 
 
 class Trader:
     client = Client
     market: str = 'USDT'
-    trade_repository = TradeRepository
     trade_volume: float = 1000  # USDT
+
+    trade_repository: TradeRepository
+    exchange_repository: ExchangeRepository
 
     def __init__(self):
         self.trade_repository = TradeRepository()
+        self.exchange_repository = ExchangeRepository()
         self.client = Client(
             api_key=API_KEY,
             api_secret=API_SECRET,
@@ -23,7 +28,6 @@ class Trader:
 
     def trade_buy_many(self, df: pd.DataFrame, limit: int, interval: str) -> list[Trade]:
         trades = []
-
         df_len = len(df)
 
         if limit > df_len:
@@ -31,12 +35,17 @@ class Trader:
 
         for i in range(0, limit):
             asset = df.iloc[i]['asset']
+
+            exchange = self.exchange_repository.get_market_asset(
+                market=self.market,
+                asset=asset
+            )
+            # precision = get_precision(exchange.lotStepSize)
+
             price_close = round(df.iloc[i]['close_price'], 8)
             diff = round(df.iloc[i]['diff'], 4)
             trades_amount = round(df.iloc[i]['trades'], 0)
             quantity = round(self.trade_volume / float(price_close), 4)
-
-            print(trades)
 
             trade = self.trade_buy(
                 asset=asset,
@@ -62,7 +71,7 @@ class Trader:
             price: float,
             quantity: float,
     ):
-        # symbol = f'{asset}{market}'
+        symbol = f'{asset}{market}'
 
         # order = self.client.create_test_order(
         #     price=price,
