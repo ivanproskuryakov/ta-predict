@@ -1,7 +1,7 @@
 ### Installation
-
 ```
-mkdir markets
+python -m venv .env
+source .env/bin/activate
 
 pip install -r requirements.txt
 pip install -r requirements-ubuntu.txt
@@ -11,12 +11,10 @@ pip install --force-reinstall -r requirements.txt
 ### Commands
 
 ```
-python -m venv .env
-source .env/bin/activate
-
 ENV=dev python model_train.py
 ENV=dev python model_predict.py 15m
-python model_plot.py
+ENV=dev python model_plot.py
+ENV=dev python trades_populate.py
 
 ```
 

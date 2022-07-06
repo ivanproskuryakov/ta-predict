@@ -5,7 +5,8 @@ from src.service.reporter import Reporter
 from src.service.trade_finder import TradeFinder
 
 from src.repository.trade_repository import TradeRepository
-from src.fixture.trade import trade_create_buy
+
+from fixture.trade import trade_create_buy
 from fixture.prediction import load_predictions
 
 trader = Trader()
