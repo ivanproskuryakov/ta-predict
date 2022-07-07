@@ -32,7 +32,7 @@ dataset_builder = DatasetBuilderAPI(
     market=market,
 )
 
-start_at = datetime.now()
+start_at = datetime.utcnow()
 data = []
 
 # --------
@@ -41,7 +41,7 @@ model = tf.keras.models.load_model('model/gru-b.keras')
 
 collection = dataset_builder.build_dataset_all()
 
-time_download = datetime.now() - start_at
+time_download = datetime.utcnow() - start_at
 
 for item in collection:
     asset, x_df, last_item = item
@@ -50,7 +50,7 @@ for item in collection:
 
     data.append((asset, last_item, x_df, y_df))
 
-time_prediction = datetime.now() - start_at
+time_prediction = datetime.utcnow() - start_at
 
 # --------
 

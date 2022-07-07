@@ -34,10 +34,10 @@ ENV=test python db_populate_exchange.py
 ### Cron
 
 ```
-12 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
-27 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
-42 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
-57 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
+13 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
+28 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
+43 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
+58 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
 
 ```
 
