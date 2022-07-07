@@ -30,6 +30,19 @@ class TradeRepository:
                 interval_end = interval_start + timedelta(minutes=30)
 
         if interval == '15m':
+            if buy_time.minute == 0:
+                interval_start = buy_time.replace(minute=15, second=0, microsecond=0)
+                interval_end = interval_start + timedelta(minutes=15)
+            if buy_time.minute == 15:
+                interval_start = buy_time.replace(minute=30, second=0, microsecond=0)
+                interval_end = interval_start + timedelta(minutes=15)
+            if buy_time.minute == 30:
+                interval_start = buy_time.replace(minute=45, second=0, microsecond=0)
+                interval_end = interval_start + timedelta(minutes=15)
+            if buy_time.minute == 45:
+                interval_start = buy_time.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+                interval_end = interval_start + timedelta(minutes=15)
+
             if 0 < buy_time.minute < 15:
                 interval_start = buy_time.replace(minute=15, second=0, microsecond=0)
                 interval_end = interval_start + timedelta(minutes=15)

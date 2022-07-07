@@ -112,6 +112,134 @@ def test_trade_buy_15m_13():
     assert trade_buy.interval_end.minute == 30
     assert trade_buy.interval_end.second == 0
 
+def test_trade_buy_15m_0():
+    asset = 'BTC'
+    market = 'USDT'
+    interval = '15m'
+    trades = 10000
+    price = 10000
+    diff = 0.00001
+    quantity = 0.001
+    buy_time = datetime.strptime('09/19/19 12:00:00', '%m/%d/%y %H:%M:%S')
+
+    trade_buy = trader.trade_buy(
+        buy_time=buy_time,
+        asset=asset,
+        market=market,
+        interval=interval,
+        trades=trades,
+        price=price,
+        diff=diff,
+        quantity=quantity,
+    )
+    trade_last = trade_repository.find_last_trade()
+
+    assert trade_buy.id == trade_last.id
+
+    assert trade_buy.interval_start.hour == 12
+    assert trade_buy.interval_start.minute == 15
+    assert trade_buy.interval_start.second == 0
+
+    assert trade_buy.interval_end.hour == 12
+    assert trade_buy.interval_end.minute == 30
+    assert trade_buy.interval_end.second == 0
+
+def test_trade_buy_15m_15():
+    asset = 'BTC'
+    market = 'USDT'
+    interval = '15m'
+    trades = 10000
+    price = 10000
+    diff = 0.00001
+    quantity = 0.001
+    buy_time = datetime.strptime('09/19/19 12:15:00', '%m/%d/%y %H:%M:%S')
+
+    trade_buy = trader.trade_buy(
+        buy_time=buy_time,
+        asset=asset,
+        market=market,
+        interval=interval,
+        trades=trades,
+        price=price,
+        diff=diff,
+        quantity=quantity,
+    )
+    trade_last = trade_repository.find_last_trade()
+
+    assert trade_buy.id == trade_last.id
+
+    assert trade_buy.interval_start.hour == 12
+    assert trade_buy.interval_start.minute == 30
+    assert trade_buy.interval_start.second == 0
+
+    assert trade_buy.interval_end.hour == 12
+    assert trade_buy.interval_end.minute == 45
+    assert trade_buy.interval_end.second == 0
+
+def test_trade_buy_15m_30():
+    asset = 'BTC'
+    market = 'USDT'
+    interval = '15m'
+    trades = 10000
+    price = 10000
+    diff = 0.00001
+    quantity = 0.001
+    buy_time = datetime.strptime('09/19/19 12:30:00', '%m/%d/%y %H:%M:%S')
+
+    trade_buy = trader.trade_buy(
+        buy_time=buy_time,
+        asset=asset,
+        market=market,
+        interval=interval,
+        trades=trades,
+        price=price,
+        diff=diff,
+        quantity=quantity,
+    )
+    trade_last = trade_repository.find_last_trade()
+
+    assert trade_buy.id == trade_last.id
+
+    assert trade_buy.interval_start.hour == 12
+    assert trade_buy.interval_start.minute == 45
+    assert trade_buy.interval_start.second == 0
+
+    assert trade_buy.interval_end.hour == 13
+    assert trade_buy.interval_end.minute == 0
+    assert trade_buy.interval_end.second == 0
+
+def test_trade_buy_15m_45():
+    asset = 'BTC'
+    market = 'USDT'
+    interval = '15m'
+    trades = 10000
+    price = 10000
+    diff = 0.00001
+    quantity = 0.001
+    buy_time = datetime.strptime('09/19/19 12:45:00', '%m/%d/%y %H:%M:%S')
+
+    trade_buy = trader.trade_buy(
+        buy_time=buy_time,
+        asset=asset,
+        market=market,
+        interval=interval,
+        trades=trades,
+        price=price,
+        diff=diff,
+        quantity=quantity,
+    )
+    trade_last = trade_repository.find_last_trade()
+
+    assert trade_buy.id == trade_last.id
+
+    assert trade_buy.interval_start.hour == 13
+    assert trade_buy.interval_start.minute == 0
+    assert trade_buy.interval_start.second == 0
+
+    assert trade_buy.interval_end.hour == 13
+    assert trade_buy.interval_end.minute == 15
+    assert trade_buy.interval_end.second == 0
+
 def test_trade_buy_15m_28():
     asset = 'BTC'
     market = 'USDT'
