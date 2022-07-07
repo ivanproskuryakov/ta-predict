@@ -1,5 +1,6 @@
 import pandas as pd
 
+from datetime import datetime
 from binance import Client
 
 from src.repository.trade_repository import TradeRepository
@@ -26,7 +27,7 @@ class Trader:
             api_secret=API_SECRET,
         )
 
-    def trade_buy_many(self, df: pd.DataFrame, limit: int, interval: str) -> list[Trade]:
+    def trade_buy_many(self, df: pd.DataFrame, limit: int, interval: str, buy_time: datetime) -> list[Trade]:
         trades = []
         df_len = len(df)
 
@@ -48,6 +49,7 @@ class Trader:
             quantity = round(self.trade_volume / float(price_close), 4)
 
             trade = self.trade_buy(
+                buy_time=buy_time,
                 asset=asset,
                 market=self.market,
                 trades=trades_amount,
@@ -63,6 +65,7 @@ class Trader:
 
     def trade_buy(
             self,
+            buy_time: datetime,
             asset: str,
             market: str,
             interval: str,
@@ -86,6 +89,7 @@ class Trader:
         order = {}
 
         trade = self.trade_repository.create_buy(
+            buy_time=buy_time,
             asset=asset,
             market=market,
             interval=interval,

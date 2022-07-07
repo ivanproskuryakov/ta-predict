@@ -1,9 +1,12 @@
+from datetime import datetime
+
 from src.repository.trade_repository import TradeRepository
 
 
 def trade_create_buy():
     trade_repository = TradeRepository()
 
+    buy_time = datetime.utcnow()
     asset = 'BTC'
     market = 'USDT'
     interval = '1h'
@@ -14,6 +17,7 @@ def trade_create_buy():
     order = {}
 
     trade = trade_repository.create_buy(
+        buy_time=buy_time,
         asset=asset,
         market=market,
         trades=trades,

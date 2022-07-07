@@ -60,8 +60,9 @@ report = reporter.report_prettify(df)
 
 trader.trade_buy_many(
     df=df_best,
-    limit=20,
+    limit=10,
     interval=interval,
+    buy_time=start_at,
 )
 
 print(report)

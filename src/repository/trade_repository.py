@@ -14,21 +14,34 @@ class TradeRepository:
 
     def create_buy(
             self,
+            buy_time: datetime,
             asset: str, market: str, interval: str, diff: float, trades: float,
             price_buy: float, quantity: float, order: {},
     ) -> Trade:
-        now = datetime.utcnow()
-
-        interval_start = now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+        interval_start = buy_time.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
         interval_end = interval_start + timedelta(hours=1)
 
         if interval == '30m':
-            if now.minute < 30:
-                interval_start = now.replace(minute=30, second=0, microsecond=0)
+            if buy_time.minute < 30:
+                interval_start = buy_time.replace(minute=30, second=0, microsecond=0)
                 interval_end = interval_start + timedelta(minutes=30)
-            if now.minute > 30:
-                interval_start = now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+            if buy_time.minute > 30:
+                interval_start = buy_time.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
                 interval_end = interval_start + timedelta(minutes=30)
+
+        if interval == '15m':
+            if 0 < buy_time.minute < 15:
+                interval_start = buy_time.replace(minute=15, second=0, microsecond=0)
+                interval_end = interval_start + timedelta(minutes=15)
+            if 15 < buy_time.minute < 30:
+                interval_start = buy_time.replace(minute=30, second=0, microsecond=0)
+                interval_end = interval_start + timedelta(minutes=15)
+            if 30 < buy_time.minute < 45:
+                interval_start = buy_time.replace(minute=45, second=0, microsecond=0)
+                interval_end = interval_start + timedelta(minutes=15)
+            if buy_time.minute > 45:
+                interval_start = buy_time.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+                interval_end = interval_start + timedelta(minutes=15)
 
         trade = Trade()
 
@@ -40,7 +53,7 @@ class TradeRepository:
 
         trade.buy_price = price_buy
         trade.buy_quantity = quantity
-        trade.buy_time = now
+        trade.buy_time = buy_time
         trade.buy_order = order
 
         trade.interval_start = interval_start
