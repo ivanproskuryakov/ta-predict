@@ -10,7 +10,6 @@ from src.service.util import diff_percentage, diff_percentage_sum
 class Reporter():
     def report_prettify(self, df):
         df['diff'] = df['diff'].apply(lambda x: chalk.green(x) if x > 0.1 else x)
-        # df['diff'] = df['diff'].apply(lambda x: chalk.red(x) if x < 0.1 else x)
 
         table = tabulate(
             tabular_data=df.values,
@@ -47,7 +46,7 @@ class Reporter():
         for item in data:
             asset, last_item, x_df, y_df = item
 
-            x_tail = x_df.tail(10)
+            x_tail = x_df.tail(30)
             x_last = x_tail.iloc[-1]
 
             y1 = y_df.iloc[-2]
@@ -86,7 +85,7 @@ class Reporter():
 
         df = pd.DataFrame(report, None, headers)
 
-        df.sort_values(by=['diff_sum'], inplace=True, ascending=False)
+        df.sort_values(by=['diff'], inplace=True, ascending=True)
 
         df = df.reset_index(drop=True)
 

@@ -55,17 +55,20 @@ time_prediction = datetime.utcnow() - start_at
 # --------
 
 df = reporter.report_build(data=data)
-df_best = trade_finder.pick_best_options(df, diff=0)
-report = reporter.report_prettify(df)
+df_best = trade_finder.pick_best_options(df, diff=1, diff_sum=0)
 
-trader.trade_buy_many(
-    df=df_best,
-    limit=10,
-    interval=interval,
-    buy_time=start_at,
-)
+report = reporter.report_prettify(df)
+report_best = reporter.report_prettify(df_best)
+
+# trader.trade_buy_many(
+#     df=df_best,
+#     limit=10,
+#     interval=interval,
+#     buy_time=start_at,
+# )
 
 print(report)
+print(report_best)
 
 print(f'start: {start_at}')
 print(f'interval: {interval}')

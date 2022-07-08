@@ -18,7 +18,7 @@ trade_repository = TradeRepository()
 def test_trade_buy_many():
     data = load_predictions()
     df = reporter.report_build(data=data)
-    df_best = trade_finder.pick_best_options(df, diff=0)
+    df_best = trade_finder.pick_best_options(df, diff=0, diff_sum=100)
     buy_time = datetime.utcnow()
 
     trades = trader.trade_buy_many(
@@ -28,18 +28,19 @@ def test_trade_buy_many():
         buy_time=buy_time,
     )
 
-    assert trades[0].asset == 'BTC'
-    assert trades[1].asset == 'ONT'
+    assert trades[0].asset == 'ONT'
+    assert trades[1].asset == 'BTC'
 
-    assert trades[0].buy_price == 20977.69
-    assert trades[0].diff_predicted == 1.0215
-    assert trades[0].buy_quantity == 0.0477
-    assert trades[0].trades == 3703.0
+    assert trades[0].buy_price == 0.2521
+    assert trades[0].diff_predicted == 0.1535
+    assert trades[0].buy_quantity == 3966.6799
+    assert trades[0].trades == 47.0
 
-    assert trades[1].buy_price == 0.2521
-    assert trades[1].diff_predicted == 0.1535
-    assert trades[1].buy_quantity == 3966.6799
-    assert trades[1].trades == 47.0
+    assert trades[1].buy_price == 20977.69
+    assert trades[1].diff_predicted == 1.0215
+    assert trades[1].buy_quantity == 0.0477
+    assert trades[1].trades == 3703.0
+
 
 
 def test_trade_buy_1h():
