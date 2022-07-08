@@ -15,7 +15,6 @@ data = response.json()
 headers = [
     "bid price",
     "bid qty",
-    "-",
     "ask price",
     "ask qty",
 ]

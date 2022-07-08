@@ -199,7 +199,6 @@ assets = [
     'ALICE',
     'LINA',
     'PERP',
-    'RAMP',
     'SUPER',
     'CFX',
     'AUTO',

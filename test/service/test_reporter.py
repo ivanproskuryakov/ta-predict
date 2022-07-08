@@ -13,4 +13,4 @@ def test_report_prettify():
 
     pos = report.find('close_price')
 
-    assert pos == 20
+    assert pos == 32

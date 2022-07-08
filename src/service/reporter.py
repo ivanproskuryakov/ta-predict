@@ -4,7 +4,7 @@ from yachalk import chalk
 from datetime import datetime
 from tabulate import tabulate
 
-from src.service.util import diff_percentage
+from src.service.util import diff_percentage, diff_percentage_sum
 
 
 class Reporter():
@@ -26,6 +26,7 @@ class Reporter():
         headers = [
             "asset",
             "diff",
+            "diff_sum",
             "close_price_modified",
             "close_price",
             "trades",
@@ -46,29 +47,30 @@ class Reporter():
         for item in data:
             asset, last_item, x_df, y_df = item
 
-            y_tail = y_df.tail(2)
-            x_tail = x_df.tail(2)
+            x_tail = x_df.tail(10)
+            x_last = x_tail.iloc[-1]
 
-            x1 = x_tail.iloc[0]
-            x2 = x_tail.iloc[1]
-            y1 = y_tail.iloc[0]
-            y2 = y_tail.iloc[1]
+            y1 = y_df.iloc[-2]
+            y2 = y_df.iloc[-1]
 
             date = datetime.fromtimestamp(last_item["time_open"])
 
             diff = diff_percentage(v2=y2['close'], v1=y1['close'])
+            diff_sum = diff_percentage_sum(x_tail)
 
-            # print(last_item)
-
-            # volume_market = x2["volume"] * x1["open"]
+            # print(x_tail)
+            # print(x_last)
+            # print(diff_sum)
+            # exit()
 
             report.append([
                 asset,
                 diff,
-                x2['close'],
+                diff_sum,
+                x_last['close'],
                 last_item["price_close"],
-                x2["trades"],
-                x2["volume"],
+                x_last["trades"],
+                x_last["volume"],
                 # volume_market,
 
                 # f'{x1["open"]:.4f}',
@@ -77,14 +79,14 @@ class Reporter():
                 # f'{y2["close"]:.4f}',
 
                 date.strftime("%Y %m %d %H:%M:%S"),
-                f'{x2["time_hour"]:.0f}',
-                f'{x2["time_minute"]:.0f}',
+                f'{x_last["time_hour"]:.0f}',
+                f'{x_last["time_minute"]:.0f}',
                 f'https://www.binance.com/en/trade/{asset}_USDT',
             ])
 
         df = pd.DataFrame(report, None, headers)
 
-        df.sort_values(by=['trades', 'diff'], inplace=True, ascending=True)
+        df.sort_values(by=['diff_sum'], inplace=True, ascending=False)
 
         df = df.reset_index(drop=True)
 
