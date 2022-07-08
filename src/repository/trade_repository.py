@@ -21,40 +21,47 @@ class TradeRepository:
         interval_start = buy_time.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
         interval_end = interval_start + timedelta(hours=1)
 
+        m = buy_time.minute
+
         if interval == '30m':
-            if buy_time.minute < 30:
+            if m < 30:
                 interval_start = buy_time.replace(minute=30, second=0, microsecond=0)
                 interval_end = interval_start + timedelta(minutes=30)
-            if buy_time.minute > 30:
+            if m > 30:
                 interval_start = buy_time.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
                 interval_end = interval_start + timedelta(minutes=30)
 
         if interval == '15m':
-            if buy_time.minute == 0:
+            if m == 0:
                 interval_start = buy_time.replace(minute=15, second=0, microsecond=0)
                 interval_end = interval_start + timedelta(minutes=15)
-            if buy_time.minute == 15:
+            if m == 15:
                 interval_start = buy_time.replace(minute=30, second=0, microsecond=0)
                 interval_end = interval_start + timedelta(minutes=15)
-            if buy_time.minute == 30:
+            if m == 30:
                 interval_start = buy_time.replace(minute=45, second=0, microsecond=0)
                 interval_end = interval_start + timedelta(minutes=15)
-            if buy_time.minute == 45:
+            if m == 45:
                 interval_start = buy_time.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
                 interval_end = interval_start + timedelta(minutes=15)
 
-            if 0 < buy_time.minute < 15:
+            if 0 < m < 15:
                 interval_start = buy_time.replace(minute=15, second=0, microsecond=0)
                 interval_end = interval_start + timedelta(minutes=15)
-            if 15 < buy_time.minute < 30:
+            if 15 < m < 30:
                 interval_start = buy_time.replace(minute=30, second=0, microsecond=0)
                 interval_end = interval_start + timedelta(minutes=15)
-            if 30 < buy_time.minute < 45:
+            if 30 < m < 45:
                 interval_start = buy_time.replace(minute=45, second=0, microsecond=0)
                 interval_end = interval_start + timedelta(minutes=15)
-            if buy_time.minute > 45:
+            if m > 45:
                 interval_start = buy_time.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
                 interval_end = interval_start + timedelta(minutes=15)
+
+        if interval == '5m':
+            interval_start = buy_time.replace(second=0, microsecond=0)
+            interval_start = interval_start + timedelta(minutes=5)
+            interval_end = interval_start + timedelta(minutes=5)
 
         trade = Trade()
 

@@ -39,6 +39,8 @@ ENV=test python db_populate_exchange.py
 43 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
 58 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
 
+*/5 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
+
 ```
 
 ### Test
