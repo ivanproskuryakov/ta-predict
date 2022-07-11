@@ -7,11 +7,6 @@ from src.service.util import diff_percentage, round
 
 
 class KLines:
-    def price_average(self, k: float):
-        avg = (float(k[1]) + float(k[2]) + float(k[3]) + float(k[4])) / 4
-
-        return round(avg)
-
     def build_klines(
             self,
             market: str,
@@ -66,6 +61,9 @@ class KLines:
 
             quote_asset_volume = round(float(current[7]), 0)
             trades = round(float(current[8]), 0)
+
+            # todo:
+            # something is wrong here with volumes
             volume_maker = round(float(current[9]), 0)
             volume_taker = round(volume - volume_maker, 1)
 

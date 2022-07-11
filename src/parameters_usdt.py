@@ -61,7 +61,6 @@ assets = [
     'CVC',
     'CHZ',
     'BAND',
-    # 'BUSD',
     'BEAM',
     'XTZ',
     'REN',
@@ -78,7 +77,6 @@ assets = [
     'TROY',
     'VITE',
     'FTT',
-    # 'EUR',
     'OGN',
     'DREP',
     'TCT',
@@ -200,6 +198,7 @@ assets = [
     'LINA',
     'PERP',
     'SUPER',
+
     'CFX',
     'AUTO',
     'TKO',

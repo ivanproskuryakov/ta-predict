@@ -12,9 +12,11 @@ class OhlcRepository:
     connection: Connection
     market: str = 'BTC'
     df_len: [int] = []
+    start_at: int
 
-    def __init__(self):
+    def __init__(self, start_at: int):
         self.connection = db_connect()
+        self.start_at = start_at
 
     def create(self, ohlc: Ohlc):
         with Session(self.connection) as session:
@@ -56,6 +58,7 @@ class OhlcRepository:
             .filter(Ohlc.market == market) \
             .filter(Ohlc.interval == interval) \
             .filter(Ohlc.asset == asset) \
+            .filter(Ohlc.time_open > self.start_at) \
             .order_by(Ohlc.time_open.desc()) \
             .statement
 
@@ -164,6 +167,7 @@ class OhlcRepository:
             .filter(Ohlc.market == market) \
             .filter(Ohlc.interval == interval) \
             .filter(Ohlc.asset == asset) \
+            .filter(Ohlc.time_open > self.start_at) \
             .order_by(Ohlc.time_open.desc()) \
             .statement
 
@@ -195,6 +199,7 @@ class OhlcRepository:
             .filter(Ohlc.market == market) \
             .filter(Ohlc.interval == interval) \
             .filter(Ohlc.asset == asset) \
+            .filter(Ohlc.time_open > self.start_at) \
             .order_by(Ohlc.time_open.desc()) \
             .statement
 

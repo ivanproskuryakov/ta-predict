@@ -10,32 +10,35 @@ class DatasetBuilderDB:
     scaler: MinMaxScaler
     exchange: str = 'binance'
 
-    def __init__(self):
-        self.scaler = MinMaxScaler()
-        self.repository = OhlcRepository()
+    assets: [str]
+    assets_down: [str]
+    assets_btc: [str]
+    interval: str
+    market: str
 
-    def build_dataset_all(
-            self,
-            market: str,
-            assets: list[str],
-            assets_down: list[str],
-            assets_btc: list[str],
-            interval: str
-    ) -> [
-        pd.DataFrame,
-        pd.DataFrame
-    ]:
+    def __init__(self,
+                 assets: [str],
+                 assets_down: [str],
+                 assets_btc: [str],
+                 interval: str,
+                 market: str,
+                 start_at: int,
+                 ):
+        self.assets = assets
+        self.assets_down = assets_down
+        self.assets_btc = assets_btc
+        self.interval = interval
+        self.market = market
+
+        self.scaler = MinMaxScaler()
+        self.repository = OhlcRepository(start_at=start_at)
+
+    def build_dataset_all(self) -> [pd.DataFrame, pd.DataFrame]:
         train = []
         validate = []
 
-        for asset in assets:
-            df_train, df_validate = self.build_dataset_asset(
-                asset=asset,
-                assets_down=assets_down,
-                assets_btc=assets_btc,
-                market=market,
-                interval=interval
-            )
+        for asset in self.assets:
+            df_train, df_validate = self.build_dataset_asset(asset=asset)
 
             train.append(df_train)
             validate.append(df_validate)
@@ -45,32 +48,22 @@ class DatasetBuilderDB:
 
         return train, validate
 
-    def build_dataset_asset(
-            self,
-            market: str,
-            asset: str,
-            assets_down: list[str],
-            assets_btc: list[str],
-            interval: str
-    ) -> [
-        pd.DataFrame,
-        pd.DataFrame
-    ]:
+    def build_dataset_asset(self, asset: str) -> [pd.DataFrame, pd.DataFrame]:
         df_ohlc = self.repository.get_full_df(
-            exchange=self.exchange,
-            market=market,
             asset=asset,
-            interval=interval
+            market=self.market,
+            interval=self.interval,
+            exchange=self.exchange,
         )
         df_down = self.repository.find_down_df(
+            assets_down=self.assets_down,
+            interval=self.interval,
             exchange=self.exchange,
-            assets_down=assets_down,
-            interval=interval
         )
         df_btc = self.repository.find_btc_df(
+            assets_btc=self.assets_btc,
+            interval=self.interval,
             exchange=self.exchange,
-            assets_btc=assets_btc,
-            interval=interval
         )
 
         min_len = self.repository.get_df_len_min()
