@@ -9,7 +9,6 @@ assets = [
     'ADA',
     'XRP',
     'EOS',
-    'TUSD',
     'IOTA',
     'XLM',
     'ONT',

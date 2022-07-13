@@ -12,4 +12,3 @@ Exchange.metadata.drop_all(bind=engine)
 Ohlc.metadata.create_all(bind=engine)
 Trade.metadata.create_all(bind=engine)
 Exchange.metadata.create_all(bind=engine)
-

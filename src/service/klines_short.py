@@ -8,18 +8,18 @@ utility = Utility()
 
 def build_klines(k: {}):
     time_open = k['t'] / 1000
-    price_open = round(k['o'], 10)
-    price_high = round(k['c'], 10)
-    price_low = round(k['h'], 10)
-    price_close = round(k['l'], 10)
-    volume = round(float(k['v']), 1)
+    price_open = utility.round(k['o'], 10)
+    price_high = utility.round(k['c'], 10)
+    price_low = utility.round(k['h'], 10)
+    price_close = utility.round(k['l'], 10)
+    volume = utility.round(float(k['v']), 1)
     time_close = k['T'] / 1000
 
-    quote_asset_volume = round(float(k['q']), 0)
-    trades = round(float(k['n']), 0)
+    quote_asset_volume = utility.round(float(k['q']), 0)
+    trades = utility.round(float(k['n']), 0)
 
-    volume_taker = round(float(k['V']), 1)  # Taker buy base asset volume
-    volume_maker = round(volume - volume_taker, 0)
+    volume_taker = utility.round(float(k['V']), 1)  # Taker buy base asset volume
+    volume_maker = utility.round(volume - volume_taker, 0)
 
     date = datetime.utcfromtimestamp(time_open)
 

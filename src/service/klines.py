@@ -80,20 +80,20 @@ class KLines:
 
         for current in klines:
             time_open = current[0] / 1000
-            price_open = round(current[1], 10)
-            price_high = round(current[2], 10)
-            price_low = round(current[3], 10)
-            price_close = round(current[4], 10)
-            volume = round(float(current[5]), 1)
+            price_open = self.utility.round(current[1], 10)
+            price_high = self.utility.round(current[2], 10)
+            price_low = self.utility.round(current[3], 10)
+            price_close = self.utility.round(current[4], 10)
+            volume = self.utility.round(float(current[5]), 1)
             time_close = current[6] / 1000
 
-            quote_asset_volume = round(float(current[7]), 0)
-            trades = round(float(current[8]), 0)
+            quote_asset_volume = self.utility.round(float(current[7]), 0)
+            trades = self.utility.round(float(current[8]), 0)
 
             # todo:
             # something is wrong here with volumes
-            volume_maker = round(float(current[9]), 0) # 9 Taker buy base asset volume,
-            volume_taker = round(volume - volume_maker, 1)
+            volume_maker = self.utility.round(float(current[9]), 0) # 9 Taker buy base asset volume,
+            volume_taker = self.utility.round(volume - volume_maker, 1)
 
             date = datetime.utcfromtimestamp(time_open)
 

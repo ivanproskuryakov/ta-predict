@@ -5,14 +5,14 @@ from src.service.klines import KLines
 
 from src.parameters_usdt import assets, market
 
-end_at = 1657712880
-start_at = end_at - 3 * 60 * 300
+end_at = 1657734060
+start_at = end_at - 1 * 60 * 300
 
 repository = OhlcRepository(-1)
 klines = KLines()
 
 exchange = 'binance'
-interval = '3m'
+interval = '1m'
 groups = [
     {
         "market": market,
