@@ -8,10 +8,10 @@ from src.service.util import diff_percentage, diff_percentage_sum
 
 class Reporter():
     def build_time(self, unscaled_last):
-        time = f"{unscaled_last['time_month']:.0f}" \
-               f"{unscaled_last['time_day']:.0f}" \
-               f"{unscaled_last['time_hour']:.0f}" \
-               f"{unscaled_last['time_minute']:.0f}"
+        time = f"{unscaled_last['time_month']:.0f} " \
+               f"{unscaled_last['time_day']:.0f} " \
+               f"{unscaled_last['time_hour']:.0f} " \
+               f"{unscaled_last['time_minute']:.0f} "
 
         return time
 

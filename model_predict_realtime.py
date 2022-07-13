@@ -20,7 +20,7 @@ pd.set_option("display.precision", 4)
 
 interval = '3m'
 start_at = datetime.utcnow()
-start_at_diff = int(start_at.timestamp() - 200 * 3 * 60)
+start_at_diff = int(start_at.timestamp() - 100 * 3 * 60)
 
 trader = Trader()
 reporter = Reporter()

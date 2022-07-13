@@ -58,8 +58,8 @@ class OhlcRepository:
             .filter(Ohlc.market == market) \
             .filter(Ohlc.interval == interval) \
             .filter(Ohlc.asset == asset) \
-            .filter(Ohlc.time_open > self.start_at) \
-            .order_by(Ohlc.time_open.desc()) \
+            .filter(self.start_at > Ohlc.time_open) \
+            .order_by(Ohlc.id.desc()) \
             .statement
 
         df = pd.read_sql(
