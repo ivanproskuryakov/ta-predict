@@ -8,26 +8,28 @@ from src.service.generator_window import WindowGenerator
 from src.parameters import market, assets, assets_down
 from src.parameters_btc import assets_btc
 
-dataset_builder_db = DatasetBuilderDB()
-
 # Variables
 # ------------------------------------------------------------------------
-width = 100
-
-filepath_model = f'data/gru-b.keras'
-filepath_checkpoint = f'data/gru-b.checkpoint'
+filepath_model = f'data/gru-100-b.keras'
+filepath_checkpoint = f'data/gru-100-b.checkpoint'
 
 interval = '5m'
+width = 100
+
+start_at = -1
 
 # Data load & train
 # ------------------------------------------------------------------------
-train_df, validate_df = dataset_builder_db.build_dataset_all(
+dataset_builder_db = DatasetBuilderDB(
     market=market,
     assets=assets,
     assets_down=assets_down,
     assets_btc=assets_btc,
-    interval=interval
+    interval=interval,
+    start_at=start_at,
 )
+
+train_df, validate_df = dataset_builder_db.build_dataset_all()
 
 df_num_signals = train_df.shape[1]
 
