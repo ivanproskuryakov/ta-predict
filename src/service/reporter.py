@@ -7,11 +7,11 @@ from src.service.util import diff_percentage, diff_percentage_sum
 
 
 class Reporter():
-    def build_time(self, unscaled_last):
-        time = f"{unscaled_last['time_month']:.0f} " \
-               f"{unscaled_last['time_day']:.0f} " \
-               f"{unscaled_last['time_hour']:.0f} " \
-               f"{unscaled_last['time_minute']:.0f} "
+    def build_time(self, x_last):
+        time = f"{x_last['time_month']:.0f} " \
+               f"{x_last['time_day']:.0f} " \
+               f"{x_last['time_hour']:.0f} " \
+               f"{x_last['time_minute']:.0f} "
 
         return time
 
@@ -33,25 +33,21 @@ class Reporter():
             "asset",
             "diff",
             "diff_sum",
-            "close_price_modified",
             "close_price",
             "trades",
             "volume",
 
             "date",
-            "h",
-            "m",
             "url",
         ]
 
         for item in data:
-            asset, x_df, x_df_unscaled, y_df = item
+            asset, x_df, y_df = item
 
             x_tail = x_df.tail(30)
-            x_last = x_tail.iloc[-1]
 
-            unscaled_last = x_df_unscaled.iloc[-1]
-            unscaled_last_time = self.build_time(unscaled_last)
+            x_last = x_df.iloc[-1]
+            x_date = self.build_time(x_last)
 
             y1 = y_df.iloc[-2]
             y2 = y_df.iloc[-1]
@@ -63,14 +59,11 @@ class Reporter():
                 asset,
                 diff,
                 diff_sum,
-                x_last['close'],
-                unscaled_last["close"],
+                x_last["close"],
                 x_last["trades"],
                 x_last["volume"],
 
-                unscaled_last_time,
-                f'{x_last["time_hour"]:.0f}',
-                f'{x_last["time_minute"]:.0f}',
+                x_date,
                 f'https://www.binance.com/en/trade/{asset}_USDT',
             ])
 

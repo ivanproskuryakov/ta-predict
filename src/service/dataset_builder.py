@@ -52,22 +52,21 @@ class DatasetBuilder:
         collection = []
 
         for asset in self.assets:
-            df_ohlc = self.repository.get_full_df(
+            df, df_scaled = self.repository.get_full_df(
                 asset=asset,
                 market=self.market,
                 interval=self.interval,
                 exchange=self.exchange,
             )
 
-            df_asc = df_ohlc[::-1].reset_index(drop=True)
+            df = df[::-1].reset_index(drop=True)
 
-            df_ta_na = estimate_ta_fill_na(df_asc)
+            df_scaled = df_scaled[::-1].reset_index(drop=True)
+            df_scaled = estimate_ta_fill_na(df_scaled)
+            scaled = self.scaler.fit_transform(df_scaled)
+            df_scaled = pd.DataFrame(scaled, None, df_scaled.keys())
 
-            scaled = self.scaler.fit_transform(df_ta_na)
-
-            df = pd.DataFrame(scaled, None, df_ta_na.keys())
-
-            collection.append((asset, df, df_ta_na))
+            collection.append((asset, df, df_scaled))
 
         return collection
 

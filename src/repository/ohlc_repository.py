@@ -70,12 +70,14 @@ class OhlcRepository:
         price = df['open'].iloc[-1]
         diff = diff_price(price)
 
-        df['open'] = df['open'].apply(lambda x: x * diff)
-        df['high'] = df['high'].apply(lambda x: x * diff)
-        df['low'] = df['low'].apply(lambda x: x * diff)
-        df['close'] = df['close'].apply(lambda x: x * diff)
+        df_scaled = df.copy()
 
-        return df
+        df_scaled['open'] = df_scaled['open'].apply(lambda x: x * diff)
+        df_scaled['high'] = df_scaled['high'].apply(lambda x: x * diff)
+        df_scaled['low'] = df_scaled['low'].apply(lambda x: x * diff)
+        df_scaled['close'] = df_scaled['close'].apply(lambda x: x * diff)
+
+        return df, df_scaled
 
     def find_down_df(
             self,

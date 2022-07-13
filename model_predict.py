@@ -45,11 +45,15 @@ time_db_load = datetime.utcnow() - start_at
 model = tf.keras.models.load_model('model/gru-b-100-48.keras')
 
 for item in collection:
-    asset, x_df, x_df_unscaled = item
+    asset, x_df, df_scaled = item
 
-    y_df = make_prediction_ohlc_close(x_df, model)
+    y_df = make_prediction_ohlc_close(df_scaled, model)
 
-    data.append((asset, x_df, x_df_unscaled, y_df))
+    data.append((
+        asset,
+        x_df,
+        y_df
+    ))
 
 time_prediction = datetime.utcnow() - start_at
 
