@@ -24,7 +24,7 @@ dataset_builder = DatasetBuilderAPI(
 # ------------------------------------------------------------------------
 
 model = tf.keras.models.load_model(f'model/ta.keras')
-x, last_item = dataset_builder.build_dataset_all()
+x, last_item = dataset_builder.build_dataset_train()
 
 y = make_prediction_ohlc_close(x, model)
 

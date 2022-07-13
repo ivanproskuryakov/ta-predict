@@ -1,16 +1,16 @@
 from fixture.ohlc import crate_ohlc_many
 
 from src.entity.ohlc import Ohlc
-from src.service.dataset_builder_db import DatasetBuilderDB
+from src.service.dataset_builder import DatasetBuilder
 from src.connector.db_connector import db_connect
 
 
-def test_build_dataset_all():
+def test_build_dataset_train():
     engine = db_connect()
     Ohlc.metadata.drop_all(bind=engine)
     Ohlc.metadata.create_all(bind=engine)
 
-    builder = DatasetBuilderDB()
+    builder = DatasetBuilder()
 
     assets = [
         'BTC',
@@ -39,7 +39,7 @@ def test_build_dataset_all():
     crate_ohlc_many(asset='BNB', market='BTC', interval='5m', price=0.011, quantity=10)
     crate_ohlc_many(asset='ADA', market='BTC', interval='5m', price=0.00002, quantity=10)
 
-    train, validate = builder.build_dataset_all(
+    train, validate = builder.build_dataset_train(
         market='USDT',
         assets=assets,
         assets_down=assets_down,

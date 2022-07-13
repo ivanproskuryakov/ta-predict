@@ -5,7 +5,7 @@ from src.service.estimator import estimate_ta_fill_na
 from src.repository.ohlc_repository import OhlcRepository
 
 
-class DatasetBuilderDB:
+class DatasetBuilder:
     repository: OhlcRepository
     scaler: MinMaxScaler
     exchange: str = 'binance'
@@ -33,7 +33,7 @@ class DatasetBuilderDB:
         self.scaler = MinMaxScaler()
         self.repository = OhlcRepository(start_at=start_at)
 
-    def build_dataset_all(self) -> [pd.DataFrame, pd.DataFrame]:
+    def build_dataset_train(self) -> [pd.DataFrame, pd.DataFrame]:
         train = []
         validate = []
 
@@ -48,7 +48,7 @@ class DatasetBuilderDB:
 
         return train, validate
 
-    def build_dataset_asset_all_real(self):
+    def build_dataset_predict(self):
         collection = []
 
         for asset in self.assets:

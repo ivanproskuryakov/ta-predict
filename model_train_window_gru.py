@@ -3,7 +3,7 @@ import tensorflow as tf
 from keras.layers import Dense, GRU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
-from src.service.dataset_builder_db import DatasetBuilderDB
+from src.service.dataset_builder import DatasetBuilder
 from src.service.generator_window import WindowGenerator
 from src.parameters import market, assets, assets_down
 from src.parameters_btc import assets_btc
@@ -19,7 +19,7 @@ start_at = -1
 
 # Data load & train
 # ------------------------------------------------------------------------
-dataset_builder_db = DatasetBuilderDB(
+dataset_builder = DatasetBuilder(
     market=market,
     assets=assets,
     assets_down=assets_down,
@@ -28,7 +28,7 @@ dataset_builder_db = DatasetBuilderDB(
     start_at=start_at,
 )
 
-train_df, validate_df = dataset_builder_db.build_dataset_all()
+train_df, validate_df = dataset_builder.build_dataset_train()
 
 df_num_signals = train_df.shape[1]
 
