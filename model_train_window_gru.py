@@ -15,7 +15,6 @@ filepath_checkpoint = f'data/gru-100-b.checkpoint'
 
 interval = '5m'
 width = 100
-
 start_at = -1
 
 # Data load & train

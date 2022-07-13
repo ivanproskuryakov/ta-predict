@@ -16,7 +16,7 @@ def build_klines(k: {}):
     quote_asset_volume = round(float(k['q']), 0)
     trades = round(float(k['n']), 0)
 
-    volume_taker = round(float(k['V']), 1)
+    volume_taker = round(float(k['V']), 1) # Taker buy base asset volume
     volume_maker = round(volume - volume_taker, 0)
 
     date = datetime.utcfromtimestamp(time_open)

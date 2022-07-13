@@ -3,33 +3,20 @@ from binance import enums
 from src.repository.ohlc_repository import OhlcRepository
 from src.service.klines import KLines
 
-from src.parameters import assets_down
 from src.parameters_usdt import assets, market
-from src.parameters_btc import assets_btc, market_btc
 
-diff_seconds = 5 * 60 * 100
-end_at = 1657578600
-start_at = end_at - diff_seconds
+end_at = 1657712880
+start_at = end_at - 3 * 60 * 300
 
 repository = OhlcRepository(-1)
 klines = KLines()
 
 exchange = 'binance'
-interval = '5m'
+interval = '3m'
 groups = [
     {
         "market": market,
         "assets": assets,
-        "type": enums.HistoricalKlinesType.SPOT
-    },
-    {
-        "market": market,
-        "assets": assets_down,
-        "type": enums.HistoricalKlinesType.SPOT
-    },
-    {
-        "market": market_btc,
-        "assets": assets_btc,
         "type": enums.HistoricalKlinesType.SPOT
     },
 ]

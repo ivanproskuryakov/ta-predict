@@ -1,4 +1,3 @@
-import sys
 import tensorflow as tf
 import numpy as np
 import pandas as pd
@@ -19,12 +18,9 @@ from src.service.predictor_unseen import make_prediction_ohlc_close
 np.set_printoptions(precision=4)
 pd.set_option("display.precision", 4)
 
-interval = sys.argv[1]
+interval = '3m'
 start_at = datetime.utcnow()
-start_at_diff = int(start_at.timestamp() - 100 * 5 * 60)
-
-# print(start_at_diff)
-# exit()
+start_at_diff = int(start_at.timestamp() - 200 * 3 * 60)
 
 trader = Trader()
 reporter = Reporter()
@@ -38,23 +34,22 @@ dataset_builder = DatasetBuilderDB(
     start_at=start_at_diff,
 )
 
-
 data = []
 
 # --------
 
-model = tf.keras.models.load_model('model/gru-b.keras')
+collection = dataset_builder.build_dataset_asset_all_real()
 
-collection = dataset_builder.build_dataset_all()
+time_db_load = datetime.utcnow() - start_at
 
-time_download = datetime.utcnow() - start_at
+model = tf.keras.models.load_model('model/gru-b-100-48.keras')
 
 for item in collection:
-    asset, x_df, last_item = item
+    asset, x_df, x_df_unscaled = item
 
     y_df = make_prediction_ohlc_close(x_df, model)
 
-    data.append((asset, last_item, x_df, y_df))
+    data.append((asset, x_df, x_df_unscaled, y_df))
 
 time_prediction = datetime.utcnow() - start_at
 
@@ -66,17 +61,10 @@ df_best = trade_finder.pick_best_options(df, diff=1, diff_sum=0)
 report = reporter.report_prettify(df)
 report_best = reporter.report_prettify(df_best)
 
-# trader.trade_buy_many(
-#     df=df_best,
-#     limit=10,
-#     interval=interval,
-#     buy_time=start_at,
-# )
-
 print(report)
 print(report_best)
 
 print(f'start: {start_at}')
 print(f'interval: {interval}')
-print(f'download: {time_download}')
+print(f'db_load: {time_db_load}')
 print(f'prediction: {time_prediction}')

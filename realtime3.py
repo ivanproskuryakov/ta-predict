@@ -13,15 +13,16 @@ from src.service.klines_short import build_klines
 
 repository = OhlcRepository(-1)
 
-interval = '5m'
+interval = '3m'
 socket = 'wss://stream.binance.com:9443/ws'
 symbols = [f'{x}{market}@kline_{interval}'.lower() for x in assets]
-symbols_btc = [f'{x}{market_btc}@kline_{interval}'.lower() for x in assets_btc]
-symbols_down = [f'{x}{market}@kline_{interval}'.lower() for x in assets_down]
+# symbols_btc = [f'{x}{market_btc}@kline_{interval}'.lower() for x in assets_btc]
+# symbols_down = [f'{x}{market}@kline_{interval}'.lower() for x in assets_down]
 
-symbols_total = len(symbols) + len(symbols_btc) + len(symbols_down)
+symbols_total = len(symbols)
 
-print(symbols, symbols_btc, symbols_down, symbols_total)
+print(symbols, symbols_total)
+# print(symbols, symbols_btc, symbols_down, symbols_total)
 
 collection = []
 

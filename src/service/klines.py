@@ -5,6 +5,48 @@ from datetime import datetime
 from src.parameters import API_KEY, API_SECRET
 from src.service.util import diff_percentage, round
 
+"""
+https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-data
+
+Taker - an order that trades immediately before going on the order book
+Maker - an order that goes on the order book partially or fully
+
+0 Open time,
+
+1 Open,
+2 High,
+3 Low,
+4 Close,
+5 Volume,
+
+6 Close time,
+
+7 Quote asset volume,
+8 Number of trades,
+9 Taker buy base asset volume,
+10 Taker buy quote asset volume,
+
+11 Ignore
+
+
+[
+  [
+    1499040000000,      // Open time
+    "0.01634790",       // Open
+    "0.80000000",       // High
+    "0.01575800",       // Low
+    "0.01577100",       // Close
+    "148976.11427815",  // Volume
+    1499644799999,      // Close time
+    "2434.19055334",    // Quote asset volume
+    308,                // Number of trades
+    "1756.87402397",    // Taker buy base asset volume
+    "28.46694368",      // Taker buy quote asset volume
+    "17928899.62484339" // Ignore.
+  ]
+]
+"""
+
 
 class KLines:
     def build_klines(
@@ -21,25 +63,6 @@ class KLines:
             api_secret=API_SECRET,
         )
         symbol = asset + market
-        # Taker - an order that trades immediately before going on the order book
-        # Maker - an order that goes on the order book partially or fully
-
-        # 0 Open time,
-
-        # 1 Open,
-        # 2 High,
-        # 3 Low,
-        # 4 Close,
-        # 5 Volume,
-
-        # 6 Close time,
-
-        # 7 Quote asset volume,
-        # 8 Number of trades,
-        # 9 Taker buy base asset volume,
-        # 10 Taker buy quote asset volume,
-
-        # 11 Ignore
 
         klines = client.get_historical_klines(
             symbol=symbol,
@@ -64,7 +87,7 @@ class KLines:
 
             # todo:
             # something is wrong here with volumes
-            volume_maker = round(float(current[9]), 0)
+            volume_maker = round(float(current[9]), 0) # 9 Taker buy base asset volume,
             volume_taker = round(volume - volume_maker, 1)
 
             date = datetime.utcfromtimestamp(time_open)

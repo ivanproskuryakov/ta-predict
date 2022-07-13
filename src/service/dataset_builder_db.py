@@ -48,6 +48,29 @@ class DatasetBuilderDB:
 
         return train, validate
 
+    def build_dataset_asset_all_real(self):
+        collection = []
+
+        for asset in self.assets:
+            df_ohlc = self.repository.get_full_df(
+                asset=asset,
+                market=self.market,
+                interval=self.interval,
+                exchange=self.exchange,
+            )
+
+            df_asc = df_ohlc[::-1].reset_index(drop=True)
+
+            df_ta_na = estimate_ta_fill_na(df_asc)
+
+            scaled = self.scaler.fit_transform(df_ta_na)
+
+            df = pd.DataFrame(scaled, None, df_ta_na.keys())
+
+            collection.append((asset, df, df_ta_na))
+
+        return collection
+
     def build_dataset_asset(self, asset: str) -> [pd.DataFrame, pd.DataFrame]:
         df_ohlc = self.repository.get_full_df(
             asset=asset,
