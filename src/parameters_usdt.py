@@ -18,7 +18,6 @@ assets = [
     'ICX',
     'NULS',
     'VET',
-    'USDC',
     'LINK',
     'WAVES',
     'ONG',

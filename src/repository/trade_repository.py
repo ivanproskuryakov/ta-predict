@@ -3,14 +3,16 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from src.entity.trade import Trade
 from src.connector.db_connector import db_connect
-from src.service.util import diff_percentage
+from src.service.util import Utility
 
 
 class TradeRepository:
     connection = None
+    utility: Utility
 
     def __init__(self):
         self.connection = db_connect()
+        self.utility = Utility()
 
     def create_buy(
             self,
@@ -90,7 +92,7 @@ class TradeRepository:
         trade.sell_price = price_sell
         trade.sell_time = datetime.utcnow()
         trade.sell_order = order
-        trade.diff_real = diff_percentage(price_sell, trade.buy_price)
+        trade.diff_real = self.utility.diff_percentage(price_sell, trade.buy_price)
         trade.is_positive = trade.diff_real > 0
 
         with Session(self.connection) as session:

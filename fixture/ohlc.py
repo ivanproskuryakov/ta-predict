@@ -2,11 +2,12 @@ import pandas as pd
 
 from datetime import datetime
 from src.repository.ohlc_repository import OhlcRepository
-from src.service.util import diff_percentage
+from src.service.util import Utility
 
 
 def crate_ohlc_many(asset: str, market: str, interval: str, price: float, quantity: int) -> pd.DataFrame:
     ohlc_repository = OhlcRepository()
+    utility = Utility()
 
     collection = []
     time_open = 1650011400
@@ -34,7 +35,7 @@ def crate_ohlc_many(asset: str, market: str, interval: str, price: float, quanti
             'price_high': price_high,
             'price_low': price_low,
             'price_close': price_close,
-            'price_diff': diff_percentage(price_close, price_open),
+            'price_diff': utility.diff_percentage(price_close, price_open),
 
             'time_open': time_open,
             'time_close': time_close,

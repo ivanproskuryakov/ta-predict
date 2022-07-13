@@ -3,7 +3,7 @@ from binance import Client, enums
 from datetime import datetime
 
 from src.parameters import API_KEY, API_SECRET
-from src.service.util import diff_percentage, round
+from src.service.util import Utility
 
 """
 https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-data
@@ -49,6 +49,11 @@ Maker - an order that goes on the order book partially or fully
 
 
 class KLines:
+    utility: Utility
+
+    def __init__(self):
+        self.utility = Utility()
+
     def build_klines(
             self,
             market: str,
@@ -97,7 +102,7 @@ class KLines:
                 'price_high': price_high,
                 'price_low': price_low,
                 'price_close': price_close,
-                'price_diff': diff_percentage(price_close, price_open),
+                'price_diff': self.utility.diff_percentage(price_close, price_open),
 
                 'time_open': time_open,
                 'time_close': time_close,

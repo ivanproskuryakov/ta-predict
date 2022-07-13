@@ -8,7 +8,7 @@ from src.repository.exchange_repository import ExchangeRepository
 
 from src.entity.trade import Trade
 from src.parameters import API_KEY, API_SECRET
-from src.service.util import round, get_precision
+from src.service.util import Utility
 
 
 class Trader:
@@ -19,7 +19,10 @@ class Trader:
     trade_repository: TradeRepository
     exchange_repository: ExchangeRepository
 
+    utility: Utility
+
     def __init__(self):
+        self.utility = Utility()
         self.trade_repository = TradeRepository()
         self.exchange_repository = ExchangeRepository()
         self.client = Client(
@@ -43,10 +46,10 @@ class Trader:
             )
             # precision = get_precision(exchange.lotStepSize)
 
-            price_close = round(df.iloc[i]['close_price'], 8)
-            diff = round(df.iloc[i]['diff'], 4)
-            trades_amount = round(df.iloc[i]['trades'], 0)
-            quantity = round(self.trade_volume / float(price_close), 4)
+            price_close = self.utility.round(df.iloc[i]['close_price'], 8)
+            diff = self.utility.round(df.iloc[i]['diff'], 4)
+            trades_amount = self.utility.round(df.iloc[i]['trades'], 0)
+            quantity = self.utility.round(self.trade_volume / float(price_close), 4)
 
             trade = self.trade_buy(
                 buy_time=buy_time,

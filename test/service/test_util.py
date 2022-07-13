@@ -1,4 +1,6 @@
-from src.service.util import diff_price
+from src.service.util import Utility
+
+utility = Utility()
 
 
 def test_price_hight_btc():
@@ -7,10 +9,10 @@ def test_price_hight_btc():
     trx = 0.000003
     celo = 0.000045
 
-    diff_ada = diff_price(ada)
-    diff_bnb = diff_price(bnb)
-    diff_trx = diff_price(trx)
-    diff_celo = diff_price(celo)
+    diff_ada = utility.diff_price(ada)
+    diff_bnb = utility.diff_price(bnb)
+    diff_trx = utility.diff_price(trx)
+    diff_celo = utility.diff_price(celo)
 
     assert diff_ada == 434782608.6956522
 
@@ -26,10 +28,10 @@ def test_price_hight_usdt():
     trx = 0.01
     celo = 0.8
 
-    diff_ada = diff_price(ada)
-    diff_bnb = diff_price(bnb)
-    diff_trx = diff_price(trx)
-    diff_celo = diff_price(celo)
+    diff_ada = utility.diff_price(ada)
+    diff_bnb = utility.diff_price(bnb)
+    diff_trx = utility.diff_price(trx)
+    diff_celo = utility.diff_price(celo)
 
     assert diff_ada == 25000.0
 

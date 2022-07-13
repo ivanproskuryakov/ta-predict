@@ -5,7 +5,7 @@ from sqlalchemy.engine import Connection
 
 from src.entity.ohlc import Ohlc
 from src.connector.db_connector import db_connect
-from src.service.util import diff_price
+from src.service.util import Utility
 
 
 class OhlcRepository:
@@ -13,10 +13,12 @@ class OhlcRepository:
     market: str = 'BTC'
     df_len: [int] = []
     start_at: int
+    utility: Utility
 
     def __init__(self, start_at: int):
         self.connection = db_connect()
         self.start_at = start_at
+        self.utility = Utility()
 
     def create(self, ohlc: Ohlc):
         with Session(self.connection) as session:
@@ -68,7 +70,7 @@ class OhlcRepository:
         )
 
         price = df['open'].iloc[-1]
-        diff = diff_price(price)
+        diff = self.utility.diff_price(price)
 
         df_scaled = df.copy()
 
@@ -95,7 +97,7 @@ class OhlcRepository:
             )
 
             price = df[f'open_{asset}'].iloc[-1]
-            diff = diff_price(price)
+            diff = self.utility.diff_price(price)
 
             df[f'open_{asset}'] = df[f'open_{asset}'].apply(lambda x: x * diff)
             df[f'high_{asset}'] = df[f'high_{asset}'].apply(lambda x: x * diff)
@@ -127,7 +129,7 @@ class OhlcRepository:
                 interval=interval
             )
             price = df[f'open_BTC_{asset}'].iloc[-1]
-            diff = diff_price(price)
+            diff = self.utility.diff_price(price)
 
             df[f'open_BTC_{asset}'] = df[f'open_BTC_{asset}'].apply(lambda x: x * diff)
             df[f'high_BTC_{asset}'] = df[f'high_BTC_{asset}'].apply(lambda x: x * diff)

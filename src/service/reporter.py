@@ -3,10 +3,15 @@ from yachalk import chalk
 
 from tabulate import tabulate
 
-from src.service.util import diff_percentage, diff_percentage_sum
+from src.service.util import Utility
 
 
-class Reporter():
+class Reporter:
+    utility: Utility
+
+    def __init__(self):
+        self.utility = Utility()
+
     def build_time(self, x_last):
         time = f"{x_last['time_month']:.0f} " \
                f"{x_last['time_day']:.0f} " \
@@ -52,8 +57,8 @@ class Reporter():
             y1 = y_df.iloc[-2]
             y2 = y_df.iloc[-1]
 
-            diff = diff_percentage(v2=y2['close'], v1=y1['close'])
-            diff_sum = diff_percentage_sum(x_tail)
+            diff = self.utility.diff_percentage(v2=y2['close'], v1=y1['close'])
+            diff_sum = self.utility.diff_percentage_sum(x_tail)
 
             report.append([
                 asset,
