@@ -1,3 +1,5 @@
+import sys
+
 from binance import enums
 from datetime import datetime, timedelta
 
@@ -6,14 +8,16 @@ from src.service.klines import KLines
 
 from src.parameters_usdt import assets, market
 
-end_at = datetime.utcfromtimestamp(1657789680)
-start_at = end_at - timedelta(hours=20)
+interval = float(sys.argv[1])
+
+end_at = datetime.utcfromtimestamp(interval)
+start_at = end_at - timedelta(hours=55)
 
 repository = OhlcRepository(-1)
 klines = KLines()
 
 exchange = 'binance'
-interval = '1m'
+interval = '3m'
 groups = [
     {
         "market": market,

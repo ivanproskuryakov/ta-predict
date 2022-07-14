@@ -70,14 +70,6 @@ class OhlcRepository:
             con=self.connection
         )
 
-        # print(asset, market, exchange, interval)
-        # print(start_at)
-        # print(end_at)
-        # print(asset)
-        # print(start_at)
-        # print(len(df))
-        # exit()
-
         price = df['open'].iloc[-1]
         diff = self.utility.diff_price(price)
 
