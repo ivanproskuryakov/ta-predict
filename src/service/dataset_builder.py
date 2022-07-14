@@ -47,7 +47,7 @@ class DatasetBuilder:
 
         return train, validate
 
-    def build_dataset_predict(self, start_at: float, end_at: float ):
+    def build_dataset_predict(self, start_at: float):
         collection = []
 
         for asset in self.assets:
@@ -57,7 +57,6 @@ class DatasetBuilder:
                 market=self.market,
                 interval=self.interval,
                 start_at=start_at,
-                end_at=end_at,
             )
 
             df = df[::-1].reset_index(drop=True)

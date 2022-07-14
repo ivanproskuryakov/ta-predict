@@ -35,7 +35,6 @@ class OhlcRepository:
             asset: str,
             interval: str,
             start_at: float,
-            end_at: float,
     ):
         session = Session(bind=self.connection)
 
@@ -74,10 +73,9 @@ class OhlcRepository:
         # print(asset, market, exchange, interval)
         # print(start_at)
         # print(end_at)
-        print(asset)
-        print(start_at)
-        print(end_at)
-        print(len(df))
+        # print(asset)
+        # print(start_at)
+        # print(len(df))
         # exit()
 
         price = df['open'].iloc[-1]

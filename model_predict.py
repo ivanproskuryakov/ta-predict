@@ -21,8 +21,8 @@ pd.set_option("display.precision", 4)
 
 interval = '1m'
 
-end_at = now = datetime.now()
-start_at = end_at - timedelta(hours=2)
+now = datetime.now()
+start_at = now - timedelta(hours=2)
 
 trader = Trader()
 reporter = Reporter()
@@ -41,12 +41,11 @@ data = []
 
 collection = dataset_builder.build_dataset_predict(
     start_at=start_at.timestamp(),
-    end_at=end_at.timestamp(),
 )
 
 time_db_load = datetime.now() - now
 
-model = tf.keras.models.load_model('model/gru-b-100-48.keras')
+model = tf.keras.models.load_model('model/gru-b-1000-48.keras')
 
 for item in collection:
     asset, x_df, df_scaled = item
