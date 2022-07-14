@@ -1,7 +1,8 @@
 import tensorflow as tf
 import numpy as np
 import pandas as pd
-from datetime import datetime
+
+from datetime import datetime, timedelta
 
 from src.parameters_usdt import market, assets
 from src.parameters_btc import assets_btc
@@ -18,9 +19,10 @@ from src.service.predictor_unseen import make_prediction_ohlc_close
 np.set_printoptions(precision=4)
 pd.set_option("display.precision", 4)
 
-interval = '3m'
-start_at = datetime.utcnow()
-start_at_diff = int(start_at.timestamp() - 100 * 3 * 60)
+interval = '1m'
+
+end_at = now = datetime.now()
+start_at = end_at - timedelta(hours=2)
 
 trader = Trader()
 reporter = Reporter()
@@ -31,16 +33,18 @@ dataset_builder = DatasetBuilder(
     assets_down=assets_down,
     interval=interval,
     market=market,
-    start_at=start_at_diff,
 )
 
 data = []
 
 # --------
 
-collection = dataset_builder.build_dataset_predict()
+collection = dataset_builder.build_dataset_predict(
+    start_at=start_at.timestamp(),
+    end_at=end_at.timestamp(),
+)
 
-time_db_load = datetime.utcnow() - start_at
+time_db_load = datetime.now() - now
 
 model = tf.keras.models.load_model('model/gru-b-100-48.keras')
 
@@ -55,7 +59,7 @@ for item in collection:
         y_df
     ))
 
-time_prediction = datetime.utcnow() - start_at
+time_prediction = datetime.now() - now
 
 # --------
 

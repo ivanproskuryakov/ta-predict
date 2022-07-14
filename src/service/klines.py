@@ -60,8 +60,8 @@ class KLines:
             asset: str,
             klines_type: enums.HistoricalKlinesType,
             interval: str,
-            start_at: str,
-            end_at: str = None,
+            start_at: float,
+            end_at: float = None,
     ):
         client = Client(
             api_key=API_KEY,
@@ -73,8 +73,8 @@ class KLines:
             symbol=symbol,
             interval=interval,
             klines_type=klines_type,
-            start_str=start_at,
-            end_str=end_at,
+            start_str=str(start_at),
+            end_str=str(end_at),
         )
         collection = []
 

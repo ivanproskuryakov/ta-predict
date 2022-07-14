@@ -34,6 +34,8 @@ class OhlcRepository:
             market: str,
             asset: str,
             interval: str,
+            start_at: float,
+            end_at: float,
     ):
         session = Session(bind=self.connection)
 
@@ -60,7 +62,7 @@ class OhlcRepository:
             .filter(Ohlc.market == market) \
             .filter(Ohlc.interval == interval) \
             .filter(Ohlc.asset == asset) \
-            .filter(self.start_at > Ohlc.time_open) \
+            .filter(Ohlc.time_open > start_at) \
             .order_by(Ohlc.id.desc()) \
             .statement
 
@@ -68,6 +70,15 @@ class OhlcRepository:
             sql=sql,
             con=self.connection
         )
+
+        # print(asset, market, exchange, interval)
+        # print(start_at)
+        # print(end_at)
+        print(asset)
+        print(start_at)
+        print(end_at)
+        print(len(df))
+        # exit()
 
         price = df['open'].iloc[-1]
         diff = self.utility.diff_price(price)

@@ -1,12 +1,13 @@
 from binance import enums
+from datetime import datetime, timedelta
 
 from src.repository.ohlc_repository import OhlcRepository
 from src.service.klines import KLines
 
 from src.parameters_usdt import assets, market
 
-end_at = 1657734060
-start_at = end_at - 1 * 60 * 300
+end_at = datetime.utcfromtimestamp(1657788120)
+start_at = end_at - timedelta(hours=2)
 
 repository = OhlcRepository(-1)
 klines = KLines()
@@ -30,10 +31,11 @@ for group in groups:
             asset=asset,
             klines_type=group["type"],
             interval=interval,
-            start_at=str(start_at),
-            end_at=str(end_at),
+            start_at=start_at.timestamp(),
+            end_at=end_at.timestamp(),
         )
 
+        print(asset)
         print(len(collection))
 
         repository.create_many(

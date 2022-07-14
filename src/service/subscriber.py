@@ -10,7 +10,6 @@ class Subscriber:
     interval: str
     socket: str = 'wss://stream.binance.com:9443/ws'
     repository: OhlcRepository
-    collection = []
 
     def __init__(self, interval: str):
         self.interval = interval
@@ -53,19 +52,15 @@ class Subscriber:
             if is_closed:
                 item = build_klines(k=k)
 
-                self.collection.append(item)
-
-            if len(self.collection) == self.symbols_total:
                 self.repository.create_many(
                     exchange='binance',
                     market=market,
                     interval=self.interval,
                     asset=asset,
-                    collection=self.collection
+                    collection=[item]
                 )
 
-                print('timeframe added ...', len(self.collection))
-                self.collection.clear()
+                print(f'{asset} - {self.interval}')
 
     def on_error(self, ws, message):
         print("on_error")

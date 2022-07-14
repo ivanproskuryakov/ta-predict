@@ -22,7 +22,6 @@ class DatasetBuilder:
                  assets_btc: [str],
                  interval: str,
                  market: str,
-                 start_at: int,
                  ):
         self.assets = assets
         self.assets_down = assets_down
@@ -31,7 +30,7 @@ class DatasetBuilder:
         self.market = market
 
         self.scaler = MinMaxScaler()
-        self.repository = OhlcRepository(start_at=start_at)
+        self.repository = OhlcRepository(start_at=-1)
 
     def build_dataset_train(self) -> [pd.DataFrame, pd.DataFrame]:
         train = []
@@ -48,15 +47,17 @@ class DatasetBuilder:
 
         return train, validate
 
-    def build_dataset_predict(self):
+    def build_dataset_predict(self, start_at: float, end_at: float ):
         collection = []
 
         for asset in self.assets:
             df, df_scaled = self.repository.get_full_df(
                 asset=asset,
+                exchange=self.exchange,
                 market=self.market,
                 interval=self.interval,
-                exchange=self.exchange,
+                start_at=start_at,
+                end_at=end_at,
             )
 
             df = df[::-1].reset_index(drop=True)
