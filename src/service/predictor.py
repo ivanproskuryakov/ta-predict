@@ -21,9 +21,11 @@ class Predictor:
     reporter: Reporter
     trade_finder: TradeFinder
     dataset_builder: DatasetBuilder
+    dataset_builder: DatasetBuilder
 
     interval: str
     model = None
+    model_path: str = 'model/gru-b-1000-48.keras'
 
     def __init__(self, interval: str):
         self.interval = interval
@@ -46,29 +48,24 @@ class Predictor:
         start_at = now - timedelta(hours=2)
         data = []
 
-        # --------
-
         collection = self.dataset_builder.build_dataset_predict(
             start_at=start_at.timestamp(),
         )
 
         time_db_load = datetime.now() - now
 
-        self.model = tf.keras.models.load_model('model/gru-b-1000-48.keras')
-
-        print('prediction skipped - no data')
+        self.model = tf.keras.models.load_model(self.model_path)
 
         for item in collection:
             asset, x_df, df_scaled = item
 
-            if len(df_scaled) > 100:
-                y_df = self.make_prediction_ohlc_close(df_scaled)
+            y_df = self.make_prediction_ohlc_close(df_scaled)
 
-                data.append((
-                    asset,
-                    x_df,
-                    y_df
-                ))
+            data.append((
+                asset,
+                x_df,
+                y_df
+            ))
 
         time_prediction = datetime.now() - now
 

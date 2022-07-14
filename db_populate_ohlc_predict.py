@@ -8,16 +8,23 @@ from src.service.klines import KLines
 
 from src.parameters_usdt import assets, market
 
+# ---------------
+
 interval = float(sys.argv[1])
+last_time = float(sys.argv[2])
 
 end_at = datetime.utcfromtimestamp(interval)
-start_at = end_at - timedelta(hours=55)
+start_at = end_at - timedelta(minutes=1000)
+
+if interval == '3m':
+    start_at = end_at - timedelta(minutes=1000 * 3)
+
+# ---------------
 
 repository = OhlcRepository(-1)
 klines = KLines()
 
 exchange = 'binance'
-interval = '3m'
 groups = [
     {
         "market": market,
