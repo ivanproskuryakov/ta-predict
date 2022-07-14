@@ -249,7 +249,6 @@ assets = [
     'POLY',
     'IDEX',
     'VIDT',
-    'USDP',
     'GALA',
     'ILV',
     'YGG',

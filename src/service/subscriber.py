@@ -4,18 +4,21 @@ import websocket
 from src.repository.ohlc_repository import OhlcRepository
 from src.parameters_usdt import assets, market
 from src.service.klines_short import build_klines
-
+from src.service.predictor import Predictor
 
 class Subscriber:
+    total: int = 0
     interval: str
     socket: str = 'wss://stream.binance.com:9443/ws'
     repository: OhlcRepository
+    predictor: Predictor
 
     def __init__(self, interval: str):
         self.interval = interval
         self.symbols = [f'{x}{market}@kline_{interval}'.lower() for x in assets]
         self.symbols_total: int = len(self.symbols)
         self.repository = OhlcRepository(-1)
+        self.predictor = Predictor(interval)
 
         print(self.symbols, self.symbols_total)
 
@@ -60,7 +63,14 @@ class Subscriber:
                     collection=[item]
                 )
 
+                self.total = self.total + 1
+
                 print(f'{asset} - {self.interval}')
+
+                if self.total == self.symbols_total:
+                    self.total = 0
+                    self.predictor.run()
+
 
     def on_error(self, ws, message):
         print("on_error")
