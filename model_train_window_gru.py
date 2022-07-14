@@ -25,7 +25,6 @@ dataset_builder = DatasetBuilder(
     assets_down=assets_down,
     assets_btc=assets_btc,
     interval=interval,
-    start_at=start_at,
 )
 
 train_df, validate_df = dataset_builder.build_dataset_train()

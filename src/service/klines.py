@@ -97,12 +97,16 @@ class KLines:
 
             date = datetime.utcfromtimestamp(time_open)
 
+            price_diff = self.utility.diff_percentage(price_close, price_open)
+            price_positive = price_diff > 0
+
             item = {
                 'price_open': price_open,
                 'price_high': price_high,
                 'price_low': price_low,
                 'price_close': price_close,
-                'price_diff': self.utility.diff_percentage(price_close, price_open),
+                'price_diff': price_diff,
+                'price_positive': price_positive,
 
                 'time_open': time_open,
                 'time_close': time_close,

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, BigInteger, String, Float
+from sqlalchemy import Column, BigInteger, String, Float, Integer
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -26,10 +26,13 @@ class Ohlc(Base):
     price_low = Column(Float(precision=32, decimal_return_scale=None))
     price_close = Column(Float(precision=32, decimal_return_scale=None))
     price_diff = Column(Float(precision=32, decimal_return_scale=None))
+    price_positive = Column(Integer)
 
     trades = Column(Float(precision=32, decimal_return_scale=None))
     volume = Column(Float(precision=32, decimal_return_scale=None))
     volume_taker = Column(Float(precision=32, decimal_return_scale=None))
+
+    # remove maker
     volume_maker = Column(Float(precision=32, decimal_return_scale=None))
 
     quote_asset_volume = Column(Float(precision=32, decimal_return_scale=None))

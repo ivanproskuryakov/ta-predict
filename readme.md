@@ -1,4 +1,5 @@
 ### Installation
+
 ```
 python -m venv .env
 source .env/bin/activate
@@ -28,18 +29,6 @@ create database ta_test;
 ENV=dev python db_flush_sync.py
 ENV=test python db_flush_sync.py
 ENV=test python db_populate_exchange.py
-
-```
-
-### Cron
-
-```
-13 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
-28 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
-43 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
-58 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
-
-*/5 * * * * sh /Users/ivan/code/ta/backend/crontab.sh >> /Users/ivan/code/ta/cron.log 2>&1
 
 ```
 

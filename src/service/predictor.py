@@ -56,16 +56,19 @@ class Predictor:
 
         self.model = tf.keras.models.load_model('model/gru-b-1000-48.keras')
 
+        print('prediction skipped - no data')
+
         for item in collection:
             asset, x_df, df_scaled = item
 
-            y_df = self.make_prediction_ohlc_close(df_scaled)
+            if len(df_scaled) > 100:
+                y_df = self.make_prediction_ohlc_close(df_scaled)
 
-            data.append((
-                asset,
-                x_df,
-                y_df
-            ))
+                data.append((
+                    asset,
+                    x_df,
+                    y_df
+                ))
 
         time_prediction = datetime.now() - now
 
@@ -73,12 +76,15 @@ class Predictor:
 
         df = self.reporter.report_build(data=data)
         df_best = self.trade_finder.pick_best_options(df, diff=1, diff_sum=0)
+        df_worst = self.trade_finder.pick_worst_options(df, diff=-10)
 
         report = self.reporter.report_prettify(df)
         report_best = self.reporter.report_prettify(df_best)
+        report_worst = self.reporter.report_prettify(df_worst)
 
         print(report)
         print(report_best)
+        print(report_worst)
 
         print(f'start: {start_at}')
         print(f'interval: {self.interval}')
