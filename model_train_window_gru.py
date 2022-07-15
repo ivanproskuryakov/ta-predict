@@ -12,12 +12,8 @@ dataset_builder_db = DatasetBuilderDB()
 
 # Variables
 # ------------------------------------------------------------------------
-width = 100
-
-filepath_model = f'data/gru-b.keras'
-filepath_checkpoint = f'data/gru-b.checkpoint'
-
-interval = '5m'
+width = 800
+interval = '3m'
 
 # Data load & train
 # ------------------------------------------------------------------------
@@ -30,6 +26,9 @@ train_df, validate_df = dataset_builder_db.build_dataset_all(
 )
 
 df_num_signals = train_df.shape[1]
+
+filepath_model = f'data/gru-c-{width}-{df_num_signals}-{interval}.keras'
+filepath_checkpoint = f'data/gru-c-{width}-{df_num_signals}-{interval}.checkpoint'
 
 print(f'training: {interval} {assets} {df_num_signals}')
 
@@ -54,13 +53,15 @@ callback_checkpoint = ModelCheckpoint(
     filepath=filepath_checkpoint,
     monitor='val_loss',
     verbose=1,
+    save_freq="epoch",
+    period=1,
     save_weights_only=True,
     save_best_only=True
 )
 
 model = tf.keras.models.Sequential([
     GRU(
-        units=600,
+        units=width,
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
@@ -80,7 +81,7 @@ window = WindowGenerator(
     input_width=width,
     label_width=width,
     shift=1,
-    batch_size=200,
+    batch_size=100,
     label_columns=[
         # 'open',
         # 'high',

@@ -56,29 +56,29 @@ class DatasetBuilderDB:
         pd.DataFrame,
         pd.DataFrame
     ]:
-        df_ohlc = self.repository.get_full_df(
+        df = self.repository.get_full_df(
             exchange=self.exchange,
             market=market,
             asset=asset,
             interval=interval
         )
-        df_down = self.repository.find_down_df(
-            exchange=self.exchange,
-            assets_down=assets_down,
-            interval=interval
-        )
-        df_btc = self.repository.find_btc_df(
-            exchange=self.exchange,
-            assets_btc=assets_btc,
-            interval=interval
-        )
+        # df_down = self.repository.find_down_df(
+        #     exchange=self.exchange,
+        #     assets_down=assets_down,
+        #     interval=interval
+        # )
+        # df_btc = self.repository.find_btc_df(
+        #     exchange=self.exchange,
+        #     assets_btc=assets_btc,
+        #     interval=interval
+        # )
+        #
+        # min_len = self.repository.get_df_len_min()
 
-        min_len = self.repository.get_df_len_min()
-
-        if len(df_ohlc) != min_len or len(df_down) != min_len or len(df_btc) != min_len:
-            raise Exception("Data frame lengths are not equal")
-
-        df = pd.concat([df_ohlc, df_down, df_btc], axis=1)
+        # if len(df_ohlc) != min_len or len(df_down) != min_len or len(df_btc) != min_len:
+        #     raise Exception("Data frame lengths are not equal")
+        #
+        # df = pd.concat([df_ohlc, df_down, df_btc], axis=1)
 
         df_asc = df[::-1].reset_index(drop=True)
 

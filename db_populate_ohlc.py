@@ -10,32 +10,32 @@ from src.parameters_futures import assets_futures, market_futures
 repository = OhlcRepository()
 klines = KLines()
 
-start_at = '1611500000'
+start_at = '1511500000'
 end_at = '1656110684'
 
 exchange = 'binance'
-interval = '5m'
+interval = '3m'
 groups = [
-    # {
-    #     "market": 'USDT',
-    #     "assets": assets,
-    #     "type": enums.HistoricalKlinesType.SPOT
-    # },
     {
         "market": 'USDT',
-        "assets": assets_down,
+        "assets": assets,
         "type": enums.HistoricalKlinesType.SPOT
     },
-    {
-        "market": market_btc,
-        "assets": assets_btc,
-        "type": enums.HistoricalKlinesType.SPOT
-    },
-    {
-        "market": market_futures,
-        "assets": assets_futures,
-        "type": enums.HistoricalKlinesType.FUTURES
-    },
+    # {
+    #     "market": 'USDT',
+    #     "assets": assets_down,
+    #     "type": enums.HistoricalKlinesType.SPOT
+    # },
+    # {
+    #     "market": market_btc,
+    #     "assets": assets_btc,
+    #     "type": enums.HistoricalKlinesType.SPOT
+    # },
+    # {
+    #     "market": market_futures,
+    #     "assets": assets_futures,
+    #     "type": enums.HistoricalKlinesType.FUTURES
+    # },
 ]
 
 for group in groups:

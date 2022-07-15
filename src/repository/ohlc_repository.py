@@ -47,10 +47,11 @@ class OhlcRepository:
             Ohlc.trades,
             Ohlc.volume,
             Ohlc.volume_taker,
-            Ohlc.volume_maker,
+            # Ohlc.volume_maker,
             Ohlc.quote_asset_volume,
 
             Ohlc.price_diff,
+            Ohlc.price_positive,
         ) \
             .filter(Ohlc.exchange == exchange) \
             .filter(Ohlc.market == market) \
@@ -64,13 +65,13 @@ class OhlcRepository:
             con=self.connection
         )
 
-        price = df['open'].iloc[-1]
-        diff = diff_price(price)
-
-        df['open'] = df['open'].apply(lambda x: x * diff)
-        df['high'] = df['high'].apply(lambda x: x * diff)
-        df['low'] = df['low'].apply(lambda x: x * diff)
-        df['close'] = df['close'].apply(lambda x: x * diff)
+        # price = df['open'].iloc[-1]
+        # diff = diff_price(price)
+        #
+        # df['open'] = df['open'].apply(lambda x: x * diff)
+        # df['high'] = df['high'].apply(lambda x: x * diff)
+        # df['low'] = df['low'].apply(lambda x: x * diff)
+        # df['close'] = df['close'].apply(lambda x: x * diff)
 
         return df
 
@@ -240,7 +241,7 @@ class OhlcRepository:
             ohlc.trades = item['trades']
             ohlc.volume = item['volume']
             ohlc.volume_taker = item['volume_taker']
-            ohlc.volume_maker = item['volume_maker']
+            # ohlc.volume_maker = item['volume_maker']
 
             ohlc.quote_asset_volume = item['quote_asset_volume']
 

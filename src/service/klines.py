@@ -61,13 +61,16 @@ class KLines:
             price_high = round(current[2], 10)
             price_low = round(current[3], 10)
             price_close = round(current[4], 10)
+
+            price_diff = diff_percentage(price_close, price_open)
+            price_positive = 1 if price_diff > 0 else 0
+
             volume = round(float(current[5]), 1)
             time_close = current[6] / 1000
 
             quote_asset_volume = round(float(current[7]), 0)
             trades = round(float(current[8]), 0)
-            volume_maker = round(float(current[9]), 0)
-            volume_taker = round(volume - volume_maker, 1)
+            volume_taker = round(float(current[9]), 0)
 
             date = datetime.utcfromtimestamp(time_open)
 
@@ -76,7 +79,8 @@ class KLines:
                 'price_high': price_high,
                 'price_low': price_low,
                 'price_close': price_close,
-                'price_diff': diff_percentage(price_close, price_open),
+                'price_diff': price_diff,
+                'price_positive': price_positive,
 
                 'time_open': time_open,
                 'time_close': time_close,
@@ -89,7 +93,7 @@ class KLines:
                 'trades': trades,
                 'volume': volume,
                 'volume_taker': volume_taker,
-                'volume_maker': volume_maker,
+                # 'volume_maker': volume_maker,
 
                 'quote_asset_volume': quote_asset_volume,
             }
