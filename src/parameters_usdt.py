@@ -196,7 +196,6 @@ assets = [
     'LINA',
     'PERP',
     'SUPER',
-
     'CFX',
     'AUTO',
     'TKO',

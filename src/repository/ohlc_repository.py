@@ -35,6 +35,7 @@ class OhlcRepository:
             asset: str,
             interval: str,
             start_at: float,
+            end_at: float,
     ):
         session = Session(bind=self.connection)
 
@@ -62,6 +63,7 @@ class OhlcRepository:
             .filter(Ohlc.interval == interval) \
             .filter(Ohlc.asset == asset) \
             .filter(Ohlc.time_open > start_at) \
+            .filter(Ohlc.time_open < end_at) \
             .order_by(Ohlc.id.desc()) \
             .statement
 
@@ -70,17 +72,23 @@ class OhlcRepository:
             con=self.connection
         )
 
-        price = df['open'].iloc[-1]
-        diff = self.utility.diff_price(price)
+        # print(asset, market, exchange, interval)
+        # print(start_at)
+        # print(end_at)
+        # print(asset)
+        # print(start_at)
+        # print(len(df))
+        # exit()
 
-        df_scaled = df.copy()
+        # price = df['open'].iloc[-1]
+        # diff = self.utility.diff_price(price)
 
-        df_scaled['open'] = df_scaled['open'].apply(lambda x: x * diff)
-        df_scaled['high'] = df_scaled['high'].apply(lambda x: x * diff)
-        df_scaled['low'] = df_scaled['low'].apply(lambda x: x * diff)
-        df_scaled['close'] = df_scaled['close'].apply(lambda x: x * diff)
+        # df_scaled['open'] = df_scaled['open'].apply(lambda x: x * diff)
+        # df_scaled['high'] = df_scaled['high'].apply(lambda x: x * diff)
+        # df_scaled['low'] = df_scaled['low'].apply(lambda x: x * diff)
+        # df_scaled['close'] = df_scaled['close'].apply(lambda x: x * diff)
 
-        return df, df_scaled
+        return df
 
     def find_down_df(
             self,

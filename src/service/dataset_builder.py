@@ -47,23 +47,26 @@ class DatasetBuilder:
 
         return train, validate
 
-    def build_dataset_predict(self, start_at: float):
+    def build_dataset_predict(self, start_at: float, end_at: float):
         collection = []
 
         for asset in self.assets:
-            df, df_scaled = self.repository.get_full_df(
+            df = self.repository.get_full_df(
                 asset=asset,
                 exchange=self.exchange,
                 market=self.market,
                 interval=self.interval,
                 start_at=start_at,
+                end_at=end_at,
             )
 
             df = df[::-1].reset_index(drop=True)
 
-            df_scaled = df_scaled[::-1].reset_index(drop=True)
+            df_scaled = df.copy()
             df_scaled = estimate_ta_fill_na(df_scaled)
+
             scaled = self.scaler.fit_transform(df_scaled)
+
             df_scaled = pd.DataFrame(scaled, None, df_scaled.keys())
 
             collection.append((asset, df, df_scaled))

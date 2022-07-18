@@ -2,7 +2,7 @@ import json
 import websocket
 
 from src.repository.ohlc_repository import OhlcRepository
-from src.parameters_usdt import assets, market
+from src.parameters_usdt_top import assets, market
 from src.service.klines_short import build_klines
 from src.service.predictor import Predictor
 

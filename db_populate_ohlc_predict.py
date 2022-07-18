@@ -6,18 +6,22 @@ from datetime import datetime, timedelta
 from src.repository.ohlc_repository import OhlcRepository
 from src.service.klines import KLines
 
-from src.parameters_usdt import assets, market
+from src.parameters_usdt_top import assets, market
 
 # ---------------
 
-interval = float(sys.argv[1])
-last_time = float(sys.argv[2])
+last_time = float(sys.argv[1])
+interval = sys.argv[2]
 
-end_at = datetime.utcfromtimestamp(interval)
-start_at = end_at - timedelta(minutes=1000)
+multiplier = int(interval[:-1])
 
-if interval == '3m':
-    start_at = end_at - timedelta(minutes=1000 * 3)
+frames = 1100 * multiplier
+
+print(frames)
+print(multiplier)
+
+end_at = datetime.utcfromtimestamp(last_time)
+start_at = end_at - timedelta(minutes=frames)
 
 # ---------------
 
