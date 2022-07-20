@@ -12,8 +12,8 @@ dataset_builder_db = DatasetBuilderDB()
 
 # Variables
 # ------------------------------------------------------------------------
-width = 800
-interval = '3m'
+width = 1500
+interval = '15m'
 
 # Data load & train
 # ------------------------------------------------------------------------
@@ -38,7 +38,7 @@ print(f'training: {interval} {assets} {df_num_signals}')
 callback_early_stopping = EarlyStopping(
     monitor='val_loss',
     # monitor='mean_absolute_error',
-    patience=10,
+    patience=20,
     mode='min',
     verbose=1
 )
@@ -46,7 +46,7 @@ callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
     factor=0.5,
     min_lr=0,
-    patience=10,
+    patience=2,
     verbose=1,
 )
 callback_checkpoint = ModelCheckpoint(
@@ -56,7 +56,7 @@ callback_checkpoint = ModelCheckpoint(
     save_freq="epoch",
     period=1,
     save_weights_only=True,
-    save_best_only=True
+    save_best_only=False
 )
 
 model = tf.keras.models.Sequential([
@@ -81,7 +81,7 @@ window = WindowGenerator(
     input_width=width,
     label_width=width,
     shift=1,
-    batch_size=100,
+    batch_size=50,
     label_columns=[
         # 'open',
         # 'high',
@@ -92,12 +92,12 @@ window = WindowGenerator(
     val_df=validate_df,
 )
 
-# latest = tf.train.latest_checkpoint('data')
-# model.load_weights(latest)
+latest = tf.train.latest_checkpoint('data')
+model.load_weights(latest)
 
 model.fit(
     window.train,
-    epochs=50,
+    epochs=10,
     validation_data=window.val,
     callbacks=[
         callback_early_stopping,

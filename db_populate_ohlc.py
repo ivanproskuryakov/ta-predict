@@ -14,7 +14,7 @@ start_at = '1511500000'
 end_at = '1656110684'
 
 exchange = 'binance'
-interval = '3m'
+interval = '15m'
 groups = [
     {
         "market": 'USDT',
