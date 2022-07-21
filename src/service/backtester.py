@@ -36,12 +36,13 @@ class BackTester:
 
         return y_df
 
-    def datasets_build(self, asset: str, width: int) -> [pd.DataFrame]:
+    def datasets_build(self, asset: str, width: int, scaler) -> [pd.DataFrame]:
         width_plus = width + 1
-        df, scaler = self.builder.build_dataset_predict(
+        df = self.builder.build_dataset_predict(
             asset=asset,
             market=self.market,
             interval=self.interval,
+            scaler=scaler
         )
 
         total = len(df)
@@ -55,4 +56,4 @@ class BackTester:
 
             dfs.append(crop)
 
-        return dfs, scaler
+        return dfs
