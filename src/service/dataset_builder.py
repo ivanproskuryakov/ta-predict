@@ -29,7 +29,6 @@ class DatasetBuilder:
         self.interval = interval
         self.market = market
 
-        self.scaler = MinMaxScaler()
         self.repository = OhlcRepository()
 
     def build_dataset_train(self) -> [pd.DataFrame, pd.DataFrame]:
@@ -89,7 +88,8 @@ class DatasetBuilder:
             df_scaled = df.copy()
             df_scaled = estimate_ta_fill_na(df_scaled)
 
-            scaled = self.scaler.fit_transform(df_scaled)
+            scaler = MinMaxScaler()
+            scaled = scaler.fit_transform(df_scaled)
 
             df_scaled = pd.DataFrame(scaled, None, df_scaled.keys())
 
@@ -129,7 +129,8 @@ class DatasetBuilder:
         # Data Scaling
         # ------------------------------------------------------------------------
 
-        scaled = self.scaler.fit_transform(df_ta_na)
+        scaler = MinMaxScaler()
+        scaled = scaler.fit_transform(df_ta_na)
 
         df = pd.DataFrame(scaled, None, df_ta_na.keys())
 

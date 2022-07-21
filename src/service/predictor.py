@@ -122,8 +122,4 @@ class Predictor:
 
         y_df = pd.DataFrame(y_inverse, None, x_df.keys())
 
-        print(x_df)
-        print(y_df)
-        exit()
-
         return y_df

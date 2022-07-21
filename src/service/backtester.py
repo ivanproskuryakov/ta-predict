@@ -1,5 +1,4 @@
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
 
 from src.service.predictor import Predictor
 from src.service.dataset_builder_db import DatasetBuilderDB
@@ -31,7 +30,7 @@ class BackTester:
     def load_model(self, name: str):
         self.predictor.load_model(name=f'model/{name}')
 
-    def datasets_predict(self, df: pd.DataFrame, width: int, scaler: MinMaxScaler):
+    def datasets_predict(self, df: pd.DataFrame, width: int, scaler):
         x_df = df[0: width]
         y_df = self.predictor.make_prediction_ohlc_close(x_df=x_df, scaler=scaler)
 
