@@ -98,3 +98,26 @@ class DatasetBuilderDB:
         dv_validate = df[int(n * 0.9):]
 
         return df_train, dv_validate
+
+    def build_dataset_predict(
+            self,
+            market: str,
+            asset: str,
+            interval: str
+    ) -> pd.DataFrame:
+        df = self.repository.get_full_df(
+            exchange=self.exchange,
+            market=market,
+            asset=asset,
+            interval=interval
+        )
+
+        df_asc = df[::-1].reset_index(drop=True)
+
+        df_ta_na = estimate_ta_fill_na(df_asc)
+
+        scaled = self.scaler.fit_transform(df_ta_na)
+
+        df = pd.DataFrame(scaled, None, df_ta_na.keys())
+
+        return df

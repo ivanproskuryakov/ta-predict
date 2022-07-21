@@ -1,5 +1,6 @@
 import pandas as pd
 
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from sqlalchemy.engine import Connection
 
@@ -107,6 +108,25 @@ class OhlcRepository:
         # print(df)
 
         return df
+
+    def find_total(
+            self,
+            exchange: str,
+            market: str,
+            asset: str,
+            interval: str,
+    ) -> int:
+        session = Session(bind=self.connection)
+
+        total = session \
+            .query(func.count(Ohlc.id)) \
+            .filter(Ohlc.exchange == exchange) \
+            .filter(Ohlc.market == market) \
+            .filter(Ohlc.asset == asset) \
+            .filter(Ohlc.interval == interval) \
+            .scalar()
+
+        return total
 
     def find_btc_df(
             self,
