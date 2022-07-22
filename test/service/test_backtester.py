@@ -10,12 +10,7 @@ def test_backtester_datasets_build():
     Ohlc.metadata.drop_all(bind=engine)
     Ohlc.metadata.create_all(bind=engine)
 
-    models = [
-        ("gru-b.keras", 1000)
-    ]
-
     backtester = BackTester(
-        models=models,
         market='USDT',
         interval='15m',
     )

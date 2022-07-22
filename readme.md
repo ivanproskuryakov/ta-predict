@@ -25,6 +25,7 @@ psql -U postgres
 create database ta_dev;
 create database ta_test;
 
+ENV=validate python db_flush_sync.py
 ENV=dev python db_flush_sync.py
 ENV=test python db_flush_sync.py
 ENV=test python db_populate_exchange.py

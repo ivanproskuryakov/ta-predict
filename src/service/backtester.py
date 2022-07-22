@@ -1,9 +1,14 @@
 import pandas as pd
 
+from datetime import datetime
+from sklearn.preprocessing import MinMaxScaler
+
 from src.service.predictor import Predictor
 from src.service.dataset_builder_db import DatasetBuilderDB
 from src.repository.ohlc_repository import OhlcRepository
 from src.repository.prediction_repository import PredictionRepository
+
+from src.service.util import diff_percentage
 
 
 class BackTester:
@@ -12,20 +17,22 @@ class BackTester:
     builder: DatasetBuilderDB
     predictor: Predictor
 
-    models: list
     width: int
     interval: str
     market: str
 
-    def __init__(self, models: list, interval: str, market: str):
+    scaler: MinMaxScaler
+
+    def __init__(self, interval: str, market: str):
         self.prediction_repository = PredictionRepository()
         self.ohlc_repository = OhlcRepository()
         self.builder = DatasetBuilderDB()
         self.predictor = Predictor(interval=interval)
 
-        self.models = models
         self.interval = interval
         self.market = market
+
+        self.scaler = MinMaxScaler()
 
     def load_model(self, name: str):
         self.predictor.load_model(name=f'model/{name}')
@@ -36,13 +43,45 @@ class BackTester:
 
         return y_df
 
-    def datasets_build(self, asset: str, width: int, scaler) -> [pd.DataFrame]:
+    def run(self, asset: str, model: str, width: int):
+        x_dfs = self.datasets_build(asset=asset, width=width)
+
+        self.load_model(name=model)
+        started_at = datetime.now()
+
+        for x_df in x_dfs:
+            rescaled = self.scaler.inverse_transform(x_df)
+            x_df_rescaled = pd.DataFrame(rescaled, None, x_df.keys())
+
+            y_df = self.datasets_predict(df=x_df, width=width, scaler=self.scaler)
+
+            # x_last = x_df_rescaled.iloc[-2:]
+            # y_last = y_df.iloc[-2:]
+
+            x_diff = diff_percentage(v2=x_df_rescaled.iloc[-1]['close'], v1=x_df_rescaled.iloc[-2]['close'])
+            y_diff = diff_percentage(v2=y_df.iloc[-1]['close'], v1=y_df.iloc[-2]['close'])
+
+            if y_diff > 5:
+                self.prediction_repository.create(
+                    market=self.market,
+                    asset=asset,
+                    interval=self.interval,
+                    model=model,
+
+                    x_df=x_df_rescaled,
+                    y_df=y_df,
+                    started_at=started_at,
+                )
+
+                print(x_diff, y_diff)
+
+    def datasets_build(self, asset: str, width: int) -> [pd.DataFrame]:
         width_plus = width + 1
         df = self.builder.build_dataset_predict(
             asset=asset,
             market=self.market,
             interval=self.interval,
-            scaler=scaler
+            scaler=self.scaler
         )
 
         total = len(df)

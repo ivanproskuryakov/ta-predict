@@ -1,4 +1,5 @@
 DB_URL = {
+    'validate': 'postgresql://postgres:@localhost/ta_validate',
     'test': 'postgresql://postgres:@localhost/ta_test',
     'dev': 'postgresql://postgres:@localhost/ta_dev',
 }

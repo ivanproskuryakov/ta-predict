@@ -1,4 +1,5 @@
 from binance import enums
+from datetime import datetime, timedelta
 
 from src.repository.ohlc_repository import OhlcRepository
 from src.service.klines import KLines
@@ -10,8 +11,11 @@ from src.parameters_futures import assets_futures, market_futures
 repository = OhlcRepository()
 klines = KLines()
 
-start_at = '1511500000'
-end_at = '1656110684'
+# start_at = '1511500000'
+# end_at = '1656110684'
+
+end_at = str(datetime.utcnow())
+start_at = str(datetime.utcnow() - timedelta(minutes=15 * 1000 + 15 * 10000 ))
 
 exchange = 'binance'
 interval = '15m'

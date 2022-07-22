@@ -4,7 +4,6 @@ import tensorflow as tf
 import numpy as np
 import pandas as pd
 
-from sklearn.preprocessing import MinMaxScaler
 from datetime import datetime, timedelta
 
 from src.parameters_btc import assets_btc

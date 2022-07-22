@@ -16,8 +16,7 @@ class Prediction(Base):
     market = Column(String)
     interval = Column(String)
 
-    time_open = Column(DateTime)
-    time_close = Column(DateTime)
+    time = Column(String)
     price_close = Column(Float(precision=32, decimal_return_scale=None))
     price_close_next = Column(Float(precision=32, decimal_return_scale=None))
     price_close_next_diff = Column(Float(precision=32, decimal_return_scale=None))
