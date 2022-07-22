@@ -12,8 +12,8 @@ dataset_builder_db = DatasetBuilderDB()
 
 # Variables
 # ------------------------------------------------------------------------
-width = 1500
-interval = '15m'
+width = 500
+interval = '5m'
 
 # Data load & train
 # ------------------------------------------------------------------------
@@ -26,11 +26,14 @@ train_df, validate_df = dataset_builder_db.build_dataset_all(
 )
 
 df_num_signals = train_df.shape[1]
+data_dir = 'data'
+assets_names = '-'.join(assets)
+name = f'gru-d-{width}-{df_num_signals}-{interval}-{assets_names}'
 
-filepath_model = f'data/gru-c-{width}-{df_num_signals}-{interval}.keras'
-filepath_checkpoint = f'data/gru-c-{width}-{df_num_signals}-{interval}.checkpoint'
+filepath_model = f'{data_dir}/{name}.keras'
+filepath_checkpoint = f'{data_dir}/{name}.checkpoint'
 
-print(f'training: {interval} {assets} {df_num_signals}')
+print(f'training: {interval} {assets} {df_num_signals} {name}')
 
 # Model definition
 # ------------------------------------------------------------------------
@@ -65,7 +68,7 @@ model = tf.keras.models.Sequential([
         return_sequences=True,
         input_shape=(None, df_num_signals)
     ),
-    Dense(units=1, activation='linear', input_dim=df_num_signals),
+    Dense(units=1, activation='relu', input_dim=df_num_signals),
 ])
 
 model.compile(
@@ -81,7 +84,7 @@ window = WindowGenerator(
     input_width=width,
     label_width=width,
     shift=1,
-    batch_size=50,
+    batch_size=250,
     label_columns=[
         # 'open',
         # 'high',
@@ -92,12 +95,12 @@ window = WindowGenerator(
     val_df=validate_df,
 )
 
-latest = tf.train.latest_checkpoint('data')
+latest = tf.train.latest_checkpoint(data_dir)
 model.load_weights(latest)
 
 model.fit(
     window.train,
-    epochs=10,
+    epochs=1,
     validation_data=window.val,
     callbacks=[
         callback_early_stopping,

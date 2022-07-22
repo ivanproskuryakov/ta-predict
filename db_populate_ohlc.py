@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from binance import enums
 
 from src.repository.ohlc_repository import OhlcRepository
@@ -10,11 +12,11 @@ from src.parameters_futures import assets_futures, market_futures
 repository = OhlcRepository()
 klines = KLines()
 
-start_at = '1511500000'
-end_at = '1656110684'
+end_at = str(datetime.utcnow())
+start_at = str(datetime.utcnow() - timedelta(days=365 * 10))
 
 exchange = 'binance'
-interval = '15m'
+interval = '5m'
 groups = [
     {
         "market": 'USDT',

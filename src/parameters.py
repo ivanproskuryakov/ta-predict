@@ -8,18 +8,18 @@ market = 'USDT'
 
 assets = [
     'BTC',
-    'ETH',
-    "BNB",
-    "NEO",
-    "LTC",
-    "ADA",
-    "XRP",
-    "EOS",
-    'IOTA',
-    'XLM',
-    'ONT',
-    'TRX',
-    'ETC',
+    # 'ETH',
+    # "BNB",
+    # "NEO",
+    # "LTC",
+    # "ADA",
+    # "XRP",
+    # "EOS",
+    # 'IOTA',
+    # 'XLM',
+    # 'ONT',
+    # 'TRX',
+    # 'ETC',
 ]
 
 assets_down = [

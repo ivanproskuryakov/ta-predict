@@ -69,7 +69,7 @@ class WindowGenerator:
             targets=None,
             sequence_length=self.total_window_size,
             sequence_stride=1,
-            shuffle=False,
+            shuffle=True,
             # shuffle=False,
             batch_size=self.batch_size,
         )
