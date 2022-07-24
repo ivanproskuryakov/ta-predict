@@ -2,6 +2,10 @@ from src.service.backtester import BackTester
 
 from src.parameters import assets, market
 
+# assets = [
+#     'ADA'
+# ]
+
 backtester = BackTester(
     market=market,
     interval='15m',

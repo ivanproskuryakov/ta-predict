@@ -55,25 +55,21 @@ class BackTester:
 
             y_df = self.datasets_predict(df=x_df, width=width, scaler=self.scaler)
 
-            # x_last = x_df_rescaled.iloc[-2:]
-            # y_last = y_df.iloc[-2:]
-
             x_diff = diff_percentage(v2=x_df_rescaled.iloc[-1]['close'], v1=x_df_rescaled.iloc[-2]['close'])
             y_diff = diff_percentage(v2=y_df.iloc[-1]['close'], v1=y_df.iloc[-2]['close'])
 
-            if y_diff > 5:
-                self.prediction_repository.create(
-                    market=self.market,
-                    asset=asset,
-                    interval=self.interval,
-                    model=model,
+            self.prediction_repository.create(
+                market=self.market,
+                asset=asset,
+                interval=self.interval,
+                model=model,
 
-                    x_df=x_df_rescaled,
-                    y_df=y_df,
-                    started_at=started_at,
-                )
+                x_df=x_df_rescaled,
+                y_df=y_df,
+                started_at=started_at,
+            )
 
-                print(x_diff, y_diff)
+            print(x_diff, y_diff)
 
     def datasets_build(self, asset: str, width: int) -> [pd.DataFrame]:
         width_plus = width + 1

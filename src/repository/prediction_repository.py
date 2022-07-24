@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 from datetime import datetime
@@ -5,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from src.entity.prediction import Prediction
 from src.connector.db_connector import db_connect
-from src.service.util import diff_percentage
+from src.service.util import diff_percentage, round
 
 
 class PredictionRepository:
@@ -45,26 +46,21 @@ class PredictionRepository:
 
         prediction.time = self.get_time(x_df1)
 
-        prediction.price_close = x_df.iloc[-2]['close']
-        prediction.price_close_next = x_df.iloc[-1]['close']
+        prediction.price_close = round(x_df.iloc[-2]['close'])
+        prediction.price_close_next = round(x_df.iloc[-1]['close'])
         prediction.price_close_next_diff = diff_percentage(
+            v1=x_df.iloc[-2]['close'],
             v2=x_df.iloc[-1]['close'],
-            v1=x_df.iloc[-2]['close']
         )
-        prediction.price_close_predicted = x_df.iloc[-1]['close']
+        prediction.price_close_predicted = round(y_df.iloc[-1]['close'])
         prediction.price_close_predicted_diff = diff_percentage(
-            v2=y_df.iloc[-1]['close'],
-            v1=y_df.iloc[-2]['close']
+            v1=y_df.iloc[-2]['close'],
+            v2=y_df.iloc[-1]['close']
         )
 
-        if prediction.price_close_next_diff > 0 and prediction.price_close_predicted_diff > 0:
+        if np.sign(prediction.price_close_next_diff) == np.sign(prediction.price_close_predicted_diff):
             prediction.is_match = True
-        if prediction.price_close_next_diff < 0 and prediction.price_close_predicted_diff < 0:
-            prediction.is_match = True
-
-        if prediction.price_close_next_diff > 0 and prediction.price_close_predicted_diff < 0:
-            prediction.is_match = False
-        if prediction.price_close_next_diff < 0 and prediction.price_close_predicted_diff > 0:
+        else:
             prediction.is_match = False
 
         with Session(self.connection) as session:
