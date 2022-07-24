@@ -15,10 +15,10 @@ klines = KLines()
 # end_at = '1656110684'
 
 end_at = str(datetime.utcnow())
-start_at = str(datetime.utcnow() - timedelta(minutes=15 * 1000 + 15 * 10000 ))
+start_at = str(datetime.utcnow() - timedelta(minutes=5 * 1000 + 5 * 10000 ))
 
 exchange = 'binance'
-interval = '15m'
+interval = '5m'
 groups = [
     {
         "market": 'USDT',

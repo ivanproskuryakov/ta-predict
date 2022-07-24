@@ -17,7 +17,7 @@ class PredictionRepository:
 
     def get_time(self, df):
         return f'{df["time_month"]:.0f}.' \
-               f'{df["time_day"]:.0f}.' \
+               f'{df["time_day"]:.0f}:' \
                f'{df["time_hour"]:.0f}.' \
                f'{df["time_minute"]:.0f}'
 
@@ -30,11 +30,10 @@ class PredictionRepository:
 
             x_df,
             y_df,
+            x_df_full,
 
             started_at: datetime
     ) -> Prediction:
-        x_df1 = x_df.iloc[-1]
-
         prediction = Prediction()
 
         prediction.model = model
@@ -44,7 +43,7 @@ class PredictionRepository:
         prediction.asset = asset
         prediction.interval = interval
 
-        prediction.time = self.get_time(x_df1)
+        prediction.time = self.get_time(x_df_full.iloc[-1])
 
         prediction.price_close = round(x_df.iloc[-2]['close'])
         prediction.price_close_next = round(x_df.iloc[-1]['close'])

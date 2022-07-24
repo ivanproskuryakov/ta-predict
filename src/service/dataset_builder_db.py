@@ -106,19 +106,21 @@ class DatasetBuilderDB:
             scaler
     ):
 
-        df = self.repository.get_full_df(
+        df_full = self.repository.get_full_df(
             exchange=self.exchange,
             market=market,
             asset=asset,
             interval=interval
         )
 
-        df_asc = df[::-1].reset_index(drop=True)
+        df = df_full.copy()
 
-        df_ta_na = estimate_ta_fill_na(df_asc)
+        # df = df.drop(columns=['time_month', 'time_day', 'time_hour', 'time_minute'])
 
-        scaled = scaler.fit_transform(df_ta_na)
+        df = estimate_ta_fill_na(df)
 
-        df = pd.DataFrame(scaled, None, df_ta_na.keys())
+        scaled = scaler.fit_transform(df)
 
-        return df
+        df = pd.DataFrame(scaled, None, df.keys())
+
+        return df, df_full

@@ -49,7 +49,9 @@ class BackTester:
         self.load_model(name=model)
         started_at = datetime.now()
 
-        for x_df in x_dfs:
+        for x in x_dfs:
+            x_df, x_df_full = x
+
             rescaled = self.scaler.inverse_transform(x_df)
             x_df_rescaled = pd.DataFrame(rescaled, None, x_df.keys())
 
@@ -66,14 +68,15 @@ class BackTester:
 
                 x_df=x_df_rescaled,
                 y_df=y_df,
+                x_df_full=x_df_full,
                 started_at=started_at,
             )
 
-            print(x_diff, y_diff)
+            print(asset, x_diff, y_diff)
 
     def datasets_build(self, asset: str, width: int) -> [pd.DataFrame]:
         width_plus = width + 1
-        df = self.builder.build_dataset_predict(
+        df, df_full = self.builder.build_dataset_predict(
             asset=asset,
             market=self.market,
             interval=self.interval,
@@ -87,7 +90,7 @@ class BackTester:
 
         for i in range(0, total_adjusted):
             j = i + width_plus
-            crop = df[i:j]
+            crop = df[i:j], df_full[i:j]
 
             dfs.append(crop)
 

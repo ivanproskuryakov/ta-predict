@@ -8,7 +8,7 @@ from src.parameters import assets, market
 
 backtester = BackTester(
     market=market,
-    interval='15m',
+    interval='5m',
 )
 
 for asset in assets:
