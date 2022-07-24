@@ -80,21 +80,22 @@ class DatasetBuilderDB:
         #
         # df = pd.concat([df_ohlc, df_down, df_btc], axis=1)
 
-        df_asc = df[::-1].reset_index(drop=True)
+        # df_ta_na = df[::-1].reset_index(drop=True)
 
-        df_ta_na = estimate_ta_fill_na(df_asc)
+        df = estimate_ta_fill_na(df)
 
         # Data Scaling
         # ------------------------------------------------------------------------
 
-        scaled = self.scaler.fit_transform(df_ta_na)
+        scaled = self.scaler.fit_transform(df)
 
-        df = pd.DataFrame(scaled, None, df_ta_na.keys())
+        df = pd.DataFrame(scaled, None, df.keys())
 
         # Data split
         # --------------------------------------------------------
         n = len(df)
-        df_train = df[0:int(n * 0.9)]
-        dv_validate = df[int(n * 0.9):]
+        n_split = n * 0.7
+        df_train = df[0:int(n_split)]
+        dv_validate = df[int(n_split):]
 
         return df_train, dv_validate

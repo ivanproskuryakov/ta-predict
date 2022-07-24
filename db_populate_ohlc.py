@@ -16,7 +16,7 @@ end_at = str(datetime.utcnow())
 start_at = str(datetime.utcnow() - timedelta(days=365 * 10))
 
 exchange = 'binance'
-interval = '5m'
+interval = '3m'
 groups = [
     {
         "market": 'USDT',

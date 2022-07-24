@@ -57,7 +57,7 @@ class OhlcRepository:
             .filter(Ohlc.market == market) \
             .filter(Ohlc.interval == interval) \
             .filter(Ohlc.asset == asset) \
-            .order_by(Ohlc.time_open.desc()) \
+            .order_by(Ohlc.id.asc()) \
             .statement
 
         df = pd.read_sql(
