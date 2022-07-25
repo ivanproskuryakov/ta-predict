@@ -5,17 +5,12 @@ from src.repository.ohlc_repository import OhlcRepository
 from src.service.klines import KLines
 
 from src.parameters import assets_down, assets
-from src.parameters_btc import assets_btc, market_btc
-from src.parameters_futures import assets_futures, market_futures
 
 repository = OhlcRepository()
 klines = KLines()
 
-# start_at = '1511500000'
-# end_at = '1656110684'
-
 end_at = str(datetime.utcnow())
-start_at = str(datetime.utcnow() - timedelta(minutes=5 * 1000 + 5 * 10000 ))
+start_at = str(datetime.utcnow() - timedelta(days=6 * 30))
 
 exchange = 'binance'
 interval = '5m'
