@@ -9,11 +9,11 @@ from src.parameters import market, assets, assets_down
 from src.parameters_btc import assets_btc
 
 assets = [
-    # 'BTC',
+    'BTC',
     # 'ETH',
     # "BNB",
     # "XRP",
-    "ADA",
+    # "ADA",
     # 'TRX',
 ]
 
@@ -21,8 +21,8 @@ dataset_builder_db = DatasetBuilderDB()
 
 # Variables
 # ------------------------------------------------------------------------
-width = 50
-units = 1000
+width = 1500
+units = 1500
 interval = '3m'
 
 # Data load & train
@@ -116,7 +116,7 @@ window = WindowGenerator(
     input_width=width,
     label_width=width,
     shift=1,
-    batch_size=500,
+    batch_size=50,
     label_columns=[
         # 'open',
         # 'high',
@@ -127,12 +127,12 @@ window = WindowGenerator(
     val_df=validate_df,
 )
 
-# latest = tf.train.latest_checkpoint(data_dir)
-# model.load_weights(latest)
+latest = tf.train.latest_checkpoint(data_dir)
+model.load_weights(latest)
 
 model.fit(
     window.train,
-    epochs=100,
+    epochs=1,
     validation_data=window.val,
     callbacks=[
         callback_early_stopping,
