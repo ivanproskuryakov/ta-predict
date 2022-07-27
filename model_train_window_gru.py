@@ -21,8 +21,8 @@ dataset_builder_db = DatasetBuilderDB()
 
 # Variables
 # ------------------------------------------------------------------------
-width = 1500
-units = 1500
+width = 50
+units = 2000
 interval = '3m'
 
 # Data load & train
@@ -40,7 +40,7 @@ train_df, validate_df = dataset_builder_db.build_dataset_all(
 df_num_signals = train_df.shape[1]
 data_dir = 'data'
 assets_names = '-'.join(assets)
-name = f'gru-d-{width}-{units}-{df_num_signals}-{interval}-{assets_names}'
+name = f'gru-e-{width}-{units}-{df_num_signals}-{interval}-{assets_names}'
 
 filepath_model = f'{data_dir}/{name}.keras'
 filepath_checkpoint = f'{data_dir}/{name}.checkpoint'
@@ -53,7 +53,7 @@ print(f'training: {interval} {assets} {df_num_signals} {name}')
 callback_early_stopping = EarlyStopping(
     monitor='val_loss',
     # monitor='mean_absolute_error',
-    patience=50,
+    patience=5,
     mode='min',
     verbose=1
 )
@@ -116,7 +116,7 @@ window = WindowGenerator(
     input_width=width,
     label_width=width,
     shift=1,
-    batch_size=50,
+    batch_size=100,
     label_columns=[
         # 'open',
         # 'high',
@@ -127,12 +127,12 @@ window = WindowGenerator(
     val_df=validate_df,
 )
 
-latest = tf.train.latest_checkpoint(data_dir)
-model.load_weights(latest)
+# latest = tf.train.latest_checkpoint(data_dir)
+# model.load_weights(latest)
 
 model.fit(
     window.train,
-    epochs=1,
+    epochs=100,
     validation_data=window.val,
     callbacks=[
         callback_early_stopping,
