@@ -64,7 +64,7 @@ class OhlcRepository:
             .filter(Ohlc.asset == asset) \
             .filter(Ohlc.time_open > start_at) \
             .filter(Ohlc.time_open < end_at) \
-            .order_by(Ohlc.id.desc()) \
+            .order_by(Ohlc.id.asc()) \
             .statement
 
         df = pd.read_sql(

@@ -22,17 +22,19 @@ class Predictor:
     reporter: Reporter
     trade_finder: TradeFinder
     dataset_builder: DatasetBuilder
-    dataset_builder: DatasetBuilder
+    scaler = MinMaxScaler()
 
     interval: str
     model = None
     model_path: str = 'model/gru-b-1000-48.keras'
+    width: int = 1000
 
     def __init__(self, interval: str):
         self.interval = interval
         self.trader = Trader()
         self.reporter = Reporter()
         self.trade_finder = TradeFinder()
+        self.scaler = MinMaxScaler()
         self.dataset_builder = DatasetBuilder(
             assets=assets,
             assets_btc=assets_btc,
@@ -44,10 +46,9 @@ class Predictor:
         np.set_printoptions(precision=4)
         pd.set_option("display.precision", 4)
 
-    def run(self):
+    def predict(self):
         now = datetime.now()
-        start_at = datetime.utcnow() - timedelta(minutes=1100 * 3)
-
+        start_at = datetime.utcnow() - timedelta(minutes=(self.width + 100) * 5)
         data = []
 
         collection = self.dataset_builder.build_dataset_predict(
@@ -60,10 +61,11 @@ class Predictor:
         self.model = tf.keras.models.load_model(self.model_path)
 
         for item in collection:
-            asset, x_df, df_scaled = item
+            asset, x_df = item
 
-            if len(df_scaled) > 1000:
-                y_df = self.make_prediction_ohlc_close(df_scaled)
+            if len(x_df) > self.width:
+                x_df_scaled = self.scaler.fit_transform(x_df)
+                y_df = self.make_prediction_ohlc_close(x_df_scaled)
 
                 data.append((
                     asset,
@@ -91,7 +93,7 @@ class Predictor:
 
             if len(df_best):
                 webbrowser.open(df_best.iloc[-1]['url'], new=2)
-                
+
         else:
             print('--- no data ---')
 
@@ -102,23 +104,15 @@ class Predictor:
         print(f'prediction: {time_prediction}')
 
     def make_prediction_ohlc_close(self, x_df):
-        # Scale
-        # ------------------------------------------------------------------------
-        scaler = MinMaxScaler()
-        scaled = scaler.fit_transform(x_df)
+        x_df_expanded = np.expand_dims(x_df, axis=0)
 
-        x_df_scaled = pd.DataFrame(scaled, None, x_df.keys())
-        x_df_scaled_expanded = np.expand_dims(x_df_scaled, axis=0)
-
-        # Predict
-        # ------------------------------------------------------------------------
-        y = self.model.predict(x_df_scaled_expanded, verbose=0)
+        y = self.model.predict(x_df_expanded, verbose=0)
 
         df = pd.DataFrame(0, index=np.arange(len(y[0])), columns=x_df.keys())
 
         df['close'] = y[0]
 
-        y_inverse = scaler.inverse_transform(df)
+        y_inverse = self.scaler.inverse_transform(df)
 
         y_df = pd.DataFrame(y_inverse, None, x_df.keys())
 

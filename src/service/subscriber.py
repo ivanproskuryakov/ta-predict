@@ -22,7 +22,7 @@ class Subscriber:
 
         print(self.symbols, self.symbols_total)
 
-    def run(self):
+    def listen(self):
         ws = websocket.WebSocketApp(
             url=self.socket,
             on_open=self.on_open,
@@ -69,7 +69,7 @@ class Subscriber:
 
                 if self.total == self.symbols_total:
                     self.total = 0
-                    self.predictor.run()
+                    self.predictor.predict()
 
 
     def on_error(self, ws, message):

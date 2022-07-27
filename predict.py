@@ -6,4 +6,4 @@ interval = sys.argv[1]
 
 predictor = Predictor(interval)
 
-predictor.run()
+predictor.predict()
