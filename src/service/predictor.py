@@ -96,8 +96,11 @@ class Predictor:
             report_best = self.reporter.report_prettify(df_best)
             report_worst = self.reporter.report_prettify(df_worst)
 
+            print('all')
             print(report)
+            print('best')
             print(report_best)
+            print('worst')
             print(report_worst)
 
             if len(df_best):

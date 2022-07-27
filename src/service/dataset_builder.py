@@ -65,33 +65,33 @@ class DatasetBuilder:
         return collection
 
     def build_dataset_asset(self, asset: str) -> [pd.DataFrame, pd.DataFrame]:
-        df_ohlc = self.repository.get_full_df(
+        df = self.repository.get_full_df(
             asset=asset,
             market=self.market,
             interval=self.interval,
             exchange=self.exchange,
         )
-        df_down = self.repository.find_down_df(
-            assets_down=self.assets_down,
-            interval=self.interval,
-            exchange=self.exchange,
-        )
-        df_btc = self.repository.find_btc_df(
-            assets_btc=self.assets_btc,
-            interval=self.interval,
-            exchange=self.exchange,
-        )
+        # df_down = self.repository.find_down_df(
+        #     assets_down=self.assets_down,
+        #     interval=self.interval,
+        #     exchange=self.exchange,
+        # )
+        # df_btc = self.repository.find_btc_df(
+        #     assets_btc=self.assets_btc,
+        #     interval=self.interval,
+        #     exchange=self.exchange,
+        # )
+        #
+        # min_len = self.repository.get_df_len_min()
+        #
+        # if len(df_ohlc) != min_len or len(df_down) != min_len or len(df_btc) != min_len:
+        #     raise Exception("Data frame lengths are not equal")
+        #
+        # df = pd.concat([df_ohlc, df_down, df_btc], axis=1)
+        #
+        # df_asc = df[::-1].reset_index(drop=True)
 
-        min_len = self.repository.get_df_len_min()
-
-        if len(df_ohlc) != min_len or len(df_down) != min_len or len(df_btc) != min_len:
-            raise Exception("Data frame lengths are not equal")
-
-        df = pd.concat([df_ohlc, df_down, df_btc], axis=1)
-
-        df_asc = df[::-1].reset_index(drop=True)
-
-        df_ta_na = estimate_ta_fill_na(df_asc)
+        df_ta_na = estimate_ta_fill_na(df)
 
         # Data Scaling
         # ------------------------------------------------------------------------

@@ -72,22 +72,6 @@ class OhlcRepository:
             con=self.connection
         )
 
-        # print(asset, market, exchange, interval)
-        # print(start_at)
-        # print(end_at)
-        # print(asset)
-        # print(start_at)
-        # print(len(df))
-        # exit()
-
-        # price = df['open'].iloc[-1]
-        # diff = self.utility.diff_price(price)
-
-        # df_scaled['open'] = df_scaled['open'].apply(lambda x: x * diff)
-        # df_scaled['high'] = df_scaled['high'].apply(lambda x: x * diff)
-        # df_scaled['low'] = df_scaled['low'].apply(lambda x: x * diff)
-        # df_scaled['close'] = df_scaled['close'].apply(lambda x: x * diff)
-
         return df
 
     def find_down_df(
@@ -118,10 +102,9 @@ class OhlcRepository:
 
         df = pd.concat(dfs, axis=1)
 
-        # print('find_down_df')
-        # print(df)
 
         return df
+
 
     def find_btc_df(
             self,
@@ -129,6 +112,10 @@ class OhlcRepository:
             assets_btc: list[str],
             interval: str,
     ) -> pd.DataFrame:
+        """
+        deprecated
+        """
+
         dfs = []
 
         for asset in assets_btc:
@@ -159,6 +146,9 @@ class OhlcRepository:
             interval: str,
 
     ):
+        """
+        deprecated
+        """
         market = 'USDT'
         session = Session(bind=self.connection)
 
@@ -197,6 +187,9 @@ class OhlcRepository:
             asset: str,
             interval: str,
     ):
+        """
+        deprecated
+        """
         market = 'BTC'
         session = Session(bind=self.connection)
 
