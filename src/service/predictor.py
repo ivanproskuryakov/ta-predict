@@ -8,9 +8,6 @@ from sklearn.preprocessing import MinMaxScaler
 from datetime import datetime, timedelta
 
 from src.parameters_usdt_top import market, assets
-from src.parameters_btc import assets_btc
-from src.parameters import assets_down
-
 from src.service.reporter import Reporter
 from src.service.trade_finder import TradeFinder
 from src.service.trader import Trader
@@ -37,8 +34,8 @@ class Predictor:
         self.scaler = MinMaxScaler()
         self.dataset_builder = DatasetBuilder(
             assets=assets,
-            assets_btc=assets_btc,
-            assets_down=assets_down,
+            assets_btc=[],
+            assets_down=[],
             interval=self.interval,
             market=market,
         )
@@ -64,8 +61,20 @@ class Predictor:
             asset, x_df = item
 
             if len(x_df) > self.width:
-                x_df_scaled = self.scaler.fit_transform(x_df)
-                y_df = self.make_prediction_ohlc_close(x_df_scaled)
+                x_df_expanded = np.expand_dims(
+                    self.scaler.fit_transform(x_df),
+                    axis=0
+                )
+
+                y = self.model.predict(x_df_expanded, verbose=0)
+
+                df = pd.DataFrame(0, index=np.arange(len(y[0])), columns=x_df.keys())
+
+                df['close'] = y[0]
+
+                y_inverse = self.scaler.inverse_transform(df)
+
+                y_df = pd.DataFrame(y_inverse, None, x_df.keys())
 
                 data.append((
                     asset,

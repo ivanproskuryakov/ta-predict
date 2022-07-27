@@ -22,7 +22,7 @@ class Subscriber:
 
         print(self.symbols, self.symbols_total)
 
-    def listen(self):
+    def subscribe(self):
         ws = websocket.WebSocketApp(
             url=self.socket,
             on_open=self.on_open,
