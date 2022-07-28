@@ -1,28 +1,44 @@
 import json
 import websocket
+from datetime import datetime
 
 from src.repository.ohlc_repository import OhlcRepository
 from src.parameters_usdt_top import assets, market
 from src.service.klines_short import build_klines
 from src.service.predictor import Predictor
+from src.service.loader_ohlc import LoaderOHLC
+
 
 class Subscriber:
     total: int = 0
+    width: int
     interval: str
     socket: str = 'wss://stream.binance.com:9443/ws'
     repository: OhlcRepository
     predictor: Predictor
+    loaderOHLC: LoaderOHLC
 
-    def __init__(self, interval: str):
+    def __init__(self, interval: str, model_path: str, width: int):
+        self.width = width
         self.interval = interval
+
         self.symbols = [f'{x}{market}@kline_{interval}'.lower() for x in assets]
         self.symbols_total: int = len(self.symbols)
+
         self.repository = OhlcRepository(-1)
-        self.predictor = Predictor(interval)
+        self.predictor = Predictor(interval=interval, width=width, model_path=model_path)
+        self.loaderOHLC = LoaderOHLC(assets=assets, market=market)
 
         print(self.symbols, self.symbols_total)
 
     def subscribe(self):
+        self.loaderOHLC.flush()
+        self.loaderOHLC.load(
+            end_at=datetime.utcnow(),
+            interval=self.interval,
+            width=self.width
+        )
+
         ws = websocket.WebSocketApp(
             url=self.socket,
             on_open=self.on_open,
@@ -70,7 +86,6 @@ class Subscriber:
                 if self.total == self.symbols_total:
                     self.total = 0
                     self.predictor.predict()
-
 
     def on_error(self, ws, message):
         print("on_error")

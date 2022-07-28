@@ -22,11 +22,14 @@ class Predictor:
     scaler = MinMaxScaler()
 
     interval: str
-    model = None
-    model_path: str = 'model/gru-b-1000-48.keras'
-    width: int = 1000
+    model_path: str
+    width: int
 
-    def __init__(self, interval: str):
+    model = None
+
+    def __init__(self, interval: str, width: int, model_path: str):
+        self.model_path = model_path
+        self.width = width
         self.interval = interval
         self.trader = Trader()
         self.reporter = Reporter()
