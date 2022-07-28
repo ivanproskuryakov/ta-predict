@@ -9,32 +9,34 @@ pip install -r requirements-ubuntu.txt
 pip install --force-reinstall -r requirements.txt
 ```
 
-### Commands
+### Training
 
 ```
-ENV=dev python model_train.py
-ENV=dev python model_predict.py 15m
-ENV=dev python model_plot.py
-ENV=dev python trades_populate.py
+psql -U postgres
+create database ta_train;
+
+ENV=train python db_flush_sync.py
+ENV=train python db_populate_ohlc_train.py
+ENV=train python model_train_window_gru.py
 
 ```
 
-### Postgres
+### Running
 
 ```
 psql -U postgres
 create database ta_dev;
-create database ta_test;
 
 ENV=dev python db_flush_sync.py
-ENV=test python db_flush_sync.py
-ENV=test python db_populate_exchange.py
-
+ENV=dev python predict.py 5m
 ```
 
-### Test
+### Testing
 
 ```
+psql -U postgres
+create database ta_test;
+
 ENV=test python -m pytest test
 ENV=test python -m pytest --log-cli-level DEBUG -s test/service/test_trader.py
 ENV=test python -m pytest test/service/test_trader.py

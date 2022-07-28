@@ -1,6 +1,7 @@
 DB_URL = {
-    'test': 'postgresql://postgres:@localhost/ta_test',
+    'train': 'postgresql://postgres:@localhost/ta_train',
     'dev': 'postgresql://postgres:@localhost/ta_dev',
+    'test': 'postgresql://postgres:@localhost/ta_test',
 }
 
 price_height = 10000
