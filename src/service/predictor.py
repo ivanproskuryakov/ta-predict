@@ -7,7 +7,6 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from datetime import datetime, timedelta
 
-from src.parameters_usdt_top import market, assets
 from src.service.reporter import Reporter
 from src.service.trade_finder import TradeFinder
 from src.service.trader import Trader
@@ -15,19 +14,19 @@ from src.service.dataset_builder import DatasetBuilder
 
 
 class Predictor:
-    trader: Trader
-    reporter: Reporter
-    trade_finder: TradeFinder
-    dataset_builder: DatasetBuilder
-    scaler = MinMaxScaler()
-
     interval: str
     model_path: str
     width: int
 
     model = None
 
-    def __init__(self, interval: str, width: int, model_path: str):
+    trader: Trader
+    reporter: Reporter
+    trade_finder: TradeFinder
+    dataset_builder: DatasetBuilder
+    scaler = MinMaxScaler()
+
+    def __init__(self, interval: str, width: int, model_path: str, assets: [str], market: str, ):
         self.model_path = model_path
         self.width = width
         self.interval = interval

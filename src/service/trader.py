@@ -18,7 +18,6 @@ class Trader:
 
     trade_repository: TradeRepository
     exchange_repository: ExchangeRepository
-
     utility: Utility
 
     def __init__(self):

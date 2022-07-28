@@ -3,7 +3,7 @@ import websocket
 from datetime import datetime
 
 from src.repository.ohlc_repository import OhlcRepository
-from src.parameters_usdt_top import assets, market
+from src.parameters_usdt import assets, market
 from src.service.klines_short import build_klines
 from src.service.predictor import Predictor
 from src.service.loader_ohlc import LoaderOHLC
@@ -14,6 +14,7 @@ class Subscriber:
     width: int
     interval: str
     socket: str = 'wss://stream.binance.com:9443/ws'
+
     repository: OhlcRepository
     predictor: Predictor
     loaderOHLC: LoaderOHLC
@@ -26,7 +27,11 @@ class Subscriber:
         self.symbols_total: int = len(self.symbols)
 
         self.repository = OhlcRepository(-1)
-        self.predictor = Predictor(interval=interval, width=width, model_path=model_path)
+        self.predictor = Predictor(
+            assets=assets, market=market,
+            interval=interval, width=width,
+            model_path=model_path
+        )
         self.loaderOHLC = LoaderOHLC(assets=assets, market=market)
 
         print(self.symbols, self.symbols_total)

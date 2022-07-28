@@ -2,7 +2,6 @@ import pandas as pd
 
 
 class TradeFinder:
-
     def pick_best_options(self, df: pd.DataFrame, diff: float, diff_sum: float) -> pd.DataFrame:
         df = df.query(f'diff > {diff} and diff_sum < {diff_sum} and trades > 50')
 

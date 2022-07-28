@@ -9,10 +9,11 @@ from src.service.util import Utility
 
 
 class OhlcRepository:
-    connection: Connection
     market: str = 'BTC'
-    df_len: [int] = []
     start_at: int
+    df_len: [int] = []
+
+    connection: Connection
     utility: Utility
 
     def __init__(self, start_at: int):
