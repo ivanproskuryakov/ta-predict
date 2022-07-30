@@ -14,4 +14,4 @@ def test_pick_best_options():
 
     best = db_best.loc[0]
 
-    assert best['asset'] == 'ONT'
+    assert best['asset'] == 'BTC'

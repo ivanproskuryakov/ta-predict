@@ -10,8 +10,6 @@ def test_build_dataset_train():
     Ohlc.metadata.drop_all(bind=engine)
     Ohlc.metadata.create_all(bind=engine)
 
-    builder = DatasetBuilder()
-
     assets = [
         'BTC',
         'ETH',
@@ -26,6 +24,15 @@ def test_build_dataset_train():
         'BNB',
         'ADA',
     ]
+
+    builder = DatasetBuilder(
+        market='USDT',
+        assets=assets,
+        assets_down=assets_down,
+        assets_btc=assets_btc,
+        interval='5m',
+    )
+
     crate_ohlc_many(asset='BTC', market='USDT', interval='5m', price=10000, quantity=10)
     crate_ohlc_many(asset='ETH', market='USDT', interval='5m', price=1000, quantity=10)
 
@@ -39,13 +46,7 @@ def test_build_dataset_train():
     crate_ohlc_many(asset='BNB', market='BTC', interval='5m', price=0.011, quantity=10)
     crate_ohlc_many(asset='ADA', market='BTC', interval='5m', price=0.00002, quantity=10)
 
-    train, validate = builder.build_dataset_train(
-        market='USDT',
-        assets=assets,
-        assets_down=assets_down,
-        assets_btc=assets_btc,
-        interval='5m',
-    )
+    train, validate = builder.build_dataset_train()
 
     assert train['open'].iloc[0] == 0.0
     assert train['open'].iloc[1] == 0.11111111111108585
@@ -55,7 +56,7 @@ def test_build_dataset_train():
     assert validate['open'].iloc[1] == 1
 
     assert len(train) == 18
-    assert len(train.keys()) == 90
+    assert len(train.keys()) == 48
 
     assert len(validate) == 2
-    assert len(validate.keys()) == 90
+    assert len(validate.keys()) == 48

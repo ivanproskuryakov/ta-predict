@@ -6,7 +6,7 @@ from src.service.util import Utility
 
 
 def crate_ohlc_many(asset: str, market: str, interval: str, price: float, quantity: int) -> pd.DataFrame:
-    ohlc_repository = OhlcRepository()
+    ohlc_repository = OhlcRepository(start_at=-1)
     utility = Utility()
 
     collection = []

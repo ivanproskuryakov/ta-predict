@@ -18,9 +18,9 @@ def load_predictions() -> list:
         x_df = pd.DataFrame.from_dict(json.loads(file.read()))
         file = open(f'fixture/prediction/prediction_{asset}_y_df.json', 'r')
         y_df = pd.DataFrame.from_dict(json.loads(file.read()))
-        file = open(f'fixture/prediction/prediction_{asset}_last_item.json', 'r')
-        last_item = json.loads(file.read())
+        # file = open(f'fixture/prediction/prediction_{asset}_last_item.json', 'r')
+        # last_item = json.loads(file.read())
 
-        data.append((asset, last_item, x_df, y_df))
+        data.append((asset, x_df, y_df))
 
     return data

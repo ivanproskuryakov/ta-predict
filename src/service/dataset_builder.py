@@ -1,4 +1,6 @@
 import pandas as pd
+from datetime import datetime, timedelta
+
 from sklearn.preprocessing import MinMaxScaler
 
 from src.service.estimator import estimate_ta_fill_na
@@ -65,11 +67,16 @@ class DatasetBuilder:
         return collection
 
     def build_dataset_asset(self, asset: str) -> [pd.DataFrame, pd.DataFrame]:
+        now = datetime.utcnow()
+        start_at = 0
+
         df = self.repository.get_full_df(
             asset=asset,
             market=self.market,
             interval=self.interval,
             exchange=self.exchange,
+            start_at=start_at,
+            end_at=now.timestamp(),
         )
         # df_down = self.repository.find_down_df(
         #     assets_down=self.assets_down,
