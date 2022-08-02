@@ -27,9 +27,9 @@ class Subscriber:
         self.interval = interval
         self.model_path = model_path
         self.repository = OhlcRepository(-1)
+        self.loaderOHLC = LoaderOHLC()
 
     def subscribe(self):
-        self.loaderOHLC = LoaderOHLC()
         self.loaderOHLC.flush()
 
         assets_real = self.loaderOHLC.load(

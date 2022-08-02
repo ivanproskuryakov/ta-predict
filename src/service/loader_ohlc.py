@@ -55,7 +55,7 @@ class LoaderOHLC:
             },
         ]
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=30) as executor:
             for group in groups:
                 for asset in group["assets"]:
                     futures.append(
