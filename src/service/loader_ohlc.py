@@ -1,4 +1,4 @@
-import pandas as pd
+import concurrent.futures
 
 from binance import enums
 from datetime import datetime, timedelta
@@ -13,16 +13,7 @@ class LoaderOHLC:
     repository: OhlcRepository
     exchange: str = 'binance'
 
-    assets: [str]
-    market: str
-
-    def __init__(self,
-                 assets: [str],
-                 market: str,
-                 ):
-        self.assets = assets
-        self.market = market
-
+    def __init__(self, ):
         self.repository = OhlcRepository(start_at=-1)
 
     def flush(self):
@@ -31,10 +22,17 @@ class LoaderOHLC:
         Ohlc.metadata.drop_all(bind=engine)
         Ohlc.metadata.create_all(bind=engine)
 
-    def load(self, end_at: datetime, interval: str, width: int) -> [pd.DataFrame, pd.DataFrame]:
+    def load(self,
+             assets: [str],
+             market: str,
+             end_at: datetime,
+             interval: str,
+             width: int
+             ) -> [str]:
         multiplier = int(interval[:-1])
-
         frames = width * multiplier
+        futures = []
+        assets_real = []
 
         print(width)
         print(frames)
@@ -51,32 +49,41 @@ class LoaderOHLC:
         exchange = 'binance'
         groups = [
             {
-                "market": self.market,
-                "assets": self.assets,
+                "market": market,
+                "assets": assets,
                 "type": enums.HistoricalKlinesType.SPOT
             },
         ]
 
-        for group in groups:
-            for asset in group["assets"]:
-                print(f'processing: {asset} {group["market"]} {interval}')
+        with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
+            for group in groups:
+                for asset in group["assets"]:
+                    futures.append(
+                        executor.submit(
+                            klines.build_klines,
+                            group["market"],
+                            asset,
+                            group["type"],
+                            interval,
+                            start_at.timestamp(),
+                            end_at.timestamp(),
+                        )
+                    )
+                for i in range(len(assets)):
+                    asset = assets[i]
+                    collection = futures[i].result()
 
-                collection = klines.build_klines(
-                    market=group["market"],
-                    asset=asset,
-                    klines_type=group["type"],
-                    interval=interval,
-                    start_at=start_at.timestamp(),
-                    end_at=end_at.timestamp(),
-                )
+                    if len(collection) > 0:
+                        print(f'processing: {asset} {group["market"]} {interval}')
+                        print(asset, len(collection))
 
-                print(asset)
-                print(len(collection))
+                        assets_real.append(asset)
+                        repository.create_many(
+                            exchange,
+                            group["market"],
+                            asset,
+                            interval,
+                            collection
+                        )
 
-                repository.create_many(
-                    exchange,
-                    group["market"],
-                    asset,
-                    interval,
-                    collection
-                )
+        return assets_real

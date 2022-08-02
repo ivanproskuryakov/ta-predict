@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from sklearn.preprocessing import MinMaxScaler
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from src.service.reporter import Reporter
 from src.service.trade_finder import TradeFinder
@@ -47,13 +47,9 @@ class Predictor:
 
     def predict(self):
         now = datetime.now()
-        start_at = datetime.utcnow() - timedelta(minutes=(self.width + 100) * 5)
         data = []
 
-        collection = self.dataset_builder.build_dataset_predict(
-            start_at=start_at.timestamp(),
-            end_at=now.timestamp(),
-        )
+        collection = self.dataset_builder.build_dataset_predict()
 
         time_db_load = datetime.now() - now
 

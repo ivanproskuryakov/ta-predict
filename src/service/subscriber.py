@@ -11,8 +11,11 @@ from src.service.loader_ohlc import LoaderOHLC
 
 class Subscriber:
     total: int = 0
+    symbols_total: int = 0
     width: int
     interval: str
+    model_path: str
+    symbols: [str]
     socket: str = 'wss://stream.binance.com:9443/ws'
 
     repository: OhlcRepository
@@ -22,26 +25,30 @@ class Subscriber:
     def __init__(self, interval: str, model_path: str, width: int):
         self.width = width
         self.interval = interval
-
-        self.symbols = [f'{x}{market}@kline_{interval}'.lower() for x in assets]
-        self.symbols_total: int = len(self.symbols)
-
+        self.model_path = model_path
         self.repository = OhlcRepository(-1)
-        self.predictor = Predictor(
-            assets=assets, market=market,
-            interval=interval, width=width,
-            model_path=model_path
-        )
-        self.loaderOHLC = LoaderOHLC(assets=assets, market=market)
-
-        print(self.symbols, self.symbols_total)
 
     def subscribe(self):
+        self.loaderOHLC = LoaderOHLC()
         self.loaderOHLC.flush()
-        self.loaderOHLC.load(
+
+        assets_real = self.loaderOHLC.load(
+            assets=assets,
+            market=market,
             end_at=datetime.utcnow(),
             interval=self.interval,
             width=self.width
+        )
+
+        self.symbols = [f'{x}{market}@kline_{self.interval}'.lower() for x in assets_real]
+        self.symbols_total: int = len(self.symbols)
+
+        self.predictor = Predictor(
+            assets=assets_real,
+            market=market,
+            interval=self.interval,
+            width=self.width,
+            model_path=self.model_path
         )
 
         ws = websocket.WebSocketApp(

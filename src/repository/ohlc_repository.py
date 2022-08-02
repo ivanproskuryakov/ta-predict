@@ -29,6 +29,48 @@ class OhlcRepository:
     def get_df_len_min(self) -> int:
         return min(self.df_len)
 
+    def get_df_predict(
+            self,
+            exchange: str,
+            market: str,
+            asset: str,
+            interval: str,
+    ):
+        session = Session(bind=self.connection)
+
+        sql = session.query(
+            Ohlc.price_open.label('open'),
+            Ohlc.price_high.label('high'),
+            Ohlc.price_low.label('low'),
+            Ohlc.price_close.label('close'),
+
+            Ohlc.time_month,
+            Ohlc.time_day,
+            Ohlc.time_hour,
+            Ohlc.time_minute,
+
+            Ohlc.trades,
+            Ohlc.volume,
+            Ohlc.volume_taker,
+            Ohlc.volume_maker,
+            Ohlc.quote_asset_volume,
+
+            Ohlc.price_diff,
+        ) \
+            .filter(Ohlc.exchange == exchange) \
+            .filter(Ohlc.market == market) \
+            .filter(Ohlc.interval == interval) \
+            .filter(Ohlc.asset == asset) \
+            .order_by(Ohlc.id.asc()) \
+            .statement
+
+        df = pd.read_sql(
+            sql=sql,
+            con=self.connection
+        )
+
+        return df
+
     def get_full_df(
             self,
             exchange: str,
