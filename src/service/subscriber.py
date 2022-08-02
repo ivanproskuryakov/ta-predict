@@ -30,6 +30,7 @@ class Subscriber:
         self.loaderOHLC = LoaderOHLC()
 
     def subscribe(self):
+        print('subscribe ------>', datetime.now())
         self.loaderOHLC.flush()
 
         assets_real = self.loaderOHLC.load(
@@ -42,7 +43,6 @@ class Subscriber:
 
         self.symbols = [f'{x}{market}@kline_{self.interval}'.lower() for x in assets_real]
         self.symbols_total: int = len(self.symbols)
-
         self.predictor = Predictor(
             assets=assets_real,
             market=market,
@@ -62,7 +62,7 @@ class Subscriber:
         ws.run_forever()
 
     def on_open(self, ws):
-        print("opened")
+        print('opened ------>', datetime.now())
         subscribe_message = {
             "method": "SUBSCRIBE",
             "params": self.symbols,
@@ -90,10 +90,7 @@ class Subscriber:
                     asset=asset,
                     collection=[item]
                 )
-
                 self.total = self.total + 1
-
-                print(f'{asset} - {self.interval}')
 
                 if self.total == self.symbols_total:
                     self.total = 0
