@@ -42,6 +42,12 @@ class Reporter:
             "trades",
             "volume",
 
+            "rsi",
+            "macd",
+            "sma_200",
+            "ema_5",
+            "tema",
+
             "date",
             "url",
         ]
@@ -67,6 +73,12 @@ class Reporter:
                 x_last["close"],
                 x_last["trades"],
                 x_last["volume"],
+
+                x_last["rsi"],
+                x_last["macd"],
+                x_last["sma_200"],
+                x_last["ema_5"],
+                x_last["tema"],
 
                 x_date,
                 f'https://www.binance.com/en/trade/{asset}_USDT',
