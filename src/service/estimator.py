@@ -7,8 +7,6 @@ import src.vendor.qtpylib as qtpylib
 def estimate_ta_fill_na(df):
     price = qtpylib.typical_price(df)
 
-    stoch_fast = ta.STOCHF(df, 5, 3, 0, 3, 0)
-
     df_tdi = qtpylib.tdi(price)
     df_heikinashi = qtpylib.heikinashi(df)
     df_macd = qtpylib.macd(price)
@@ -52,40 +50,52 @@ def estimate_ta_fill_na(df):
     df['pvt'] = qtpylib.pvt(df)
     df['chopiness'] = qtpylib.chopiness(df)
 
-    tadf = {
-        # CCI
-        # 'trend_kst_diff': KST.kst_diff(),
+    # Math Transform Functions
+    # https://mrjbq7.github.io/ta-lib/func_groups/math_transform.html
 
-        'cci_one': ta.CCI(df, timeperiod=170),
-        'cci_two': ta.CCI(df, timeperiod=34),
-        'cci': ta.CCI(df),
+    df['ACOS'] = ta.ACOS(df['close'])
+    df['ASIN'] = ta.ASIN(df['close'])
+    df['ATAN'] = ta.ATAN(df['close'])
+    df['CEIL'] = ta.CEIL(df['close'])
+    df['COS'] = ta.COS(df['close'])
+    # df['EXP'] = ta.EXP(df['close'])
+    df['FLOOR'] = ta.FLOOR(df['close'])
+    df['LN'] = ta.LN(df['close'])
+    df['LOG10'] = ta.LOG10(df['close'])
+    df['SIN'] = ta.SIN(df['close'])
+    df['SQRT'] = ta.SQRT(df['close'])
+    df['TAN'] = ta.TAN(df['close'])
+    df['TANH'] = ta.TANH(df['close'])
 
-        # EMA - Exponential Moving Average
-        'ema_5': ta.EMA(df, timeperiod=5),
-        'ema_10': ta.EMA(df, timeperiod=10),
-        'ema_high': ta.EMA(df, timeperiod=5, price='high'),
-        'ema_close': ta.EMA(df, timeperiod=5, price='close'),
-        'ema_low': ta.EMA(df, timeperiod=5, price='low'),
+    # Statistic Functions
+    # https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html
+    df['BETA'] = ta.BETA(df, timeperiod=5)
+    df['CORREL'] = ta.CORREL(df, timeperiod=30)
+    df['LINEARREG'] = ta.LINEARREG(df, timeperiod=14)
+    df['LINEARREG_ANGLE'] = ta.LINEARREG_ANGLE(df, timeperiod=14)
+    df['LINEARREG_INTERCEPT'] = ta.LINEARREG_INTERCEPT(df, timeperiod=14)
+    df['LINEARREG_SLOPE'] = ta.LINEARREG_SLOPE(df, timeperiod=14)
+    # df['STDDEV'] = ta.STDDEV(df['close'], timeperiod=5, nbdev=1)
+    df['TSF'] = ta.TSF(df, timeperiod=14)
+    # df['VAR'] = ta.VAR(df, timeperiod=5, nbdev=1)
 
-        'min': ta.MIN(df, timeperiod=12),
-        'max': ta.MAX(df, timeperiod=12),
+    # Math Operator Functions
+    # https://mrjbq7.github.io/ta-lib/func_groups/math_operators.html
 
-        # STOCHF
-        'stochf_fastd': stoch_fast['fastd'],
-        'stochf_fastk': stoch_fast['fastk'],
-
-        # SMA
-        'sma_200': ta.SMA(df, timeperiod=200),
-        'sma_50': ta.SMA(df, timeperiod=50),
-
-        'sma_short': ta.SMA(df, timeperiod=3),
-        'sma_long': ta.SMA(df, timeperiod=6),
-        'sma_fastMA': ta.SMA(df, timeperiod=14),
-        'sma_slowMA': ta.SMA(df, timeperiod=28),
-    }
-
-    for key in tadf.keys():
-        df[key] = tadf[key]
+    df['MIN'] = ta.MIN(df, timeperiod=12)
+    df['MIN_30'] = ta.MIN(df, timeperiod=30)
+    df['MAX'] = ta.MAX(df, timeperiod=12)
+    df['MAX_30'] = ta.MAX(df['close'], timeperiod=30)
+    df['ADD'] = ta.ADD(df['high'], df['low'])
+    df['DIV'] = ta.DIV(df['high'], df['low'])
+    df['MAXINDEX'] = ta.MAXINDEX(df['close'], timeperiod=30)
+    df['MININDEX'] = ta.MININDEX(df['close'], timeperiod=30)
+    df_MINMAX = ta.MINMAX(df['close'], timeperiod=30)
+    df['MININDEX_min'] = df_MINMAX[0]
+    df['MININDEX_max'] = df_MINMAX[1]
+    df['MULT'] = ta.MULT(df['high'], df['low'])
+    df['SUB'] = ta.SUB(df['high'], df['low'])
+    df['SUM'] = ta.SUM(df['high'], timeperiod=30)
 
     # Pattern Recognition Functions
     # https://mrjbq7.github.io/ta-lib/func_groups/pattern_recognition.html
@@ -157,7 +167,14 @@ def estimate_ta_fill_na(df):
     # Overlap Studies Functions
     # https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html
     df['DEMA'] = ta.DEMA(df, timeperiod=30)
+
     df['EMA'] = ta.EMA(df, timeperiod=5)
+    df['EMA_5'] = ta.EMA(df, timeperiod=5)
+    df['EMA_10'] = ta.EMA(df, timeperiod=10)
+    df['EMA_high'] = ta.EMA(df, timeperiod=5, price='high')
+    df['EMA_close'] = ta.EMA(df, timeperiod=5, price='close')
+    df['EMA_low'] = ta.EMA(df, timeperiod=5, price='low')
+
     df['ADXR'] = ta.ADXR(df, timeperiod=5)
     df['KAMA'] = ta.KAMA(df, timeperiod=30)
     df['MA'] = ta.ADXR(df, timeperiod=30, matype=0)
@@ -170,6 +187,14 @@ def estimate_ta_fill_na(df):
     df['SAR'] = ta.SAR(df)
     df['SAREXT'] = ta.SAREXT(df['high'], df['low'])
     df['SMA'] = ta.SMA(df['close'], timeperiod=30)
+
+    df['SMA_200'] = ta.SMA(df, timeperiod=200)
+    df['SMA_50'] = ta.SMA(df, timeperiod=50)
+    df['SMA_short'] = ta.SMA(df, timeperiod=3)
+    df['SMA_long'] = ta.SMA(df, timeperiod=6)
+    df['SMA_fastMA'] = ta.SMA(df, timeperiod=14)
+    df['SMA_slowMA'] = ta.SMA(df, timeperiod=28)
+
     df['T3'] = ta.T3(df['close'], timeperiod=5)
     df['TEMA_9'] = ta.TEMA(df['close'], timeperiod=9)
     df['TEMA'] = ta.TEMA(df['close'], timeperiod=30)
@@ -188,7 +213,11 @@ def estimate_ta_fill_na(df):
 
     df['AROONOSC'] = ta.AROONOSC(df['high'], df['low'], timeperiod=14)
     df['BOP'] = ta.BOP(df['open'], df['high'], df['low'], df['close'])
+
     df['CCI'] = ta.CCI(df['high'], df['low'], df['close'], timeperiod=14)
+    df['CCI_170'] = ta.CCI(df, timeperiod=170)
+    df['CCI_34'] = ta.CCI(df, timeperiod=34)
+    df['CCI'] = ta.CCI(df)
 
     df['CMO'] = ta.CMO(df['close'], timeperiod=14)
     df['DX'] = ta.DX(df['high'], df['low'], df['close'], timeperiod=14)
@@ -223,9 +252,12 @@ def estimate_ta_fill_na(df):
     df['STOCH_1'] = df_STOCK[1]
 
     df_STOCHF = ta.STOCHF(df['high'], df['low'], df['close'], fastk_period=5, fastd_period=3, fastd_matype=0)
+    stoch_fast = ta.STOCHF(df, 5, 3, 0, 3, 0)
 
     df['STOCHF_0'] = df_STOCHF[0]
     df['STOCHF_1'] = df_STOCHF[1]
+    df['STOCHF_stochf_fastd'] = stoch_fast['fastd']
+    df['STOCHF_stochf_fastk'] = stoch_fast['fastk']
 
     df_STOCHRSI = ta.STOCHRSI(df['close'], timeperiod=14, fastk_period=5, fastd_period=3, fastd_matype=0)
     df['STOCHRSI_0'] = df_STOCHRSI[0]
