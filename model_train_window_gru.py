@@ -1,29 +1,20 @@
 import tensorflow as tf
 
-from keras.layers import Dense, GRU, LSTM, Dropout
+from keras.layers import Dense, GRU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 from src.service.dataset_builder_db import DatasetBuilderDB
 from src.service.generator_window import WindowGenerator
-from src.parameters import market, assets, assets_down
 from src.parameters_btc import assets_btc
-
-assets = [
-    'BTC',
-    # 'ETH',
-    # "BNB",
-    # "XRP",
-    # "ADA",
-    # 'TRX',
-]
+from src.parameters import market, assets, assets_down
 
 dataset_builder_db = DatasetBuilderDB()
 
 # Variables
 # ------------------------------------------------------------------------
 width = 50
-units = 2000
-interval = '3m'
+units = 1000
+interval = '5m'
 
 # Data load & train
 # ------------------------------------------------------------------------
@@ -40,7 +31,7 @@ train_df, validate_df = dataset_builder_db.build_dataset_all(
 df_num_signals = train_df.shape[1]
 data_dir = 'data'
 assets_names = '-'.join(assets)
-name = f'gru-e-{width}-{units}-{df_num_signals}-{interval}-{assets_names}'
+name = f'gru-g-{width}-{units}-{df_num_signals}-{interval}-{assets_names}'
 
 filepath_model = f'{data_dir}/{name}.keras'
 filepath_checkpoint = f'{data_dir}/{name}.checkpoint'
@@ -53,16 +44,17 @@ print(f'training: {interval} {assets} {df_num_signals} {name}')
 callback_early_stopping = EarlyStopping(
     monitor='val_loss',
     # monitor='mean_absolute_error',
-    patience=5,
+    patience=100,
     mode='min',
     verbose=1
 )
 callback_reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
-    factor=0.5,
-    min_delta=1e-8,
+    factor=0.2,
+    # min_delta=1e-4,
+    # min_delta=1e-18,
     min_lr=0,
-    patience=2,
+    patience=3,
     verbose=1,
 )
 callback_checkpoint = ModelCheckpoint(
@@ -93,7 +85,9 @@ model = tf.keras.models.Sequential([
     #     return_sequences=True,
     #     input_shape=(None, df_num_signals)
     # ),
+    # Dense(units=1, activation='softmax', input_dim=df_num_signals),
     Dense(units=1, activation='linear', input_dim=df_num_signals),
+    # Dense(units=1, activation='tanh', input_dim=df_num_signals),
     # Dense(units=1, activation='relu', input_dim=df_num_signals),
 ])
 
@@ -116,7 +110,7 @@ window = WindowGenerator(
     input_width=width,
     label_width=width,
     shift=1,
-    batch_size=100,
+    batch_size=400,
     label_columns=[
         # 'open',
         # 'high',

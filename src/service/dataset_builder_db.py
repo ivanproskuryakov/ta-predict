@@ -94,7 +94,7 @@ class DatasetBuilderDB:
         # Data split
         # --------------------------------------------------------
         n = len(df)
-        n_split = n * 0.7
+        n_split = n * 0.8
         df_train = df[0:int(n_split)]
         dv_validate = df[int(n_split):]
 
