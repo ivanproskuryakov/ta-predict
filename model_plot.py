@@ -1,11 +1,7 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
-from src.service.predictor_unseen import make_prediction_ohlc_close
-from src.service.dataset_builder_api import DatasetBuilderAPI
 from src.parameters import market
-from src.parameters_btc import assets_btc
-from src.parameters import assets_down
 
 tail = 100
 assets = [
@@ -14,8 +10,6 @@ assets = [
 interval = '15m'
 dataset_builder = DatasetBuilderAPI(
     assets,
-    assets_btc,
-    assets_down,
     interval,
     market,
 )

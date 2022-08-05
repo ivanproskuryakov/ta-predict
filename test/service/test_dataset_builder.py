@@ -14,22 +14,10 @@ def test_build_dataset_train():
         'BTC',
         'ETH',
     ]
-    assets_down = [
-        'BTCUP',
-        'BTCDOWN',
-        'ETHUP',
-        'BNBUP',
-    ]
-    assets_btc = [
-        'BNB',
-        'ADA',
-    ]
 
     builder = DatasetBuilder(
         market='USDT',
         assets=assets,
-        assets_down=assets_down,
-        assets_btc=assets_btc,
         interval='5m',
     )
 

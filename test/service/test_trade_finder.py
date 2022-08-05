@@ -10,7 +10,7 @@ def test_pick_best_options():
 
     df = reporter.report_build(data=data)
 
-    db_best = trade_finder.pick_best_options(df, diff=0, diff_sum=100)
+    db_best = trade_finder.pick_best_options(df, diff=0, rsi=70)
 
     best = db_best.loc[0]
 

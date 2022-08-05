@@ -4,9 +4,8 @@ from keras.layers import Dense, GRU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 from src.service.dataset_builder import DatasetBuilder
-from src.service.generator_window import WindowGenerator
-from src.parameters import market, assets, assets_down
-from src.parameters_btc import assets_btc
+from src.service.window_generator import WindowGenerator
+from src.parameters import market, assets
 
 # Variables
 # ------------------------------------------------------------------------
@@ -22,8 +21,6 @@ start_at = -1
 dataset_builder = DatasetBuilder(
     market=market,
     assets=assets,
-    assets_down=assets_down,
-    assets_btc=assets_btc,
     interval=interval,
 )
 

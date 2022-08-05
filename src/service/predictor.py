@@ -36,8 +36,6 @@ class Predictor:
         self.scaler = MinMaxScaler()
         self.dataset_builder = DatasetBuilder(
             assets=assets,
-            assets_btc=[],
-            assets_down=[],
             interval=self.interval,
             market=market,
         )
@@ -60,12 +58,12 @@ class Predictor:
                 x_df_original = x_df.copy()
                 x_df = x_df.drop(columns=['asset', 'time_close'])
 
-                print(x_df)
-
                 x_df_expanded = np.expand_dims(
                     self.scaler.fit_transform(x_df),
                     axis=0
                 )
+
+                print('predicting', x_df_original.iloc[-1]['asset'])
 
                 y = self.model.predict(x_df_expanded, verbose=0)
 
@@ -103,8 +101,10 @@ class Predictor:
             print('worst')
             print(report_worst)
 
-            if len(df_best):
-                webbrowser.open(df_best.iloc[-1]['url'], new=2)
+            webbrowser.open(df.iloc[-1]['url'], new=2)
+
+            # if len(df_best):
+            #     webbrowser.open(df_best.iloc[-1]['url'], new=2)
 
         else:
             print('--- no data ---')

@@ -3,13 +3,15 @@ import websocket
 from datetime import datetime
 
 from src.repository.ohlc_repository import OhlcRepository
-from src.parameters_usdt import assets, market
+
 from src.service.klines_short import build_klines
 from src.service.predictor import Predictor
 from src.service.loader_ohlc import LoaderOHLC
 
 
 class Subscriber:
+    assets: [str]
+    market: str
     total: int = 0
     symbols_total: int = 0
     width: int
@@ -22,7 +24,9 @@ class Subscriber:
     predictor: Predictor
     loaderOHLC: LoaderOHLC
 
-    def __init__(self, interval: str, model_path: str, width: int):
+    def __init__(self, assets: str, market: str, interval: str, model_path: str, width: int):
+        self.assets = assets
+        self.market = market
         self.width = width
         self.interval = interval
         self.model_path = model_path
@@ -34,18 +38,18 @@ class Subscriber:
         self.loaderOHLC.flush()
 
         assets_real = self.loaderOHLC.load(
-            assets=assets,
-            market=market,
+            assets=self.assets,
+            market=self.market,
             end_at=datetime.utcnow(),
             interval=self.interval,
             width=self.width
         )
 
-        self.symbols = [f'{x}{market}@kline_{self.interval}'.lower() for x in assets_real]
+        self.symbols = [f'{x}{self.market}@kline_{self.interval}'.lower() for x in assets_real]
         self.symbols_total: int = len(self.symbols)
         self.predictor = Predictor(
             assets=assets_real,
-            market=market,
+            market=self.market,
             interval=self.interval,
             width=self.width,
             model_path=self.model_path
@@ -78,14 +82,14 @@ class Subscriber:
             k = m['k']
             symbol = m['s']
             is_closed = k['x']
-            asset = symbol.replace(market, '')
+            asset = symbol.replace(self.market, '')
 
             if is_closed:
                 item = build_klines(k=k)
 
                 self.repository.create_many(
                     exchange='binance',
-                    market=market,
+                    market=self.market,
                     interval=self.interval,
                     asset=asset,
                     collection=[item]

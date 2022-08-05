@@ -2,8 +2,6 @@ import numpy as np
 import pandas as pd
 from decimal import Decimal
 
-from src.parameters import price_height
-
 
 class Utility:
     def round(self, n: float, decimals=10):
@@ -24,11 +22,6 @@ class Utility:
             percentage = percentage + self.diff_percentage(close_current, close_previous)
 
         return percentage
-
-    def diff_price(self, price: float):
-        diff = price_height / price
-
-        return diff
 
     def get_precision(self, f: float):
         precision = str(Decimal(f)).index('1')

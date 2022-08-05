@@ -1,5 +1,5 @@
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from sklearn.preprocessing import MinMaxScaler
 
@@ -12,21 +12,15 @@ class DatasetBuilder:
     exchange: str = 'binance'
 
     assets: [str]
-    assets_down: [str]
-    assets_btc: [str]
     interval: str
     market: str
 
     def __init__(self,
                  assets: [str],
-                 assets_down: [str],
-                 assets_btc: [str],
                  interval: str,
                  market: str,
                  ):
         self.assets = assets
-        self.assets_down = assets_down
-        self.assets_btc = assets_btc
         self.interval = interval
         self.market = market
 
@@ -35,12 +29,36 @@ class DatasetBuilder:
     def build_dataset_train(self) -> [pd.DataFrame, pd.DataFrame]:
         train = []
         validate = []
+        now = datetime.utcnow()
+        start_at = 0
 
         for asset in self.assets:
-            df_train, df_validate = self.build_dataset_asset(asset=asset)
+            df = self.repository.get_full_df(
+                asset=asset,
+                market=self.market,
+                interval=self.interval,
+                exchange=self.exchange,
+                start_at=start_at,
+                end_at=now.timestamp(),
+            )
+
+            df_ta_na = estimate_ta_fill_na(df)
+
+            # Data Scaling
+            # ------------------------------------------------------------------------
+            scaler = MinMaxScaler()  # todo: improve scaling part
+            scaled = scaler.fit_transform(df_ta_na)
+
+            df = pd.DataFrame(scaled, None, df_ta_na.keys())
+
+            # Data split
+            # --------------------------------------------------------
+            n = len(df)
+            df_train = df[0:int(n * 0.9)]
+            dv_validate = df[int(n * 0.9):]
 
             train.append(df_train)
-            validate.append(df_validate)
+            validate.append(dv_validate)
 
         train = pd.concat(train)
         validate = pd.concat(validate)
@@ -63,52 +81,3 @@ class DatasetBuilder:
             collection.append(df)
 
         return collection
-
-    def build_dataset_asset(self, asset: str) -> [pd.DataFrame, pd.DataFrame]:
-        now = datetime.utcnow()
-        start_at = 0
-
-        df = self.repository.get_full_df(
-            asset=asset,
-            market=self.market,
-            interval=self.interval,
-            exchange=self.exchange,
-            start_at=start_at,
-            end_at=now.timestamp(),
-        )
-        # df_down = self.repository.find_down_df(
-        #     assets_down=self.assets_down,
-        #     interval=self.interval,
-        #     exchange=self.exchange,
-        # )
-        # df_btc = self.repository.find_btc_df(
-        #     assets_btc=self.assets_btc,
-        #     interval=self.interval,
-        #     exchange=self.exchange,
-        # )
-        #
-        # min_len = self.repository.get_df_len_min()
-        #
-        # if len(df_ohlc) != min_len or len(df_down) != min_len or len(df_btc) != min_len:
-        #     raise Exception("Data frame lengths are not equal")
-        #
-        # df = pd.concat([df_ohlc, df_down, df_btc], axis=1)
-        #
-        # df_asc = df[::-1].reset_index(drop=True)
-
-        df_ta_na = estimate_ta_fill_na(df)
-
-        # Data Scaling
-        # ------------------------------------------------------------------------
-        scaler = MinMaxScaler() # todo: improve scaling part
-        scaled = scaler.fit_transform(df_ta_na)
-
-        df = pd.DataFrame(scaled, None, df_ta_na.keys())
-
-        # Data split
-        # --------------------------------------------------------
-        n = len(df)
-        df_train = df[0:int(n * 0.9)]
-        dv_validate = df[int(n * 0.9):]
-
-        return df_train, dv_validate

@@ -17,7 +17,7 @@ class TradePopulator:
         trades = self.trade_repository.find_opened()
 
         for trade in trades:
-            start_at = str(trade.interval_start - timedelta(seconds=10))
+            start_at = trade.interval_start - timedelta(seconds=10)
 
             collection = self.klines.build_klines(
                 market=trade.market,

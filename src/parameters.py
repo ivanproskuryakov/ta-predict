@@ -4,7 +4,6 @@ DB_URL = {
     'test': 'postgresql://postgres:@localhost/ta_test',
 }
 
-price_height = 10000
 market = 'USDT'
 
 assets = [
@@ -21,27 +20,6 @@ assets = [
     'ONT',
     'TRX',
     'ETC',
-]
-
-assets_down = [
-    'BTCUP',
-    'BTCDOWN',
-    'ETHUP',
-
-    # 'ETHDOWN',
-    # 'ADAUP',
-    # 'ADADOWN',
-    # 'LINKUP',
-    # 'LINKDOWN',
-
-    'BNBUP',
-    # 'BNBDOWN',
-    # 'TRXUP',
-    # 'TRXDOWN',
-    # 'XRPUP',
-    # 'XRPDOWN',
-    # 'DOTUP',
-    # 'DOTDOWN',
 ]
 
 API_KEY = '***REMOVED***'

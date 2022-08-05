@@ -1,6 +1,6 @@
 import pandas as pd
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from yachalk import chalk
 from tabulate import tabulate
 from src.service.util import Utility
@@ -11,9 +11,6 @@ class Reporter:
 
     def __init__(self):
         self.utility = Utility()
-
-    def build_time(self, x_last):
-        return datetime.utcfromtimestamp(x_last['time_close'])
 
     def report_prettify(self, df):
         df['diff'] = df['diff'].apply(lambda x: chalk.green(x) if x > 0.1 else x)
@@ -40,7 +37,7 @@ class Reporter:
             "rsi",
             "macd",
 
-            "date",
+            "y_time_open",
             "url",
         ]
 
@@ -50,7 +47,7 @@ class Reporter:
             x_tail = x_df.tail(30)
 
             x_last = x_df.iloc[-1]
-            x_date = self.build_time(x_last)
+            y_time_open = datetime.fromtimestamp(x_last['time_close']) + timedelta(seconds=1)
 
             y1 = y_df.iloc[-2]
             y2 = y_df.iloc[-1]
@@ -69,7 +66,7 @@ class Reporter:
                 x_last["rsi"],
                 x_last["macd"],
 
-                x_date,
+                y_time_open,
                 f'https://www.binance.com/en/trade/{x_last["asset"]}_USDT',
             ])
 
