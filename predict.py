@@ -1,7 +1,9 @@
 import sys
 
 from src.service.subscriber import Subscriber
-from src.parameters_usdt_top import assets, market
+
+from src.parameters_usdt import market
+from src.parameters_usdt_top import assets
 
 interval = sys.argv[1]  # 5m, 15m, 30m ...
 

@@ -3,7 +3,8 @@ from binance import enums
 from src.repository.ohlc_repository import OhlcRepository
 from src.service.klines import KLines
 
-from src.parameters import assets, market
+from src.parameters import market
+from src.parameters_usdt_train import assets
 
 repository = OhlcRepository(-1)
 klines = KLines()
@@ -15,7 +16,7 @@ exchange = 'binance'
 interval = '5m'
 groups = [
     {
-        "market": 'USDT',
+        "market": market,
         "assets": assets,
         "type": enums.HistoricalKlinesType.SPOT
     },

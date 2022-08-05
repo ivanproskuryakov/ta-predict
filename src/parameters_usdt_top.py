@@ -1,5 +1,3 @@
-market = 'USDT'
-
 assets = [
     'BTC',
     'ETH',
