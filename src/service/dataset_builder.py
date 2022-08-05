@@ -60,7 +60,7 @@ class DatasetBuilder:
 
             df = estimate_ta_fill_na(df)
 
-            collection.append((asset, df))
+            collection.append(df)
 
         return collection
 

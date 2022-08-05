@@ -55,10 +55,13 @@ class Predictor:
 
         self.model = tf.keras.models.load_model(self.model_path)
 
-        for item in collection:
-            asset, x_df = item
-
+        for x_df in collection:
             if len(x_df) > self.width:
+                x_df_original = x_df.copy()
+                x_df = x_df.drop(columns=['asset', 'time_close'])
+
+                print(x_df)
+
                 x_df_expanded = np.expand_dims(
                     self.scaler.fit_transform(x_df),
                     axis=0
@@ -75,8 +78,7 @@ class Predictor:
                 y_df = pd.DataFrame(y_inverse, None, x_df.keys())
 
                 data.append((
-                    asset,
-                    x_df,
+                    x_df_original,
                     y_df
                 ))
 

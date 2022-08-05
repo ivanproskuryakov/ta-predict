@@ -1,8 +1,8 @@
 import pandas as pd
+
+from datetime import datetime
 from yachalk import chalk
-
 from tabulate import tabulate
-
 from src.service.util import Utility
 
 
@@ -13,12 +13,7 @@ class Reporter:
         self.utility = Utility()
 
     def build_time(self, x_last):
-        time = f"{x_last['time_month']:.0f} " \
-               f"{x_last['time_day']:.0f} " \
-               f"{x_last['time_hour']:.0f} " \
-               f"{x_last['time_minute']:.0f} "
-
-        return time
+        return datetime.utcfromtimestamp(x_last['time_close'])
 
     def report_prettify(self, df):
         df['diff'] = df['diff'].apply(lambda x: chalk.green(x) if x > 0.1 else x)
@@ -44,16 +39,13 @@ class Reporter:
 
             "rsi",
             "macd",
-            "sma_200",
-            "ema_5",
-            "tema",
 
             "date",
             "url",
         ]
 
         for item in data:
-            asset, x_df, y_df = item
+            x_df, y_df = item
 
             x_tail = x_df.tail(30)
 
@@ -67,7 +59,7 @@ class Reporter:
             diff_sum = self.utility.diff_percentage_sum(x_tail)
 
             report.append([
-                asset,
+                x_last["asset"],
                 diff,
                 diff_sum,
                 x_last["close"],
@@ -76,12 +68,9 @@ class Reporter:
 
                 x_last["rsi"],
                 x_last["macd"],
-                x_last["sma_200"],
-                x_last["ema_5"],
-                x_last["tema"],
 
                 x_date,
-                f'https://www.binance.com/en/trade/{asset}_USDT',
+                f'https://www.binance.com/en/trade/{x_last["asset"]}_USDT',
             ])
 
         df = pd.DataFrame(report, None, headers)

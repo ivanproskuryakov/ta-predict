@@ -92,8 +92,8 @@ class KLines:
 
             # todo:
             # something is wrong here with volumes
-            volume_maker = self.utility.round(float(current[9]), 0) # 9 Taker buy base asset volume,
-            volume_taker = self.utility.round(volume - volume_maker, 1)
+            volume_taker = self.utility.round(float(current[9]), 0) # 9 Taker buy base asset volume,
+            # volume_taker = self.utility.round(volume - volume_maker, 1)
 
             date = datetime.utcfromtimestamp(time_open)
 
@@ -119,7 +119,7 @@ class KLines:
                 'trades': trades,
                 'volume': volume,
                 'volume_taker': volume_taker,
-                'volume_maker': volume_maker,
+                # 'volume_maker': volume_maker,
 
                 'quote_asset_volume': quote_asset_volume,
             }

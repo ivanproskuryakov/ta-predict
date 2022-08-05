@@ -39,23 +39,26 @@ class OhlcRepository:
         session = Session(bind=self.connection)
 
         sql = session.query(
+            Ohlc.asset.label('asset'),
+            Ohlc.time_close.label('time_close'),
+
             Ohlc.price_open.label('open'),
             Ohlc.price_high.label('high'),
             Ohlc.price_low.label('low'),
             Ohlc.price_close.label('close'),
 
-            Ohlc.time_month,
-            Ohlc.time_day,
-            Ohlc.time_hour,
-            Ohlc.time_minute,
+            # Ohlc.time_month,
+            # Ohlc.time_day,
+            # Ohlc.time_hour,
+            # Ohlc.time_minute,
 
             Ohlc.trades,
             Ohlc.volume,
-            Ohlc.volume_taker,
+            # Ohlc.volume_taker,
             Ohlc.volume_maker,
             Ohlc.quote_asset_volume,
 
-            Ohlc.price_diff,
+            # Ohlc.price_diff,
         ) \
             .filter(Ohlc.exchange == exchange) \
             .filter(Ohlc.market == market) \
@@ -88,18 +91,18 @@ class OhlcRepository:
             Ohlc.price_low.label('low'),
             Ohlc.price_close.label('close'),
 
-            Ohlc.time_month,
-            Ohlc.time_day,
-            Ohlc.time_hour,
-            Ohlc.time_minute,
+            # Ohlc.time_month,
+            # Ohlc.time_day,
+            # Ohlc.time_hour,
+            # Ohlc.time_minute,
 
             Ohlc.trades,
             Ohlc.volume,
             Ohlc.volume_taker,
-            Ohlc.volume_maker,
+            # Ohlc.volume_maker,
             Ohlc.quote_asset_volume,
 
-            Ohlc.price_diff,
+            # Ohlc.price_diff,
         ) \
             .filter(Ohlc.exchange == exchange) \
             .filter(Ohlc.market == market) \
@@ -294,7 +297,7 @@ class OhlcRepository:
             ohlc.trades = item['trades']
             ohlc.volume = item['volume']
             ohlc.volume_taker = item['volume_taker']
-            ohlc.volume_maker = item['volume_maker']
+            # ohlc.volume_maker = item['volume_maker']
 
             ohlc.quote_asset_volume = item['quote_asset_volume']
 
