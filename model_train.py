@@ -5,7 +5,8 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 from src.service.dataset_builder import DatasetBuilder
 from src.service.window_generator import WindowGenerator
-from src.parameters import market, assets
+from src.parameters_usdt import market
+from src.parameters_usdt_train import assets
 
 # Variables
 # ------------------------------------------------------------------------
