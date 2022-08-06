@@ -43,6 +43,9 @@ class Predictor:
         np.set_printoptions(precision=4)
         pd.set_option("display.precision", 4)
 
+    def load_model(self):
+        self.model = tf.keras.models.load_model(self.model_path, compile=False)
+
     def predict(self):
         now = datetime.now()
         data = []
@@ -51,7 +54,7 @@ class Predictor:
 
         time_db_load = datetime.now() - now
 
-        self.model = tf.keras.models.load_model(self.model_path)
+        self.load_model()
 
         for x_df in collection:
             if len(x_df) > self.width:
@@ -116,7 +119,11 @@ class Predictor:
         print(f'prediction: {time_prediction}')
 
     def make_prediction_ohlc_close(self, x_df):
-        x_df_expanded = np.expand_dims(x_df, axis=0)
+        x_df = x_df.drop(columns=['asset', 'time_close'])
+
+        x_df_fitted = self.scaler.fit_transform(x_df)
+
+        x_df_expanded = np.expand_dims(x_df_fitted, axis=0)
 
         y = self.model.predict(x_df_expanded, verbose=0)
 

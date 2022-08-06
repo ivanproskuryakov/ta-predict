@@ -34,10 +34,10 @@ class LoaderOHLC:
         futures = []
         assets_real = []
 
-        print(width)
-        print(frames)
-        print(multiplier)
-        print(end_at)
+        print('width', width)
+        print('frames', frames)
+        print('multiplier', multiplier)
+        print('end_at', end_at)
 
         start_at = end_at - timedelta(minutes=frames)
 
@@ -55,7 +55,7 @@ class LoaderOHLC:
             },
         ]
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
             for group in groups:
                 for asset in group["assets"]:
                     futures.append(

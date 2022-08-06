@@ -286,7 +286,7 @@ def estimate_ta_fill_na(df):
 
     df['HT_DCPERIOD'] = ta.HT_DCPERIOD(df['close'])
     df['HT_DCPHASE'] = ta.HT_DCPHASE(df['close'])
-    df['HT_TRENDMODE'] = ta.HT_TRENDMODE(df['close'])
+    df['HT_TRENDMODE'] = ta.HT_TRENDMODE(df)
 
     df_HT_PHASOR = ta.HT_PHASOR(df)
     df_HT_SINE = ta.HT_SINE(df)

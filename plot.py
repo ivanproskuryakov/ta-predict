@@ -1,28 +1,39 @@
 import matplotlib.pyplot as plt
-import tensorflow as tf
 
-from src.parameters import market
+from src.parameters_usdt import market
+from src.service.dataset_builder import DatasetBuilder
+from src.service.predictor import Predictor
 
-tail = 100
+tail = 50
 assets = [
-    'BTC'
+    'ETH'
 ]
-interval = '15m'
-dataset_builder = DatasetBuilderAPI(
+interval = '5m'
+predictor = Predictor(
+    assets=assets,
+    market=market,
+    interval=interval,
+    model_path='/Users/ivan/code/ta/model/gru-g-50-5000-223-5m-BTC.keras',
+    width=1000
+)
+dataset_builder = DatasetBuilder(
     assets,
     interval,
     market,
 )
 
-# Predict
+# Loading data
+# Predicting close price on the next time interval
 # ------------------------------------------------------------------------
 
-model = tf.keras.models.load_model(f'model/ta.keras')
-x, last_item = dataset_builder.build_dataset_train()
+collection = dataset_builder.build_dataset_predict()
+x_df = collection[0]
+x_df_shifted = x_df[:-1]
 
-y = make_prediction_ohlc_close(x, model)
+predictor.load_model()
+y_df = predictor.make_prediction_ohlc_close(x_df=x_df_shifted)
 
-# Plot
+# Plotting
 # ------------------------------------------------------------------------
 
 plt.figure(figsize=(16, 8))
@@ -41,7 +52,7 @@ plt.grid(which='major', alpha=0.5)
 
 a = plt.subplot(2, 1, 1)
 a.plot(
-    x['open'].tail(tail).values,
+    x_df['open'].tail(tail).values,
     color='blue',
     label='real',
     marker='.'
@@ -49,7 +60,7 @@ a.plot(
 
 b = plt.subplot(2, 1, 2)
 plt.plot(
-    y['close'].tail(tail).values,
+    y_df['close'].tail(tail).values,
     color='green',
     label=f'predict {interval}',
     marker='.'
