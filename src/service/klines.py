@@ -5,6 +5,7 @@ from datetime import datetime
 from src.parameters import API_KEY, API_SECRET
 from src.service.util import Utility
 
+
 """
 https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-data
 
@@ -84,21 +85,18 @@ class KLines:
             price_high = self.utility.round(current[2], 10)
             price_low = self.utility.round(current[3], 10)
             price_close = self.utility.round(current[4], 10)
+
+            price_diff = self.utility.diff_percentage(price_close, price_open)
+            price_positive = 1 if price_diff > 0 else 0
+
             volume = self.utility.round(float(current[5]), 1)
             time_close = current[6] / 1000
 
             quote_asset_volume = self.utility.round(float(current[7]), 0)
             trades = self.utility.round(float(current[8]), 0)
-
-            # todo:
-            # something is wrong here with volumes
-            volume_taker = self.utility.round(float(current[9]), 0) # 9 Taker buy base asset volume,
-            # volume_taker = self.utility.round(volume - volume_maker, 1)
+            volume_taker = self.utility.round(float(current[9]), 0)
 
             date = datetime.utcfromtimestamp(time_open)
-
-            price_diff = self.utility.diff_percentage(price_close, price_open)
-            price_positive = price_diff > 0
 
             item = {
                 'price_open': price_open,

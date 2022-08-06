@@ -6,7 +6,7 @@ from src.service.predictor import Predictor
 
 tail = 50
 assets = [
-    'ETH'
+    'ETC'
 ]
 interval = '5m'
 predictor = Predictor(
@@ -14,6 +14,7 @@ predictor = Predictor(
     market=market,
     interval=interval,
     model_path='/Users/ivan/code/ta/model/gru-g-50-5000-223-5m-BTC.keras',
+    # model_path='/Users/ivan/code/ta/backend/model/gru-b-100-48.keras',
     width=1000
 )
 dataset_builder = DatasetBuilder(
