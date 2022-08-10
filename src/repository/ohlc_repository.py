@@ -9,16 +9,13 @@ from src.service.util import Utility
 
 
 class OhlcRepository:
-    market: str = 'BTC'
-    start_at: int
     df_len: [int] = []
 
     connection: Connection
     utility: Utility
 
-    def __init__(self, start_at: int):
+    def __init__(self):
         self.connection = db_connect()
-        self.start_at = start_at
         self.utility = Utility()
 
     def create(self, ohlc: Ohlc):
@@ -78,8 +75,6 @@ class OhlcRepository:
             market: str,
             asset: str,
             interval: str,
-            start_at: float,
-            end_at: float,
     ):
         session = Session(bind=self.connection)
 
@@ -107,8 +102,6 @@ class OhlcRepository:
             .filter(Ohlc.market == market) \
             .filter(Ohlc.interval == interval) \
             .filter(Ohlc.asset == asset) \
-            .filter(Ohlc.time_open > start_at) \
-            .filter(Ohlc.time_open < end_at) \
             .order_by(Ohlc.id.asc()) \
             .statement
 

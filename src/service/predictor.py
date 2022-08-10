@@ -9,7 +9,6 @@ from datetime import datetime
 
 from src.service.reporter import Reporter
 from src.service.trade_finder import TradeFinder
-from src.service.trader import Trader
 from src.service.dataset_builder import DatasetBuilder
 
 
@@ -20,7 +19,6 @@ class Predictor:
 
     model = None
 
-    trader: Trader
     reporter: Reporter
     trade_finder: TradeFinder
     dataset_builder: DatasetBuilder
@@ -30,7 +28,6 @@ class Predictor:
         self.model_path = model_path
         self.width = width
         self.interval = interval
-        self.trader = Trader()
         self.reporter = Reporter()
         self.trade_finder = TradeFinder()
         self.scaler = MinMaxScaler()

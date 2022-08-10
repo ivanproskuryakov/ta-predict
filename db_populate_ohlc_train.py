@@ -3,10 +3,10 @@ from binance import enums
 from src.repository.ohlc_repository import OhlcRepository
 from src.service.klines import KLines
 
-from src.parameters import market
+from src.parameters_usdt import market
 from src.parameters_usdt_train import assets
 
-repository = OhlcRepository(-1)
+repository = OhlcRepository()
 klines = KLines()
 
 start_at = 1611500000

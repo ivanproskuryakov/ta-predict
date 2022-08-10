@@ -14,7 +14,7 @@ class LoaderOHLC:
     exchange: str = 'binance'
 
     def __init__(self, ):
-        self.repository = OhlcRepository(start_at=-1)
+        self.repository = OhlcRepository()
 
     def flush(self):
         engine = db_connect()
@@ -43,7 +43,6 @@ class LoaderOHLC:
 
         # ---------------
 
-        repository = OhlcRepository(-1)
         klines = KLines()
 
         exchange = 'binance'
@@ -78,7 +77,7 @@ class LoaderOHLC:
                         print(asset, len(collection))
 
                         assets_real.append(asset)
-                        repository.create_many(
+                        self.repository.create_many(
                             exchange,
                             group["market"],
                             asset,

@@ -1,9 +1,7 @@
 import pandas as pd
 
-from datetime import datetime
 from sklearn.preprocessing import MinMaxScaler
 
-# from src.service.estimator_simple import estimate_ta_fill_na
 from src.service.estimator import estimate_ta_fill_na
 from src.repository.ohlc_repository import OhlcRepository
 
@@ -25,13 +23,11 @@ class DatasetBuilder:
         self.interval = interval
         self.market = market
 
-        self.repository = OhlcRepository(start_at=-1)
+        self.repository = OhlcRepository()
 
     def build_dataset_train(self) -> [pd.DataFrame, pd.DataFrame]:
         train = []
         validate = []
-        now = datetime.utcnow()
-        start_at = 0
 
         for asset in self.assets:
             df = self.repository.get_full_df(
@@ -39,8 +35,6 @@ class DatasetBuilder:
                 market=self.market,
                 interval=self.interval,
                 exchange=self.exchange,
-                start_at=start_at,
-                end_at=now.timestamp(),
             )
 
             df_ta_na = estimate_ta_fill_na(df)
