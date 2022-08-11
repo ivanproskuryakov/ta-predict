@@ -87,7 +87,7 @@ class Predictor:
 
         if total:
             df = self.reporter.report_build(data=data)
-            df_best = self.trade_finder.pick_best_options(df, diff=2, rsi=60)
+            df_best = self.trade_finder.pick_best_options(df, diff=2, rsi=60, trades=50)
             df_worst = self.trade_finder.pick_worst_options(df, diff=-3, rsi=-40)
 
             report = self.reporter.report_prettify(df)

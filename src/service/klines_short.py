@@ -19,9 +19,9 @@ def build_klines(k: {}):
     trades = utility.round(float(k['n']), 0)
 
     volume_taker = utility.round(float(k['V']), 1)  # Taker buy base asset volume
-    volume_maker = utility.round(volume - volume_taker, 0)
+    # volume_maker = utility.round(volume - volume_taker, 0)
 
-    date = datetime.utcfromtimestamp(time_open)
+    # date = datetime.utcfromtimestamp(time_open)
 
     item = {
         'price_open': price_open,
@@ -33,15 +33,15 @@ def build_klines(k: {}):
         'time_open': time_open,
         'time_close': time_close,
 
-        'time_month': date.month,
-        'time_hour': date.hour,
-        'time_day': date.day,
-        'time_minute': date.minute,
+        # 'time_month': date.month,
+        # 'time_hour': date.hour,
+        # 'time_day': date.day,
+        # 'time_minute': date.minute,
 
         'trades': trades,
         'volume': volume,
         'volume_taker': volume_taker,
-        'volume_maker': volume_maker,
+        # 'volume_maker': volume_maker,
 
         'quote_asset_volume': quote_asset_volume,
     }

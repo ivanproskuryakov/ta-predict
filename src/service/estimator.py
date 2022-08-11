@@ -14,7 +14,7 @@ def estimate_ta_fill_na(df):
     df_bollinger_bands = qtpylib.bollinger_bands(price, window=20)
     df_keltner_channel = qtpylib.keltner_channel(df, window=14)
     df_stoch = qtpylib.stoch(df, window=14)
-    #
+
     df = df.join(df_tdi, how='right', lsuffix="_tdi_")
     df = df.join(df_heikinashi, how='right', lsuffix="_heikinashi_")
     df = df.join(df_macd, how='right', lsuffix="_macd_")
@@ -82,92 +82,87 @@ def estimate_ta_fill_na(df):
     # Math Operator Functions
     # https://mrjbq7.github.io/ta-lib/func_groups/math_operators.html
 
+    df['MIN'] = ta.MIN(df, timeperiod=12)
+    df['MIN_30'] = ta.MIN(df, timeperiod=30)
+    df['MAX'] = ta.MAX(df, timeperiod=12)
+    df['MAX_30'] = ta.MAX(df['close'], timeperiod=30)
+    df['ADD'] = ta.ADD(df['high'], df['low'])
+    df['DIV'] = ta.DIV(df['high'], df['low'])
+    df['MAXINDEX'] = ta.MAXINDEX(df['close'], timeperiod=30)
+    df['MININDEX'] = ta.MININDEX(df['close'], timeperiod=30)
     df_MINMAX = ta.MINMAX(df['close'], timeperiod=30)
-
-    df_math = {
-        'MIN': ta.MIN(df, timeperiod=12),
-        'MIN_30': ta.MIN(df, timeperiod=30),
-        'MAX': ta.MAX(df, timeperiod=12),
-        'MAX_30': ta.MAX(df['close'], timeperiod=30),
-        'ADD': ta.ADD(df['high'], df['low']),
-        'DIV': ta.DIV(df['high'], df['low']),
-        'MAXINDEX': ta.MAXINDEX(df['close'], timeperiod=30),
-        'MININDEX': ta.MININDEX(df['close'], timeperiod=30),
-        'MININDEX_min': df_MINMAX[0],
-        'MININDEX_max': df_MINMAX[1],
-        'MULT': ta.MULT(df['high'], df['low']),
-        'SUB': ta.SUB(df['high'], df['low']),
-        'SUM': ta.SUM(df['high'], timeperiod=30),
-    }
+    df['MININDEX_min'] = df_MINMAX[0]
+    df['MININDEX_max'] = df_MINMAX[1]
+    df['MULT'] = ta.MULT(df['high'], df['low'])
+    df['SUB'] = ta.SUB(df['high'], df['low'])
+    df['SUM'] = ta.SUM(df['high'], timeperiod=30)
 
     # Pattern Recognition Functions
     # https://mrjbq7.github.io/ta-lib/func_groups/pattern_recognition.html
+    df['CDL2CROWS'] = ta.CDL2CROWS(df)
+    df['CDL3BLACKCROWS'] = ta.CDL3BLACKCROWS(df)
+    df['CDL3INSIDE'] = ta.CDL3INSIDE(df)
+    df['CDL3LINESTRIKE'] = ta.CDL3LINESTRIKE(df)
+    df['CDL3OUTSIDE'] = ta.CDL3OUTSIDE(df)
+    df['CDL3STARSINSOUTH'] = ta.CDL3STARSINSOUTH(df)
+    df['CDL3WHITESOLDIERS'] = ta.CDL3WHITESOLDIERS(df)
+    df['CDLABANDONEDBABY'] = ta.CDLABANDONEDBABY(df)
+    df['CDLADVANCEBLOCK'] = ta.CDLADVANCEBLOCK(df)
+    df['CDLBELTHOLD'] = ta.CDLBELTHOLD(df)
+    df['CDLBREAKAWAY'] = ta.CDLBREAKAWAY(df)
+    df['CDLCLOSINGMARUBOZU'] = ta.CDLCLOSINGMARUBOZU(df)
+    df['CDLCONCEALBABYSWALL'] = ta.CDLCONCEALBABYSWALL(df)
+    df['CDLCOUNTERATTACK'] = ta.CDLCOUNTERATTACK(df)
+    df['CDLDARKCLOUDCOVER'] = ta.CDLDARKCLOUDCOVER(df)
+    df['CDLDOJI'] = ta.CDLDOJI(df)
+    df['CDLDOJISTAR'] = ta.CDLDOJISTAR(df)
+    df['CDLDRAGONFLYDOJI'] = ta.CDLDRAGONFLYDOJI(df)
+    df['CDLENGULFING'] = ta.CDLENGULFING(df)
+    df['CDLEVENINGDOJISTAR'] = ta.CDLEVENINGDOJISTAR(df)
+    df['CDLEVENINGSTAR'] = ta.CDLEVENINGSTAR(df)
+    df['CDLGAPSIDESIDEWHITE'] = ta.CDLGAPSIDESIDEWHITE(df)
+    df['CDLGRAVESTONEDOJI'] = ta.CDLGRAVESTONEDOJI(df)
+    df['CDLGRAVESTONEDOJI'] = ta.CDLGRAVESTONEDOJI(df)
+    df['CDLHAMMER'] = ta.CDLHAMMER(df)
+    df['CDLHANGINGMAN'] = ta.CDLHANGINGMAN(df)
+    df['CDLHARAMI'] = ta.CDLHARAMI(df)
+    df['CDLHARAMICROSS'] = ta.CDLHARAMICROSS(df)
 
-    df_patterns = {
-        'CDL2CROWS': ta.CDL2CROWS(df),
-        'CDL3BLACKCROWS': ta.CDL3BLACKCROWS(df),
-        'CDL3INSIDE': ta.CDL3INSIDE(df),
-        'CDL3LINESTRIKE': ta.CDL3LINESTRIKE(df),
-        'CDL3OUTSIDE': ta.CDL3OUTSIDE(df),
-        'CDL3STARSINSOUTH': ta.CDL3STARSINSOUTH(df),
-        'CDL3WHITESOLDIERS': ta.CDL3WHITESOLDIERS(df),
-        'CDLABANDONEDBABY': ta.CDLABANDONEDBABY(df),
-        'CDLADVANCEBLOCK': ta.CDLADVANCEBLOCK(df),
-        'CDLBELTHOLD': ta.CDLBELTHOLD(df),
-        'CDLBREAKAWAY': ta.CDLBREAKAWAY(df),
-        'CDLCLOSINGMARUBOZU': ta.CDLCLOSINGMARUBOZU(df),
-        'CDLCONCEALBABYSWALL': ta.CDLCONCEALBABYSWALL(df),
-        'CDLCOUNTERATTACK': ta.CDLCOUNTERATTACK(df),
-        'CDLDARKCLOUDCOVER': ta.CDLDARKCLOUDCOVER(df),
-        'CDLDOJI': ta.CDLDOJI(df),
-        'CDLDOJISTAR': ta.CDLDOJISTAR(df),
-        'CDLDRAGONFLYDOJI': ta.CDLDRAGONFLYDOJI(df),
-        'CDLENGULFING': ta.CDLENGULFING(df),
-        'CDLEVENINGDOJISTAR': ta.CDLEVENINGDOJISTAR(df),
-        'CDLEVENINGSTAR': ta.CDLEVENINGSTAR(df),
-        'CDLGAPSIDESIDEWHITE': ta.CDLGAPSIDESIDEWHITE(df),
-        'CDLGRAVESTONEDOJI': ta.CDLGRAVESTONEDOJI(df),
-        'CDLHAMMER': ta.CDLHAMMER(df),
-        'CDLHANGINGMAN': ta.CDLHANGINGMAN(df),
-        'CDLHARAMI': ta.CDLHARAMI(df),
-        'CDLHARAMICROSS': ta.CDLHARAMICROSS(df),
-        'CDLHIGHWAVE': ta.CDLHIGHWAVE(df),
-        'CDLHIKKAKE': ta.CDLHIKKAKE(df),
-        'CDLHIKKAKEMOD': ta.CDLHIKKAKEMOD(df),
-        'CDLHOMINGPIGEON': ta.CDLHOMINGPIGEON(df),
-        'CDLIDENTICAL3CROWS': ta.CDLIDENTICAL3CROWS(df),
-        'CDLINNECK': ta.CDLINNECK(df),
-        'CDLINVERTEDHAMMER': ta.CDLINVERTEDHAMMER(df),
-        'CDLKICKING': ta.CDLKICKING(df),
-        'CDLKICKINGBYLENGTH': ta.CDLKICKINGBYLENGTH(df),
-        'CDLLADDERBOTTOM': ta.CDLLADDERBOTTOM(df),
-        'CDLLONGLEGGEDDOJI': ta.CDLLONGLEGGEDDOJI(df),
-        'CDLLONGLINE': ta.CDLLONGLINE(df),
-        'CDLMARUBOZU': ta.CDLMARUBOZU(df),
-        'CDLMATCHINGLOW': ta.CDLMATCHINGLOW(df),
-        'CDLMATHOLD': ta.CDLMATHOLD(df),
-        'CDLMORNINGDOJISTAR': ta.CDLMORNINGDOJISTAR(df),
-        'CDLMORNINGSTAR': ta.CDLMORNINGSTAR(df),
-        'CDLONNECK': ta.CDLONNECK(df),
-        'CDLPIERCING': ta.CDLPIERCING(df),
-
-        'CDLRICKSHAWMAN': ta.CDLRICKSHAWMAN(df),
-        'CDLRISEFALL3METHODS': ta.CDLRISEFALL3METHODS(df),
-        'CDLSEPARATINGLINES': ta.CDLSEPARATINGLINES(df),
-        'CDLSHOOTINGSTAR': ta.CDLSHOOTINGSTAR(df),
-        'CDLSHORTLINE': ta.CDLSHORTLINE(df),
-        'CDLSPINNINGTOP': ta.CDLSPINNINGTOP(df),
-        'CDLSTALLEDPATTERN': ta.CDLSTALLEDPATTERN(df),
-        'CDLSTICKSANDWICH': ta.CDLSTICKSANDWICH(df),
-        'CDLTAKURI': ta.CDLTAKURI(df),
-        'CDLTASUKIGAP': ta.CDLTASUKIGAP(df),
-        'CDLTHRUSTING': ta.CDLTHRUSTING(df),
-
-        'CDLTRISTAR': ta.CDLTRISTAR(df),
-        'CDLUNIQUE3RIVER': ta.CDLUNIQUE3RIVER(df),
-        'CDLUPSIDEGAP2CROWS': ta.CDLUPSIDEGAP2CROWS(df),
-        'CDLXSIDEGAP3METHODS': ta.CDLXSIDEGAP3METHODS(df),
-    }
+    df['CDLHARAMICROSS'] = ta.CDLHARAMICROSS(df)
+    df['CDLHARAMICROSS'] = ta.CDLHIGHWAVE(df)
+    df['CDLHARAMICROSS'] = ta.CDLHIKKAKE(df)
+    df['CDLHIKKAKEMOD'] = ta.CDLHIKKAKEMOD(df)
+    df['CDLHOMINGPIGEON'] = ta.CDLHOMINGPIGEON(df)
+    df['CDLIDENTICAL3CROWS'] = ta.CDLIDENTICAL3CROWS(df)
+    df['CDLINNECK'] = ta.CDLINNECK(df)
+    df['CDLINVERTEDHAMMER'] = ta.CDLINVERTEDHAMMER(df)
+    df['CDLKICKING'] = ta.CDLKICKING(df)
+    df['CDLKICKINGBYLENGTH'] = ta.CDLKICKINGBYLENGTH(df)
+    df['CDLLADDERBOTTOM'] = ta.CDLLADDERBOTTOM(df)
+    df['CDLLONGLEGGEDDOJI'] = ta.CDLLONGLEGGEDDOJI(df)
+    df['CDLLONGLINE'] = ta.CDLLONGLINE(df)
+    df['CDLMARUBOZU'] = ta.CDLMARUBOZU(df)
+    df['CDLMATCHINGLOW'] = ta.CDLMATCHINGLOW(df)
+    df['CDLMATHOLD'] = ta.CDLMATHOLD(df)
+    df['CDLMORNINGDOJISTAR'] = ta.CDLMORNINGDOJISTAR(df)
+    df['CDLMORNINGSTAR'] = ta.CDLMORNINGSTAR(df)
+    df['CDLONNECK'] = ta.CDLONNECK(df)
+    df['CDLPIERCING'] = ta.CDLPIERCING(df)
+    df['CDLRICKSHAWMAN'] = ta.CDLRICKSHAWMAN(df)
+    df['CDLRISEFALL3METHODS'] = ta.CDLRISEFALL3METHODS(df)
+    df['CDLSEPARATINGLINES'] = ta.CDLSEPARATINGLINES(df)
+    df['CDLSHOOTINGSTAR'] = ta.CDLSHOOTINGSTAR(df)
+    df['CDLSHORTLINE'] = ta.CDLSHORTLINE(df)
+    df['CDLSPINNINGTOP'] = ta.CDLSPINNINGTOP(df)
+    df['CDLSTALLEDPATTERN'] = ta.CDLSTALLEDPATTERN(df)
+    df['CDLSTICKSANDWICH'] = ta.CDLSTICKSANDWICH(df)
+    df['CDLTAKURI'] = ta.CDLTAKURI(df)
+    df['CDLTASUKIGAP'] = ta.CDLTASUKIGAP(df)
+    df['CDLTHRUSTING'] = ta.CDLTHRUSTING(df)
+    df['CDLTRISTAR'] = ta.CDLTRISTAR(df)
+    df['CDLUNIQUE3RIVER'] = ta.CDLUNIQUE3RIVER(df)
+    df['CDLUPSIDEGAP2CROWS'] = ta.CDLUPSIDEGAP2CROWS(df)
+    df['CDLXSIDEGAP3METHODS'] = ta.CDLXSIDEGAP3METHODS(df)
 
     # Overlap Studies Functions
     # https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html
@@ -291,7 +286,7 @@ def estimate_ta_fill_na(df):
 
     df['HT_DCPERIOD'] = ta.HT_DCPERIOD(df['close'])
     df['HT_DCPHASE'] = ta.HT_DCPHASE(df['close'])
-    df['HT_TRENDMODE'] = ta.HT_TRENDMODE(df)
+    df['HT_TRENDMODE'] = ta.HT_TRENDMODE(df['close'])
 
     df_HT_PHASOR = ta.HT_PHASOR(df)
     df_HT_SINE = ta.HT_SINE(df)

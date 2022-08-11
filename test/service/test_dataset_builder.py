@@ -35,7 +35,7 @@ def test_build_dataset_train():
     assert validate['open'].iloc[2] == 0.9278350515463814
 
     assert len(train) == 180
-    assert len(train.keys()) == 229
+    assert len(train.keys()) == 223
 
     assert len(validate) == 20
-    assert len(validate.keys()) == 229
+    assert len(validate.keys()) == 223
