@@ -1,3 +1,6 @@
+### Description
+OHLC time series training and forecasting with keras & tf2
+
 ### Installation
 
 ```
