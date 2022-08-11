@@ -133,16 +133,16 @@ class OhlcRepository:
             ohlc.time_open = int(item['time_open'])
             ohlc.time_close = int(item['time_close'])
 
-            ohlc.time_month = item['time_month']
-            ohlc.time_day = item['time_day']
-            ohlc.time_hour = item['time_hour']
-            ohlc.time_minute = item['time_minute']
+            # ohlc.time_month = item['time_month']
+            # ohlc.time_day = item['time_day']
+            # ohlc.time_hour = item['time_hour']
+            # ohlc.time_minute = item['time_minute']
 
             ohlc.price_open = item['price_open']
             ohlc.price_low = item['price_low']
             ohlc.price_high = item['price_high']
             ohlc.price_close = item['price_close']
-            ohlc.price_diff = item['price_diff']
+            # ohlc.price_diff = item['price_diff']
 
             ohlc.trades = item['trades']
             ohlc.volume = item['volume']

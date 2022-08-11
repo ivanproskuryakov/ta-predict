@@ -5,6 +5,8 @@ import src.vendor.qtpylib as qtpylib
 # https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html
 
 def estimate_ta_fill_na(df):
+    df_original = df.copy()
+
     price = qtpylib.typical_price(df)
 
     df_tdi = qtpylib.tdi(price)

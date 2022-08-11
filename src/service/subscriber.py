@@ -30,7 +30,7 @@ class Subscriber:
         self.width = width
         self.interval = interval
         self.model_path = model_path
-        self.repository = OhlcRepository(-1)
+        self.repository = OhlcRepository()
         self.loaderOHLC = LoaderOHLC()
 
     def subscribe(self):
