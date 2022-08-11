@@ -12,8 +12,8 @@ dataset_builder_db = DatasetBuilderDB()
 
 # Variables
 # ------------------------------------------------------------------------
-width = 50
-units = 1000
+width = 40
+units = 5000
 interval = '5m'
 
 # Data load & train
@@ -31,9 +31,9 @@ train_df, validate_df = dataset_builder_db.build_dataset_all(
 df_num_signals = train_df.shape[1]
 data_dir = 'data'
 assets_names = '-'.join(assets)
-name = f'gru-g-{width}-{units}-{df_num_signals}-{interval}-{assets_names}'
+name = f'gru-h-{width}-{units}-{df_num_signals}-{interval}-{assets_names}'
 
-filepath_model = f'{data_dir}/{name}.keras'
+filepath_model = f'{data_dir}/{name}.ker,as'
 filepath_checkpoint = f'{data_dir}/{name}.checkpoint'
 
 print(f'training: {interval} {assets} {df_num_signals} {name}')
@@ -110,7 +110,7 @@ window = WindowGenerator(
     input_width=width,
     label_width=width,
     shift=1,
-    batch_size=400,
+    batch_size=100,
     label_columns=[
         # 'open',
         # 'high',
