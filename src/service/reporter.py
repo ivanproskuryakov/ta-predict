@@ -1,16 +1,19 @@
 import pandas as pd
+
+from datetime import datetime, timedelta
 from yachalk import chalk
-
-from datetime import datetime
 from tabulate import tabulate
+from src.service.util import Utility
 
-from src.service.util import diff_percentage
 
+class Reporter:
+    utility: Utility
 
-class Reporter():
+    def __init__(self):
+        self.utility = Utility()
+
     def report_prettify(self, df):
         df['diff'] = df['diff'].apply(lambda x: chalk.green(x) if x > 0.1 else x)
-        # df['diff'] = df['diff'].apply(lambda x: chalk.red(x) if x < 0.1 else x)
 
         table = tabulate(
             tabular_data=df.values,
@@ -26,65 +29,50 @@ class Reporter():
         headers = [
             "asset",
             "diff",
-            "close_price_modified",
+            "diff_sum",
             "close_price",
             "trades",
             "volume",
-            # "volume_market",
 
-            # "x1o",
-            # "x2c",
-            # "y1c",
-            # "y2c",
+            "rsi",
+            "macd",
 
-            "date",
-            "h",
-            "m",
+            "y_time_open",
             "url",
         ]
 
         for item in data:
-            asset, last_item, x_df, y_df = item
+            x_df, y_df = item
 
-            y_tail = y_df.tail(2)
-            x_tail = x_df.tail(2)
+            x_tail = x_df.tail(30)
 
-            x1 = x_tail.iloc[0]
-            x2 = x_tail.iloc[1]
-            y1 = y_tail.iloc[0]
-            y2 = y_tail.iloc[1]
+            x_last = x_df.iloc[-1]
+            y_time_open = datetime.fromtimestamp(x_last['time_close']) + timedelta(seconds=1)
 
-            date = datetime.fromtimestamp(last_item["time_open"])
+            y1 = y_df.iloc[-2]
+            y2 = y_df.iloc[-1]
 
-            diff = diff_percentage(v2=y2['close'], v1=y1['close'])
-
-            # print(last_item)
-
-            # volume_market = x2["volume"] * x1["open"]
+            diff = self.utility.diff_percentage(v2=y2['close'], v1=y1['close'])
+            diff_sum = self.utility.diff_percentage_sum(x_tail)
 
             report.append([
-                asset,
+                x_last["asset"],
                 diff,
-                x2['close'],
-                last_item["price_close"],
-                x2["trades"],
-                x2["volume"],
-                # volume_market,
+                diff_sum,
+                x_last["close"],
+                x_last["trades"],
+                x_last["volume"],
 
-                # f'{x1["open"]:.4f}',
-                # f'{x2["close"]:.4f}',
-                # f'{y1["close"]:.4f}',
-                # f'{y2["close"]:.4f}',
+                x_last["rsi"],
+                x_last["macd"],
 
-                date.strftime("%Y %m %d %H:%M:%S"),
-                f'{x2["time_hour"]:.0f}',
-                f'{x2["time_minute"]:.0f}',
-                f'https://www.binance.com/en/trade/{asset}_USDT',
+                y_time_open,
+                f'https://www.binance.com/en/trade/{x_last["asset"]}_USDT',
             ])
 
         df = pd.DataFrame(report, None, headers)
 
-        df.sort_values(by=['trades', 'diff'], inplace=True, ascending=True)
+        df.sort_values(by=['diff'], inplace=True, ascending=True)
 
         df = df.reset_index(drop=True)
 

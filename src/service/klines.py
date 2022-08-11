@@ -1,16 +1,57 @@
-import datetime
+import os
 from binance import Client, enums
-from datetime import datetime
 
-from src.parameters import API_KEY, API_SECRET
-from src.service.util import diff_percentage, round
+from src.service.util import Utility
+
+
+"""
+https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-data
+
+Taker - an order that trades immediately before going on the order book
+Maker - an order that goes on the order book partially or fully
+
+0 Open time,
+
+1 Open,
+2 High,
+3 Low,
+4 Close,
+5 Volume,
+
+6 Close time,
+
+7 Quote asset volume,
+8 Number of trades,
+9 Taker buy base asset volume,
+10 Taker buy quote asset volume,
+
+11 Ignore
+
+
+[
+  [
+    1499040000000,      // Open time
+    "0.01634790",       // Open
+    "0.80000000",       // High
+    "0.01575800",       // Low
+    "0.01577100",       // Close
+    "148976.11427815",  // Volume
+    1499644799999,      // Close time
+    "2434.19055334",    // Quote asset volume
+    308,                // Number of trades
+    "1756.87402397",    // Taker buy base asset volume
+    "28.46694368",      // Taker buy quote asset volume
+    "17928899.62484339" // Ignore.
+  ]
+]
+"""
 
 
 class KLines:
-    def price_average(self, k: float):
-        avg = (float(k[1]) + float(k[2]) + float(k[3]) + float(k[4])) / 4
+    utility: Utility
 
-        return round(avg)
+    def __init__(self):
+        self.utility = Utility()
 
     def build_klines(
             self,
@@ -18,77 +59,58 @@ class KLines:
             asset: str,
             klines_type: enums.HistoricalKlinesType,
             interval: str,
-            start_at: str,
-            end_at: str = None,
+            start_at: float,
+            end_at: float = None,
     ):
         client = Client(
-            api_key=API_KEY,
-            api_secret=API_SECRET,
+            api_key=os.environ['API_KEY'],
+            api_secret=os.environ['API_SECRET'],
         )
         symbol = asset + market
-        # Taker - an order that trades immediately before going on the order book
-        # Maker - an order that goes on the order book partially or fully
-
-        # 0 Open time,
-
-        # 1 Open,
-        # 2 High,
-        # 3 Low,
-        # 4 Close,
-        # 5 Volume,
-
-        # 6 Close time,
-
-        # 7 Quote asset volume,
-        # 8 Number of trades,
-        # 9 Taker buy base asset volume,
-        # 10 Taker buy quote asset volume,
-
-        # 11 Ignore
 
         klines = client.get_historical_klines(
             symbol=symbol,
             interval=interval,
             klines_type=klines_type,
-            start_str=start_at,
-            end_str=end_at,
+            start_str=str(start_at),
+            end_str=str(end_at),
         )
         collection = []
 
         for current in klines:
             time_open = current[0] / 1000
-            price_open = round(current[1], 10)
-            price_high = round(current[2], 10)
-            price_low = round(current[3], 10)
-            price_close = round(current[4], 10)
+            price_open = self.utility.round(current[1], 10)
+            price_high = self.utility.round(current[2], 10)
+            price_low = self.utility.round(current[3], 10)
+            price_close = self.utility.round(current[4], 10)
 
-            price_diff = diff_percentage(price_close, price_open)
-            price_positive = 1 if price_diff > 0 else 0
+            # price_diff = self.utility.diff_percentage(price_close, price_open)
+            # price_positive = 1 if price_diff > 0 else 0
 
-            volume = round(float(current[5]), 1)
+            volume = self.utility.round(float(current[5]), 1)
             time_close = current[6] / 1000
 
-            quote_asset_volume = round(float(current[7]), 0)
-            trades = round(float(current[8]), 0)
-            volume_taker = round(float(current[9]), 0)
+            quote_asset_volume = self.utility.round(float(current[7]), 0)
+            trades = self.utility.round(float(current[8]), 0)
+            volume_taker = self.utility.round(float(current[9]), 0)
 
-            date = datetime.utcfromtimestamp(time_open)
+            # date = datetime.utcfromtimestamp(time_open)
 
             item = {
                 'price_open': price_open,
                 'price_high': price_high,
                 'price_low': price_low,
                 'price_close': price_close,
-                'price_diff': price_diff,
-                'price_positive': price_positive,
+                # 'price_diff': price_diff,
+                # 'price_positive': price_positive,
 
                 'time_open': time_open,
                 'time_close': time_close,
 
-                'time_month': date.month,
-                'time_hour': date.hour,
-                'time_day': date.day,
-                'time_minute': date.minute,
+                # 'time_month': date.month,
+                # 'time_hour': date.hour,
+                # 'time_day': date.day,
+                # 'time_minute': date.minute,
 
                 'trades': trades,
                 'volume': volume,

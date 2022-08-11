@@ -3,37 +3,35 @@ import tensorflow as tf
 from keras.layers import Dense, GRU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
-from src.service.dataset_builder_db import DatasetBuilderDB
-from src.service.generator_window import WindowGenerator
-from src.parameters_btc import assets_btc
-from src.parameters import market, assets, assets_down
-
-dataset_builder_db = DatasetBuilderDB()
+from src.service.dataset_builder import DatasetBuilder
+from src.service.window_generator import WindowGenerator
 
 # Variables
 # ------------------------------------------------------------------------
-width = 40
-units = 5000
+assets = [
+    'BTC'
+]
+market = 'USDT'
+width = 50
+units = 1000
 interval = '5m'
 
 # Data load & train
 # ------------------------------------------------------------------------
-train_df, validate_df = dataset_builder_db.build_dataset_all(
-    market=market,
+dataset_builder = DatasetBuilder(
     assets=assets,
-    assets_down=assets_down,
-    assets_btc=assets_btc,
+    market=market,
     interval=interval
 )
 
-# print(train_df)
+train_df, validate_df = dataset_builder.build_dataset_train()
 
 df_num_signals = train_df.shape[1]
 data_dir = 'data'
 assets_names = '-'.join(assets)
-name = f'gru-h-{width}-{units}-{df_num_signals}-{interval}-{assets_names}'
+name = f'gru-g-{width}-{units}-{df_num_signals}-{interval}-{assets_names}'
 
-filepath_model = f'{data_dir}/{name}.ker,as'
+filepath_model = f'{data_dir}/{name}.keras'
 filepath_checkpoint = f'{data_dir}/{name}.checkpoint'
 
 print(f'training: {interval} {assets} {df_num_signals} {name}')
@@ -110,7 +108,7 @@ window = WindowGenerator(
     input_width=width,
     label_width=width,
     shift=1,
-    batch_size=100,
+    batch_size=400,
     label_columns=[
         # 'open',
         # 'high',

@@ -15,5 +15,5 @@ SQLAlchemy
 psycopg2-binary
 pytest
 tabulate
-blockchain-parser
 faker
+websocket-client

@@ -1,27 +1,33 @@
-from datetime import datetime, timedelta
-
 from binance import enums
+from datetime import datetime, timedelta
 
 from src.repository.ohlc_repository import OhlcRepository
 from src.service.klines import KLines
 
-from src.parameters import assets
+# Variables
+# ------------------------------------------------------------------------
 
-repository = OhlcRepository()
-klines = KLines()
-
-end_at = str(datetime.utcnow())
-start_at = str(datetime.utcnow() - timedelta(days=365 * 10))
+end_at = datetime.utcnow()
+start_at = end_at - timedelta(days=365 * 10)
 
 exchange = 'binance'
 interval = '5m'
 groups = [
     {
         "market": 'USDT',
-        "assets": assets,
+        "assets": [
+            'BTC',
+            # 'ETH',
+        ],
         "type": enums.HistoricalKlinesType.SPOT
     },
 ]
+
+# Population of data
+# ------------------------------------------------------------------------
+
+repository = OhlcRepository()
+klines = KLines()
 
 for group in groups:
     for asset in group["assets"]:
@@ -32,8 +38,8 @@ for group in groups:
             asset,
             group["type"],
             interval,
-            start_at,
-            end_at,
+            start_at.timestamp(),
+            end_at.timestamp(),
         )
 
         print(len(collection))

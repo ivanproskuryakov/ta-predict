@@ -1,47 +1,65 @@
 DB_URL = {
-    'test': 'postgresql://postgres:@localhost/ta_test',
+    'train': 'postgresql://postgres:@localhost/ta_train',
     'dev': 'postgresql://postgres:@localhost/ta_dev',
+    'test': 'postgresql://postgres:@localhost/ta_test',
 }
-
-price_height = 10000
-market = 'USDT'
-
-assets = [
-    'BTC',
-    # 'ETH',
-    # "BNB",
-    # "NEO",
-    # "LTC",
-    # "ADA",
-    # "XRP",
-    # "EOS",
-    # 'IOTA',
-    # 'XLM',
-    # 'ONT',
-    # 'TRX',
-    # 'ETC',
-]
-
-assets_down = [
-    'BTCUP',
-    'BTCDOWN',
-    'ETHUP',
-
-    # 'ETHDOWN',
-    # 'ADAUP',
-    # 'ADADOWN',
-    # 'LINKUP',
-    # 'LINKDOWN',
-
-    'BNBUP',
-    # 'BNBDOWN',
-    # 'TRXUP',
-    # 'TRXDOWN',
-    # 'XRPUP',
-    # 'XRPDOWN',
-    # 'DOTUP',
-    # 'DOTDOWN',
-]
 
 API_KEY = '***REMOVED***'
 API_SECRET = 'B2QqUpbYGE2CC5DUBA7UspAXdKBcvXUOCuCzIhcHcnfxcuQCtg8MQ4VUZx5KyL7V'
+
+market = 'USDT'
+assets = [
+    'BTC',
+    'ETH',
+    'BNB',
+    'LTC',
+    'ADA',
+    'XRP',
+    'IOTA',
+    'ETC',
+    'TRX',
+    'FLOW',
+    'ROSE',
+    'WAVES',
+    'MKR',
+
+    'NEO',
+    'EOS',
+    'XLM',
+    'ONT',
+    'ICX',
+    'LINK',
+    'ZIL',
+    'ZRX',
+    'BAT',
+    'XMR',
+    'XTZ',
+    '1INCH',
+    'SOL',
+
+    # 'SAND',
+    # 'ZEC',
+    # 'IOST',
+    # 'SUSHI',
+    # 'YFI',
+    # 'ALPACA',
+    # 'DYDX',
+    # 'AUTO',
+    # 'MINA',
+    # 'YFII',
+    # 'CELR',
+    # 'NEAR',
+    # 'DASH',
+    # 'AAVE',
+    # 'OMG',
+    # 'THETA',
+    # 'ENJ',
+    # 'MATIC',
+    # 'ATOM',
+    # 'ONE',
+    # 'ALGO',
+    # 'DOGE',
+    # 'CHZ',
+    # 'HBAR',
+    # 'SHIB',
+]

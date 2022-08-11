@@ -1,4 +1,8 @@
+### Description
+OHLC time series training and forecasting with keras & tf2
+
 ### Installation
+
 ```
 python -m venv .env
 source .env/bin/activate
@@ -8,43 +12,34 @@ pip install -r requirements-ubuntu.txt
 pip install --force-reinstall -r requirements.txt
 ```
 
-### Commands
+### Training
 
 ```
-ENV=dev python model_train.py
-ENV=dev python model_predict.py 15m
-ENV=dev python model_plot.py
-ENV=dev python trades_populate.py
+psql -U postgres
+create database ta_train;
+
+ENV=train python db_flush_sync.py
+ENV=train python db_populate.py
+ENV=train python model_plot.py
 
 ```
 
-### Postgres
+### Predicting
 
 ```
 psql -U postgres
 create database ta_dev;
+
+ENV=train python db_flush_sync.py
+ENV=dev python predict.py 5m /Users/ivan/code/ta/model/gru-g-50-5000-223-5m-BTC.keras
+```
+
+### Testing
+
+```
+psql -U postgres
 create database ta_test;
 
-ENV=dev python db_flush_sync.py
-ENV=test python db_flush_sync.py
-ENV=test python db_populate_exchange.py
-
-```
-
-### Cron
-
-```
-26 * * * * sh /Users/ivan/code/ta/backend/crontab_30m.sh >> /Users/ivan/code/ta/30m.log 2>&1
-
-57 * * * * sh /Users/ivan/code/ta/backend/crontab_30m.sh >> /Users/ivan/code/ta/30m_58.log 2>&1
-
-56 * * * * sh /Users/ivan/code/ta/backend/crontab_1h.sh >> /Users/ivan/code/ta/1h.log 2>&1
-
-```
-
-### Test
-
-```
 ENV=test python -m pytest test
 ENV=test python -m pytest --log-cli-level DEBUG -s test/service/test_trader.py
 ENV=test python -m pytest test/service/test_trader.py
