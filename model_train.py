@@ -108,7 +108,7 @@ window = WindowGenerator(
     input_width=width,
     label_width=width,
     shift=1,
-    batch_size=400,
+    batch_size=100,
     label_columns=[
         # 'open',
         # 'high',
