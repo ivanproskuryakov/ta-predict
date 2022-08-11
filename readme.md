@@ -16,19 +16,19 @@ psql -U postgres
 create database ta_train;
 
 ENV=train python db_flush_sync.py
-ENV=train python db_populate_ohlc_train.py
-ENV=train python model_train_window_gru.py
+ENV=train python db_populate.py
+ENV=train python model_plot.py
 
 ```
 
-### Running
+### Predicting
 
 ```
 psql -U postgres
 create database ta_dev;
 
-ENV=dev python db_flush_sync.py
-ENV=dev python predict.py 5m
+ENV=train python db_flush_sync.py
+ENV=dev python predict.py 5m /Users/ivan/code/ta/model/gru-g-50-5000-223-5m-BTC.keras
 ```
 
 ### Testing

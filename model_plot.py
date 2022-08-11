@@ -1,21 +1,22 @@
 import matplotlib.pyplot as plt
 
-from src.parameters_usdt import market
+from src.parameters import market
 from src.service.dataset_builder import DatasetBuilder
 from src.service.predictor import Predictor
 
 tail = 50
+width = 1000
 assets = [
     'ETC'
 ]
 interval = '5m'
+
 predictor = Predictor(
     assets=assets,
     market=market,
     interval=interval,
     model_path='/Users/ivan/code/ta/model/gru-g-50-5000-223-5m-BTC.keras',
-    # model_path='/Users/ivan/code/ta/backend/model/gru-b-100-48.keras',
-    width=1000
+    width=width
 )
 dataset_builder = DatasetBuilder(
     assets,

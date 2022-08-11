@@ -1,8 +1,6 @@
-import datetime
+import os
 from binance import Client, enums
-from datetime import datetime
 
-from src.parameters import API_KEY, API_SECRET
 from src.service.util import Utility
 
 
@@ -65,8 +63,8 @@ class KLines:
             end_at: float = None,
     ):
         client = Client(
-            api_key=API_KEY,
-            api_secret=API_SECRET,
+            api_key=os.environ['API_KEY'],
+            api_secret=os.environ['API_SECRET'],
         )
         symbol = asset + market
 
