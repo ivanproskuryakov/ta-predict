@@ -4,6 +4,7 @@ from src.parameters import market
 from src.service.dataset_builder import DatasetBuilder
 from src.service.predictor import Predictor
 
+
 tail = 50
 width = 1000
 assets = [

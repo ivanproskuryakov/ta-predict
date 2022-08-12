@@ -3,7 +3,6 @@ from binance import Client, enums
 
 from src.service.util import Utility
 
-
 """
 https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-data
 
@@ -62,10 +61,14 @@ class KLines:
             start_at: float,
             end_at: float = None,
     ):
-        client = Client(
-            api_key=os.environ['API_KEY'],
-            api_secret=os.environ['API_SECRET'],
-        )
+        if os.environ['API_KEY']:
+            client = Client(
+                api_key=os.environ['API_KEY'],
+                api_secret=os.environ['API_SECRET'],
+            )
+        else:
+            client = Client()
+
         symbol = asset + market
 
         klines = client.get_historical_klines(

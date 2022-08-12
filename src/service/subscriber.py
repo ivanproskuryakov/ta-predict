@@ -3,7 +3,6 @@ import websocket
 from datetime import datetime
 
 from src.repository.ohlc_repository import OhlcRepository
-
 from src.service.klines_short import build_klines
 from src.service.predictor import Predictor
 from src.service.loader_ohlc import LoaderOHLC

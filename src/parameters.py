@@ -4,9 +4,6 @@ DB_URL = {
     'test': 'postgresql://postgres:@localhost/ta_test',
 }
 
-API_KEY = '***REMOVED***'
-API_SECRET = 'B2QqUpbYGE2CC5DUBA7UspAXdKBcvXUOCuCzIhcHcnfxcuQCtg8MQ4VUZx5KyL7V'
-
 market = 'USDT'
 assets = [
     'BTC',
@@ -22,7 +19,6 @@ assets = [
     'ROSE',
     'WAVES',
     'MKR',
-
     'NEO',
     'EOS',
     'XLM',
@@ -37,29 +33,4 @@ assets = [
     '1INCH',
     'SOL',
 
-    # 'SAND',
-    # 'ZEC',
-    # 'IOST',
-    # 'SUSHI',
-    # 'YFI',
-    # 'ALPACA',
-    # 'DYDX',
-    # 'AUTO',
-    # 'MINA',
-    # 'YFII',
-    # 'CELR',
-    # 'NEAR',
-    # 'DASH',
-    # 'AAVE',
-    # 'OMG',
-    # 'THETA',
-    # 'ENJ',
-    # 'MATIC',
-    # 'ATOM',
-    # 'ONE',
-    # 'ALGO',
-    # 'DOGE',
-    # 'CHZ',
-    # 'HBAR',
-    # 'SHIB',
 ]
