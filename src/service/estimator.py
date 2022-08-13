@@ -12,8 +12,8 @@ def estimate_ta_fill_na(df):
     df_macd = qtpylib.macd(price)
     df_weighted_bollinger_bands = qtpylib.weighted_bollinger_bands(price, window=20)
     df_bollinger_bands = qtpylib.bollinger_bands(price, window=20)
-    df_keltner_channel = qtpylib.keltner_channel(df, window=14)
-    df_stoch = qtpylib.stoch(df, window=14)
+    df_keltner_channel = qtpylib.keltner_channel(df, window=20)
+    df_stoch = qtpylib.stoch(df, window=20)
     #
     df = df.join(df_tdi, how='right', lsuffix="_tdi_")
     df = df.join(df_heikinashi, how='right', lsuffix="_heikinashi_")
@@ -25,9 +25,9 @@ def estimate_ta_fill_na(df):
 
     df['awesome_oscillator'] = qtpylib.awesome_oscillator(df)
 
-    # 14
-    df['atr'] = qtpylib.atr(df, window=14)
-    df['rolling_min'] = qtpylib.rolling_min(price, window=14)
+    # 20
+    df['atr'] = qtpylib.atr(df, window=20)
+    df['rolling_min'] = qtpylib.rolling_min(price, window=20)
     df['vwap'] = qtpylib.vwap(df)
 
     # df['roc'] = qtpylib.roc(df, window=14)
@@ -39,7 +39,7 @@ def estimate_ta_fill_na(df):
     df['zscore'] = qtpylib.zscore(df, window=20)
     df['pvt'] = qtpylib.pvt(df)
     df['chopiness'] = qtpylib.chopiness(df)
-    df['cci'] = qtpylib.cci(df, window=14)
+    df['cci'] = qtpylib.cci(df, window=20)
 
     # 50
     df['zscore_50'] = qtpylib.zscore(df, window=50)
@@ -95,14 +95,15 @@ def estimate_ta_fill_na(df):
     # Statistic Functions
     # https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html
     df_stat = {
-        'BETA': ta.BETA(df, timeperiod=5),
-        'CORREL': ta.CORREL(df, timeperiod=30),
-        'LINEARREG': ta.LINEARREG(df, timeperiod=14),
-        'LINEARREG_ANGLE': ta.LINEARREG_ANGLE(df, timeperiod=14),
-        'LINEARREG_INTERCEPT': ta.LINEARREG_INTERCEPT(df, timeperiod=14),
-        'LINEARREG_SLOPE': ta.LINEARREG_SLOPE(df, timeperiod=14),
+        # 20
+        'BETA': ta.BETA(df, timeperiod=20),
+        'CORREL': ta.CORREL(df, timeperiod=20),
+        'LINEARREG': ta.LINEARREG(df, timeperiod=20),
+        'LINEARREG_ANGLE': ta.LINEARREG_ANGLE(df, timeperiod=20),
+        'LINEARREG_INTERCEPT': ta.LINEARREG_INTERCEPT(df, timeperiod=20),
+        'LINEARREG_SLOPE': ta.LINEARREG_SLOPE(df, timeperiod=20),
         # df['STDDEV':ta.STDDEV(df['close'], timeperiod=5, nbdev=1)
-        'TSF': ta.TSF(df, timeperiod=14),
+        'TSF': ta.TSF(df, timeperiod=20),
         # df['VAR':ta.VAR(df, timeperiod=5, nbdev=1)
 
         # 50
@@ -135,20 +136,20 @@ def estimate_ta_fill_na(df):
     df_MINMAX = ta.MINMAX(df['close'], timeperiod=30)
 
     df_math = {
-        # 14
-        'MIN': ta.MIN(df, timeperiod=12),
-        'MIN_30': ta.MIN(df, timeperiod=30),
-        'MAX': ta.MAX(df, timeperiod=12),
-        'MAX_30': ta.MAX(df['close'], timeperiod=30),
-        'ADD': ta.ADD(df['high'], df['low']),
-        'DIV': ta.DIV(df['high'], df['low']),
-        'MAXINDEX': ta.MAXINDEX(df['close'], timeperiod=30),
-        'MININDEX': ta.MININDEX(df['close'], timeperiod=30),
         'MININDEX_min': df_MINMAX[0],
         'MININDEX_max': df_MINMAX[1],
         'MULT': ta.MULT(df['high'], df['low']),
         'SUB': ta.SUB(df['high'], df['low']),
-        'SUM': ta.SUM(df['high'], timeperiod=30),
+        'ADD': ta.ADD(df['high'], df['low']),
+        'DIV': ta.DIV(df['high'], df['low']),
+
+        # 20
+        'MIN_20': ta.MIN(df, timeperiod=20),
+        'MAX_20': ta.MAX(df, timeperiod=20),
+        'MAX_close_20': ta.MAX(df['close'], timeperiod=20),
+        'MAXINDEX_20': ta.MAXINDEX(df['close'], timeperiod=20),
+        'MININDEX_20': ta.MININDEX(df['close'], timeperiod=20),
+        'SUM_20': ta.SUM(df['high'], timeperiod=20),
 
         # 50
         'MIN_50': ta.MIN(df, timeperiod=50),
@@ -253,36 +254,35 @@ def estimate_ta_fill_na(df):
     df = df.join(df_MAMA, how='right', lsuffix="_MAMA_")
 
     df_overlap = {
-        # 14
-        'DEMA': ta.DEMA(df, timeperiod=30),
-
-        'EMA': ta.EMA(df, timeperiod=5),
         'EMA_5': ta.EMA(df, timeperiod=5),
         'EMA_10': ta.EMA(df, timeperiod=10),
-        'EMA_high': ta.EMA(df, timeperiod=5, price='high'),
-        'EMA_close': ta.EMA(df, timeperiod=5, price='close'),
-        'EMA_low': ta.EMA(df, timeperiod=5, price='low'),
-
-        'ADXR': ta.ADXR(df, timeperiod=5),
-        'KAMA': ta.KAMA(df, timeperiod=30),
-        'MA': ta.ADXR(df, timeperiod=30, matype=0),
-
-        'MIDPOINT': ta.MIDPOINT(df, timeperiod=14),
-        'MIDPRICE': ta.MIDPRICE(df['high'], df['low'], timeperiod=14),
-        'SAR': ta.SAR(df),
-        'SAREXT': ta.SAREXT(df['high'], df['low']),
-        'SMA': ta.SMA(df['close'], timeperiod=30),
-
         'SMA_short': ta.SMA(df, timeperiod=3),
         'SMA_long': ta.SMA(df, timeperiod=6),
         'SMA_fastMA': ta.SMA(df, timeperiod=14),
         'SMA_slowMA': ta.SMA(df, timeperiod=28),
+        'SAR': ta.SAR(df),
+        'SAREXT': ta.SAREXT(df['high'], df['low']),
 
-        'T3': ta.T3(df['close'], timeperiod=5),
-        'TEMA_9': ta.TEMA(df['close'], timeperiod=9),
-        'TEMA': ta.TEMA(df['close'], timeperiod=30),
-        'TRIMA': ta.TRIMA(df['close'], timeperiod=30),
-        'WMA': ta.WMA(df['close'], timeperiod=30),
+        # 20
+        'DEMA_20': ta.DEMA(df, timeperiod=20),
+        'EMA_20': ta.EMA(df, timeperiod=20),
+        'EMA_high_20': ta.EMA(df, timeperiod=20, price='high'),
+        'EMA_close_20': ta.EMA(df, timeperiod=20, price='close'),
+        'EMA_low_20': ta.EMA(df, timeperiod=20, price='low'),
+
+        'ADXR_20': ta.ADXR(df, timeperiod=20),
+        'KAMA_20': ta.KAMA(df, timeperiod=20),
+        'MA_20': ta.ADXR(df, timeperiod=20, matype=0),
+
+        'MIDPOINT_20': ta.MIDPOINT(df, timeperiod=20),
+        'MIDPRICE_20': ta.MIDPRICE(df['high'], df['low'], timeperiod=20),
+        'SMA_20': ta.SMA(df['close'], timeperiod=20),
+
+        'T3_20': ta.T3(df['close'], timeperiod=20),
+        'TEMA_9_20': ta.TEMA(df['close'], timeperiod=20),
+        'TEMA_20': ta.TEMA(df['close'], timeperiod=20),
+        'TRIMA_20': ta.TRIMA(df['close'], timeperiod=20),
+        'WMA_20': ta.WMA(df['close'], timeperiod=20),
 
         # 50
         'DEMA_50': ta.DEMA(df, timeperiod=50),
@@ -376,30 +376,7 @@ def estimate_ta_fill_na(df):
 
         'AROONOSC': ta.AROONOSC(df['high'], df['low'], timeperiod=14),
         'BOP': ta.BOP(df['open'], df['high'], df['low'], df['close']),
-
-        'CCI_': ta.CCI(df['high'], df['low'], df['close'], timeperiod=14),
-        'CCI_170': ta.CCI(df, timeperiod=170),
-        'CCI_34': ta.CCI(df, timeperiod=34),
         'CCI': ta.CCI(df),
-
-        'CMO': ta.CMO(df['close'], timeperiod=14),
-        'DX': ta.DX(df['high'], df['low'], df['close'], timeperiod=14),
-
-        'MFI': ta.MFI(df['high'], df['low'], df['close'], df['volume'], timeperiod=14),
-        'MINUS_DI': ta.MINUS_DI(df['high'], df['low'], df['close'], timeperiod=14),
-        'MINUS_DM': ta.MINUS_DM(df['high'], df['low'], timeperiod=14),
-        'MOM': ta.MOM(df['close'], timeperiod=14),
-        'PLUS_DI': ta.PLUS_DI(df, timeperiod=14),
-        'PLUS_DM': ta.PLUS_DM(df, timeperiod=14),
-        'PLUS_DI_25': ta.PLUS_DI(df, timeperiod=25),
-        'PLUS_DM_25': ta.PLUS_DM(df, timeperiod=25),
-
-        'PPO': ta.PPO(df['close'], fastperiod=12, slowperiod=26, matype=0),
-        'ROC': ta.ROC(df['close'], timeperiod=10),
-        'ROCP': ta.ROCP(df['close'], timeperiod=10),
-        'ROCR': ta.ROCR(df['close'], timeperiod=10),
-        'ROCR100': ta.ROCR100(df['close'], timeperiod=10),
-        'RSI': ta.RSI(df['close'], timeperiod=14),
 
         'STOCH_0': df_STOCK[0],
         'STOCH_1': df_STOCK[1],
@@ -412,9 +389,28 @@ def estimate_ta_fill_na(df):
         'STOCHRSI_0': df_STOCHRSI[0],
         'STOCHRSI_1': df_STOCHRSI[1],
 
-        'TRIX': ta.TRIX(df['close'], timeperiod=30),
-        'ULTOSC': ta.ULTOSC(df['high'], df['low'], df['close'], timeperiod1=7, timeperiod2=14, timeperiod3=28),
-        'WILLR': ta.WILLR(df['high'], df['low'], df['close'], timeperiod=14),
+        ## 20
+        'CMO_20': ta.CMO(df['close'], timeperiod=20),
+        'DX_20': ta.DX(df['high'], df['low'], df['close'], timeperiod=20),
+
+        'MFI_20': ta.MFI(df['high'], df['low'], df['close'], df['volume'], timeperiod=20),
+        'MINUS_DI_20': ta.MINUS_DI(df['high'], df['low'], df['close'], timeperiod=20),
+        'MINUS_DM_20': ta.MINUS_DM(df['high'], df['low'], timeperiod=20),
+        'MOM': ta.MOM(df['close'], timeperiod=20),
+        'PLUS_DI_20': ta.PLUS_DI(df, timeperiod=20),
+        'PLUS_DM_20': ta.PLUS_DM(df, timeperiod=20),
+
+        'PPO_20': ta.PPO(df['close'], fastperiod=12, slowperiod=26, matype=0),
+        'ROC_20': ta.ROC(df['close'], timeperiod=20),
+        'ROCP_20': ta.ROCP(df['close'], timeperiod=20),
+        'ROCR_20': ta.ROCR(df['close'], timeperiod=20),
+        'ROCR100_20': ta.ROCR100(df['close'], timeperiod=20),
+        'RSI_20': ta.RSI(df['close'], timeperiod=20),
+
+        'CCI_20': ta.CCI(df['high'], df['low'], df['close'], timeperiod=20),
+        'TRIX_20': ta.TRIX(df['close'], timeperiod=20),
+        'ULTOSC_20': ta.ULTOSC(df['high'], df['low'], df['close'], timeperiod1=7, timeperiod2=14, timeperiod3=20),
+        'WILLR_20': ta.WILLR(df['high'], df['low'], df['close'], timeperiod=20),
 
         ## 50
         'RSI_50': ta.RSI(df['close'], timeperiod=50),
@@ -482,8 +478,8 @@ def estimate_ta_fill_na(df):
     # Volatility Indicator Functions
     # https://mrjbq7.github.io/ta-lib/func_groups/volatility_indicators.html
 
-    df['ATR'] = ta.ATR(df['high'], df['low'], df['close'], timeperiod=14)
-    df['NATR'] = ta.NATR(df['high'], df['low'], df['close'], timeperiod=14)
+    df['ATR'] = ta.ATR(df['high'], df['low'], df['close'], timeperiod=20)
+    df['NATR'] = ta.NATR(df['high'], df['low'], df['close'], timeperiod=20)
     df['TRANGE'] = ta.TRANGE(df['high'], df['low'], df['close'])
 
     # Cycle Indicator Functions
