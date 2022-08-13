@@ -51,6 +51,7 @@ def estimate_ta_fill_na(df):
     df['rolling_vwap'] = qtpylib.rolling_vwap(df, window=200)
     df['rolling_vwap_50'] = qtpylib.rolling_vwap(df, window=50)
     df['cci'] = qtpylib.cci(df, window=14)
+    df['cci_50'] = qtpylib.cci(df, window=50)
 
     # df['roc'] = qtpylib.roc(df, window=14)
     # df['zlma'] = qtpylib.zlma(df, window=14)
@@ -130,13 +131,11 @@ def estimate_ta_fill_na(df):
         'SUB': ta.SUB(df['high'], df['low']),
         'SUM': ta.SUM(df['high'], timeperiod=30),
 
-        'MIN': ta.MIN(df, timeperiod=50),
-        'MIN_30': ta.MIN(df, timeperiod=50),
-        'MAX': ta.MAX(df, timeperiod=50),
-        'MAX_30': ta.MAX(df['close'], timeperiod=50),
-        'MAXINDEX': ta.MAXINDEX(df['close'], timeperiod=50),
-        'MININDEX': ta.MININDEX(df['close'], timeperiod=50),
-        'SUM': ta.SUM(df['high'], timeperiod=50),
+        'MIN_50': ta.MIN(df, timeperiod=50),
+        'MAX_50': ta.MAX(df['close'], timeperiod=50),
+        'MAXINDEX_50': ta.MAXINDEX(df['close'], timeperiod=50),
+        'MININDEX_50': ta.MININDEX(df['close'], timeperiod=50),
+        'SUM_50': ta.SUM(df['high'], timeperiod=50),
     }
 
     for key in df_math.keys():
@@ -256,6 +255,8 @@ def estimate_ta_fill_na(df):
         'TEMA': ta.TEMA(df['close'], timeperiod=30),
         'TRIMA': ta.TRIMA(df['close'], timeperiod=30),
         'WMA': ta.WMA(df['close'], timeperiod=30),
+
+        # 50
 
         'DEMA_50': ta.DEMA(df, timeperiod=50),
         'EMA_50': ta.EMA(df, timeperiod=50),
@@ -407,7 +408,6 @@ def estimate_ta_fill_na(df):
         'TRIX': ta.TRIX(df['close'], timeperiod=30),
         'ULTOSC': ta.ULTOSC(df['high'], df['low'], df['close'], timeperiod1=7, timeperiod2=14, timeperiod3=28),
         'WILLR': ta.WILLR(df['high'], df['low'], df['close'], timeperiod=14),
-
 
         ## 50
         'ADXR_50': ta.ADX(df['high'], df['low'], df['close'], timeperiod=50),
