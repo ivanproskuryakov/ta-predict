@@ -9,7 +9,7 @@ from src.service.predictor import Predictor
 from src.service.loader_ohlc import LoaderOHLC
 
 
-class Subscriber:
+class Listener:
     assets: [str]
     market: str
     total: int = 0
@@ -33,7 +33,7 @@ class Subscriber:
         self.repository = OhlcRepository()
         self.loaderOHLC = LoaderOHLC()
 
-    def subscribe(self):
+    def start(self):
         print('subscribe ------>', datetime.now())
         self.loaderOHLC.flush()
 

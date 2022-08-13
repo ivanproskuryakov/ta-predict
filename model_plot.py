@@ -28,7 +28,7 @@ dataset_builder = DatasetBuilder(
 # Predicting close price on the next time interval
 # ------------------------------------------------------------------------
 
-collection = dataset_builder.build_dataset_predict()
+collection = dataset_builder.build_dataset_predict(width=width)
 x_df = collection[0]
 x_df_shifted = x_df[:-1]
 

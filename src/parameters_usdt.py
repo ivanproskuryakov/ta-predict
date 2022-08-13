@@ -2,7 +2,6 @@ assets = [
     'BTC',
     'ETH',
     'BNB',
-    'BCC',
     'NEO',
     'LTC',
     'QTUM',

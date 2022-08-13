@@ -47,38 +47,37 @@ class Predictor:
         now = datetime.now()
         data = []
 
-        collection = self.dataset_builder.build_dataset_predict()
+        collection = self.dataset_builder.build_dataset_predict(width=self.width)
 
         time_db_load = datetime.now() - now
 
         self.load_model()
 
         for x_df in collection:
-            if len(x_df) > self.width:
-                x_df_original = x_df.copy()
-                x_df = x_df.drop(columns=['asset', 'time_close'])
+            x_df_original = x_df.copy()
+            x_df = x_df.drop(columns=['asset', 'time_close'])
 
-                x_df_expanded = np.expand_dims(
-                    self.scaler.fit_transform(x_df),
-                    axis=0
-                )
+            x_df_expanded = np.expand_dims(
+                self.scaler.fit_transform(x_df),
+                axis=0
+            )
 
-                print('predicting', x_df_original.iloc[-1]['asset'])
+            print('predicting', x_df_original.iloc[-1]['asset'])
 
-                y = self.model.predict(x_df_expanded, verbose=0)
+            y = self.model.predict(x_df_expanded, verbose=0)
 
-                df = pd.DataFrame(0, index=np.arange(len(y[0])), columns=x_df.keys())
+            df = pd.DataFrame(0, index=np.arange(len(y[0])), columns=x_df.keys())
 
-                df['close'] = y[0]
+            df['close'] = y[0]
 
-                y_inverse = self.scaler.inverse_transform(df)
+            y_inverse = self.scaler.inverse_transform(df)
 
-                y_df = pd.DataFrame(y_inverse, None, x_df.keys())
+            y_df = pd.DataFrame(y_inverse, None, x_df.keys())
 
-                data.append((
-                    x_df_original,
-                    y_df
-                ))
+            data.append((
+                x_df_original,
+                y_df
+            ))
 
         time_prediction = datetime.now() - now
         total = len(data)

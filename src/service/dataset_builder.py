@@ -60,7 +60,7 @@ class DatasetBuilder:
 
         return train, validate
 
-    def build_dataset_predict(self):
+    def build_dataset_predict(self, width: int):
         collection = []
 
         for asset in self.assets:
@@ -70,9 +70,9 @@ class DatasetBuilder:
                 market=self.market,
                 interval=self.interval,
             )
+            if len(df) >= width:
+                df = estimate_ta_fill_na(df)
 
-            df = estimate_ta_fill_na(df)
-
-            collection.append(df)
+                collection.append(df)
 
         return collection
