@@ -31,6 +31,7 @@ ENV=train python model_plot.py
 psql -U postgres
 create database ta_dev;
 
+
 ENV=dev python db_flush_sync.py
 ENV=dev python predict.py 1d /Users/ivan/code/ta/model/gru-g-50-1000-293-1m-BTC.keras
 ENV=dev python listen.py 30m /Users/ivan/code/ta/model/gru-g-50-1000-293-1m-BTC.keras
