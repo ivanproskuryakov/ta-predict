@@ -25,33 +25,10 @@ def estimate_ta_fill_na(df):
 
     df['awesome_oscillator'] = qtpylib.awesome_oscillator(df)
 
+    # 14
     df['atr'] = qtpylib.atr(df, window=14)
     df['rolling_min'] = qtpylib.rolling_min(price, window=14)
-
-    df['atr_50'] = qtpylib.atr(df, window=50)
-    df['rolling_min_50'] = qtpylib.rolling_min(price, window=50)
-    df['rolling_std_50'] = qtpylib.rolling_std(price, window=50)
-    df['rolling_mean_50'] = qtpylib.rolling_mean(price, window=50)
-    df['rolling_weighted_mean_50'] = qtpylib.rolling_weighted_mean(price, window=50)
-    df['hull_moving_average_50'] = qtpylib.hull_moving_average(price, window=50)
-
     df['vwap'] = qtpylib.vwap(df)
-
-    # 50
-    df['sma_50'] = qtpylib.sma(price, window=50)
-    df['wma_50'] = qtpylib.wma(price, window=50)
-    df['hma_50'] = qtpylib.hma(price, window=50)
-
-    # 200
-    df['sma_200'] = qtpylib.sma(price, window=200)
-    df['wma_200'] = qtpylib.wma(price, window=200)
-    df['hma_200'] = qtpylib.hma(price, window=200)
-
-
-    df['rolling_vwap'] = qtpylib.rolling_vwap(df, window=200)
-    df['rolling_vwap_50'] = qtpylib.rolling_vwap(df, window=50)
-    df['cci'] = qtpylib.cci(df, window=14)
-    df['cci_50'] = qtpylib.cci(df, window=50)
 
     # df['roc'] = qtpylib.roc(df, window=14)
     # df['zlma'] = qtpylib.zlma(df, window=14)
@@ -62,6 +39,37 @@ def estimate_ta_fill_na(df):
     df['zscore'] = qtpylib.zscore(df, window=20)
     df['pvt'] = qtpylib.pvt(df)
     df['chopiness'] = qtpylib.chopiness(df)
+    df['cci'] = qtpylib.cci(df, window=14)
+
+    # 50
+    df['zscore_50'] = qtpylib.zscore(df, window=50)
+    df['cci_50'] = qtpylib.cci(df, window=50)
+    df['sma_50'] = qtpylib.sma(price, window=50)
+    df['wma_50'] = qtpylib.wma(price, window=50)
+    df['hma_50'] = qtpylib.hma(price, window=50)
+    df['rolling_vwap_50'] = qtpylib.rolling_vwap(df, window=50)
+    df['hull_moving_average_50'] = qtpylib.hull_moving_average(price, window=50)
+    df['rolling_weighted_mean_50'] = qtpylib.rolling_weighted_mean(price, window=50)
+
+    df['atr_50'] = qtpylib.atr(df, window=50)
+    df['rolling_min_50'] = qtpylib.rolling_min(price, window=50)
+    df['rolling_std_50'] = qtpylib.rolling_std(price, window=50)
+    df['rolling_mean_50'] = qtpylib.rolling_mean(price, window=50)
+
+    # 200
+    df['zscore_200'] = qtpylib.zscore(df, window=200)
+    df['cci_200'] = qtpylib.cci(df, window=200)
+    df['sma_200'] = qtpylib.sma(price, window=200)
+    df['wma_200'] = qtpylib.wma(price, window=200)
+    df['hma_200'] = qtpylib.hma(price, window=200)
+    df['rolling_vwap_200'] = qtpylib.rolling_vwap(df, window=200)
+    df['hull_moving_average_200'] = qtpylib.hull_moving_average(price, window=200)
+    df['rolling_weighted_mean_200'] = qtpylib.rolling_weighted_mean(price, window=200)
+
+    df['atr_200'] = qtpylib.atr(df, window=200)
+    df['rolling_min_200'] = qtpylib.rolling_min(price, window=200)
+    df['rolling_std_200'] = qtpylib.rolling_std(price, window=200)
+    df['rolling_mean_200'] = qtpylib.rolling_mean(price, window=200)
 
     # Math Transform Functions
     # https://mrjbq7.github.io/ta-lib/func_groups/math_transform.html
@@ -106,7 +114,6 @@ def estimate_ta_fill_na(df):
         'LINEARREG_SLOPE_50': ta.LINEARREG_SLOPE(df, timeperiod=50),
         'TSF_50': ta.TSF(df, timeperiod=50),
 
-
         # 200
         'BETA_200': ta.BETA(df, timeperiod=200),
         'CORREL_200': ta.CORREL(df, timeperiod=200),
@@ -128,6 +135,7 @@ def estimate_ta_fill_na(df):
     df_MINMAX = ta.MINMAX(df['close'], timeperiod=30)
 
     df_math = {
+        # 14
         'MIN': ta.MIN(df, timeperiod=12),
         'MIN_30': ta.MIN(df, timeperiod=30),
         'MAX': ta.MAX(df, timeperiod=12),
@@ -245,6 +253,7 @@ def estimate_ta_fill_na(df):
     df = df.join(df_MAMA, how='right', lsuffix="_MAMA_")
 
     df_overlap = {
+        # 14
         'DEMA': ta.DEMA(df, timeperiod=30),
 
         'EMA': ta.EMA(df, timeperiod=5),
@@ -289,7 +298,7 @@ def estimate_ta_fill_na(df):
         'MA_50': ta.ADXR(df, timeperiod=50, matype=0),
 
         'MIDPOINT_50': ta.MIDPOINT(df, timeperiod=50),
-        'MIDPRICE_50': ta.MIDPRICE(df['high'], df['low'], timeperiod=14),
+        'MIDPRICE_50': ta.MIDPRICE(df['high'], df['low'], timeperiod=50),
         'SAR_50': ta.SAR(df),
         'SAREXT_50': ta.SAREXT(df['high'], df['low']),
 
@@ -300,7 +309,6 @@ def estimate_ta_fill_na(df):
         'SMA_slowMA_50': ta.SMA(df, timeperiod=50),
 
         'T3_50': ta.T3(df['close'], timeperiod=50),
-        'TEMA_9_50': ta.TEMA(df['close'], timeperiod=50),
         'TEMA_50': ta.TEMA(df['close'], timeperiod=50),
         'TRIMA_50': ta.TRIMA(df['close'], timeperiod=50),
         'WMA_50': ta.WMA(df['close'], timeperiod=50),
@@ -330,7 +338,6 @@ def estimate_ta_fill_na(df):
         'SMA_slowMA_200': ta.SMA(df, timeperiod=200),
 
         'T3_200': ta.T3(df['close'], timeperiod=200),
-        'TEMA_9_200': ta.TEMA(df['close'], timeperiod=200),
         'TEMA_200': ta.TEMA(df['close'], timeperiod=200),
         'TRIMA_200': ta.TRIMA(df['close'], timeperiod=200),
         'WMA_200': ta.WMA(df['close'], timeperiod=200),
@@ -409,7 +416,8 @@ def estimate_ta_fill_na(df):
         'ULTOSC': ta.ULTOSC(df['high'], df['low'], df['close'], timeperiod1=7, timeperiod2=14, timeperiod3=28),
         'WILLR': ta.WILLR(df['high'], df['low'], df['close'], timeperiod=14),
 
-        ## 200
+        ## 50
+        'RSI_50': ta.RSI(df['close'], timeperiod=50),
         'ADXR_50': ta.ADX(df['high'], df['low'], df['close'], timeperiod=50),
         'AROONOSC_50': ta.AROONOSC(df['high'], df['low'], timeperiod=50),
 
@@ -425,8 +433,6 @@ def estimate_ta_fill_na(df):
         'MOM_50': ta.MOM(df['close'], timeperiod=50),
         'PLUS_DI_50': ta.PLUS_DI(df, timeperiod=50),
         'PLUS_DM_50': ta.PLUS_DM(df, timeperiod=50),
-        'PLUS_DI_25_50': ta.PLUS_DI(df, timeperiod=50),
-        'PLUS_DM_25_50': ta.PLUS_DM(df, timeperiod=50),
 
         'ROC_50': ta.ROC(df['close'], timeperiod=50),
         'ROCP_50': ta.ROCP(df['close'], timeperiod=50),
@@ -436,6 +442,7 @@ def estimate_ta_fill_na(df):
         'TRIX_50': ta.TRIX(df['close'], timeperiod=50),
 
         ## 200
+        'RSI_200': ta.RSI(df['close'], timeperiod=200),
         'ADXR_200': ta.ADX(df['high'], df['low'], df['close'], timeperiod=200),
         'AROONOSC_200': ta.AROONOSC(df['high'], df['low'], timeperiod=200),
 
