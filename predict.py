@@ -2,8 +2,7 @@ import sys
 
 from datetime import datetime
 
-from src.parameters import market
-from src.parameters_usdt import assets
+from src.parameters import market, assets
 from src.service.predictor import Predictor
 from src.service.loader_ohlc import LoaderOHLC
 
