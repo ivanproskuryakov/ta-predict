@@ -26,19 +26,32 @@ def estimate_ta_fill_na(df):
     df['awesome_oscillator'] = qtpylib.awesome_oscillator(df)
 
     df['atr'] = qtpylib.atr(df, window=14)
-    df['rolling_std'] = qtpylib.rolling_std(price, window=200)
-    df['rolling_mean'] = qtpylib.rolling_mean(price, window=200)
     df['rolling_min'] = qtpylib.rolling_min(price, window=14)
-    df['rolling_weighted_mean'] = qtpylib.rolling_weighted_mean(price, window=200)
-    df['hull_moving_average'] = qtpylib.hull_moving_average(price, window=200)
 
-    df['sma'] = qtpylib.sma(price, window=200)
-    df['wma'] = qtpylib.wma(price, window=200)
-    df['hma'] = qtpylib.hma(price, window=200)
+    df['atr_50'] = qtpylib.atr(df, window=50)
+    df['rolling_min_50'] = qtpylib.rolling_min(price, window=50)
+    df['rolling_std_50'] = qtpylib.rolling_std(price, window=50)
+    df['rolling_mean_50'] = qtpylib.rolling_mean(price, window=50)
+    df['rolling_weighted_mean_50'] = qtpylib.rolling_weighted_mean(price, window=50)
+    df['hull_moving_average_50'] = qtpylib.hull_moving_average(price, window=50)
+
     df['vwap'] = qtpylib.vwap(df)
 
+    # 50
+    df['sma_50'] = qtpylib.sma(price, window=50)
+    df['wma_50'] = qtpylib.wma(price, window=50)
+    df['hma_50'] = qtpylib.hma(price, window=50)
+
+    # 200
+    df['sma_200'] = qtpylib.sma(price, window=200)
+    df['wma_200'] = qtpylib.wma(price, window=200)
+    df['hma_200'] = qtpylib.hma(price, window=200)
+
+
     df['rolling_vwap'] = qtpylib.rolling_vwap(df, window=200)
+    df['rolling_vwap_50'] = qtpylib.rolling_vwap(df, window=50)
     df['cci'] = qtpylib.cci(df, window=14)
+    df['cci_50'] = qtpylib.cci(df, window=50)
 
     # df['roc'] = qtpylib.roc(df, window=14)
     # df['zlma'] = qtpylib.zlma(df, window=14)
@@ -81,8 +94,27 @@ def estimate_ta_fill_na(df):
         'LINEARREG_INTERCEPT': ta.LINEARREG_INTERCEPT(df, timeperiod=14),
         'LINEARREG_SLOPE': ta.LINEARREG_SLOPE(df, timeperiod=14),
         # df['STDDEV':ta.STDDEV(df['close'], timeperiod=5, nbdev=1)
-        'TSF': ta.TSF(df, timeperiod=14)
+        'TSF': ta.TSF(df, timeperiod=14),
         # df['VAR':ta.VAR(df, timeperiod=5, nbdev=1)
+
+        # 50
+        'BETA_50': ta.BETA(df, timeperiod=50),
+        'CORREL_50': ta.CORREL(df, timeperiod=50),
+        'LINEARREG_50': ta.LINEARREG(df, timeperiod=50),
+        'LINEARREG_ANGLE_50': ta.LINEARREG_ANGLE(df, timeperiod=50),
+        'LINEARREG_INTERCEPT_50': ta.LINEARREG_INTERCEPT(df, timeperiod=50),
+        'LINEARREG_SLOPE_50': ta.LINEARREG_SLOPE(df, timeperiod=50),
+        'TSF_50': ta.TSF(df, timeperiod=50),
+
+
+        # 200
+        'BETA_200': ta.BETA(df, timeperiod=200),
+        'CORREL_200': ta.CORREL(df, timeperiod=200),
+        'LINEARREG_200': ta.LINEARREG(df, timeperiod=200),
+        'LINEARREG_ANGLE_200': ta.LINEARREG_ANGLE(df, timeperiod=200),
+        'LINEARREG_INTERCEPT_200': ta.LINEARREG_INTERCEPT(df, timeperiod=200),
+        'LINEARREG_SLOPE_200': ta.LINEARREG_SLOPE(df, timeperiod=200),
+        'TSF_200': ta.TSF(df, timeperiod=200)
     }
 
     for key in df_stat.keys():
@@ -109,6 +141,22 @@ def estimate_ta_fill_na(df):
         'MULT': ta.MULT(df['high'], df['low']),
         'SUB': ta.SUB(df['high'], df['low']),
         'SUM': ta.SUM(df['high'], timeperiod=30),
+
+        # 50
+        'MIN_50': ta.MIN(df, timeperiod=50),
+        'MAX_50': ta.MAX(df['close'], timeperiod=50),
+        'MININDEX_50': ta.MININDEX(df['close'], timeperiod=50),
+        'MAXINDEX_50': ta.MAXINDEX(df['close'], timeperiod=50),
+        'SUM_hight_50': ta.SUM(df['high'], timeperiod=50),
+        'SUM_50': ta.SUM(df['high'], timeperiod=50),
+
+        # 200
+        'MIN_200': ta.MIN(df, timeperiod=200),
+        'MAX_200': ta.MAX(df['close'], timeperiod=200),
+        'MININDEX_200': ta.MININDEX(df['close'], timeperiod=200),
+        'MAXINDEX_200': ta.MAXINDEX(df['close'], timeperiod=200),
+        'SUM_hight_200': ta.SUM(df['high'], timeperiod=200),
+        'SUM_200': ta.SUM(df['high'], timeperiod=200),
     }
 
     for key in df_math.keys():
@@ -189,7 +237,7 @@ def estimate_ta_fill_na(df):
         df[key] = df_patterns[key]
 
     """
-    Overlap Studies Functions
+    Overlap Studies Functions,
     https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html
     """
 
@@ -216,8 +264,6 @@ def estimate_ta_fill_na(df):
         'SAREXT': ta.SAREXT(df['high'], df['low']),
         'SMA': ta.SMA(df['close'], timeperiod=30),
 
-        'SMA_200': ta.SMA(df, timeperiod=200),
-        'SMA_50': ta.SMA(df, timeperiod=50),
         'SMA_short': ta.SMA(df, timeperiod=3),
         'SMA_long': ta.SMA(df, timeperiod=6),
         'SMA_fastMA': ta.SMA(df, timeperiod=14),
@@ -228,6 +274,66 @@ def estimate_ta_fill_na(df):
         'TEMA': ta.TEMA(df['close'], timeperiod=30),
         'TRIMA': ta.TRIMA(df['close'], timeperiod=30),
         'WMA': ta.WMA(df['close'], timeperiod=30),
+
+        # 50
+        'DEMA_50': ta.DEMA(df, timeperiod=50),
+        'EMA_50': ta.EMA(df, timeperiod=50),
+        'EMA_5_50': ta.EMA(df, timeperiod=50),
+        'EMA_10_50': ta.EMA(df, timeperiod=50),
+        'EMA_high_50': ta.EMA(df, timeperiod=50, price='high'),
+        'EMA_close_50': ta.EMA(df, timeperiod=50, price='close'),
+        'EMA_low_50': ta.EMA(df, timeperiod=50, price='low'),
+
+        'ADXR_50': ta.ADXR(df, timeperiod=50),
+        'KAMA_50': ta.KAMA(df, timeperiod=50),
+        'MA_50': ta.ADXR(df, timeperiod=50, matype=0),
+
+        'MIDPOINT_50': ta.MIDPOINT(df, timeperiod=50),
+        'MIDPRICE_50': ta.MIDPRICE(df['high'], df['low'], timeperiod=14),
+        'SAR_50': ta.SAR(df),
+        'SAREXT_50': ta.SAREXT(df['high'], df['low']),
+
+        'SMA_50': ta.SMA(df, timeperiod=50),
+        'SMA_short_50': ta.SMA(df, timeperiod=50),
+        'SMA_long_50': ta.SMA(df, timeperiod=50),
+        'SMA_fastMA_50': ta.SMA(df, timeperiod=50),
+        'SMA_slowMA_50': ta.SMA(df, timeperiod=50),
+
+        'T3_50': ta.T3(df['close'], timeperiod=50),
+        'TEMA_9_50': ta.TEMA(df['close'], timeperiod=50),
+        'TEMA_50': ta.TEMA(df['close'], timeperiod=50),
+        'TRIMA_50': ta.TRIMA(df['close'], timeperiod=50),
+        'WMA_50': ta.WMA(df['close'], timeperiod=50),
+
+        # 200
+        'DEMA_200': ta.DEMA(df, timeperiod=200),
+        'EMA_200': ta.EMA(df, timeperiod=200),
+        'EMA_5_200': ta.EMA(df, timeperiod=200),
+        'EMA_10_200': ta.EMA(df, timeperiod=200),
+        'EMA_high_200': ta.EMA(df, timeperiod=200, price='high'),
+        'EMA_close_200': ta.EMA(df, timeperiod=200, price='close'),
+        'EMA_low_200': ta.EMA(df, timeperiod=200, price='low'),
+
+        'ADXR_200': ta.ADXR(df, timeperiod=200),
+        'KAMA_200': ta.KAMA(df, timeperiod=200),
+        'MA_200': ta.ADXR(df, timeperiod=200, matype=0),
+
+        'MIDPOINT_200': ta.MIDPOINT(df, timeperiod=200),
+        'MIDPRICE_200': ta.MIDPRICE(df['high'], df['low'], timeperiod=14),
+        'SAR_200': ta.SAR(df),
+        'SAREXT_200': ta.SAREXT(df['high'], df['low']),
+
+        'SMA_200': ta.SMA(df, timeperiod=200),
+        'SMA_short_200': ta.SMA(df, timeperiod=200),
+        'SMA_long_200': ta.SMA(df, timeperiod=200),
+        'SMA_fastMA_200': ta.SMA(df, timeperiod=200),
+        'SMA_slowMA_200': ta.SMA(df, timeperiod=200),
+
+        'T3_200': ta.T3(df['close'], timeperiod=200),
+        'TEMA_9_200': ta.TEMA(df['close'], timeperiod=200),
+        'TEMA_200': ta.TEMA(df['close'], timeperiod=200),
+        'TRIMA_200': ta.TRIMA(df['close'], timeperiod=200),
+        'WMA_200': ta.WMA(df['close'], timeperiod=200),
     }
 
     for key in df_overlap.keys():
@@ -302,6 +408,58 @@ def estimate_ta_fill_na(df):
         'TRIX': ta.TRIX(df['close'], timeperiod=30),
         'ULTOSC': ta.ULTOSC(df['high'], df['low'], df['close'], timeperiod1=7, timeperiod2=14, timeperiod3=28),
         'WILLR': ta.WILLR(df['high'], df['low'], df['close'], timeperiod=14),
+
+        ## 200
+        'ADXR_50': ta.ADX(df['high'], df['low'], df['close'], timeperiod=50),
+        'AROONOSC_50': ta.AROONOSC(df['high'], df['low'], timeperiod=50),
+
+        'CCI_hlc_50': ta.CCI(df['high'], df['low'], df['close'], timeperiod=50),
+        'CCI_50': ta.CCI(df, timeperiod=50),
+
+        'CMO_50': ta.CMO(df['close'], timeperiod=50),
+        'DX_50': ta.DX(df['high'], df['low'], df['close'], timeperiod=50),
+
+        'MFI_50': ta.MFI(df['high'], df['low'], df['close'], df['volume'], timeperiod=50),
+        'MINUS_DI_50': ta.MINUS_DI(df['high'], df['low'], df['close'], timeperiod=50),
+        'MINUS_DM_50': ta.MINUS_DM(df['high'], df['low'], timeperiod=50),
+        'MOM_50': ta.MOM(df['close'], timeperiod=50),
+        'PLUS_DI_50': ta.PLUS_DI(df, timeperiod=50),
+        'PLUS_DM_50': ta.PLUS_DM(df, timeperiod=50),
+        'PLUS_DI_25_50': ta.PLUS_DI(df, timeperiod=50),
+        'PLUS_DM_25_50': ta.PLUS_DM(df, timeperiod=50),
+
+        'ROC_50': ta.ROC(df['close'], timeperiod=50),
+        'ROCP_50': ta.ROCP(df['close'], timeperiod=50),
+        'ROCR_50': ta.ROCR(df['close'], timeperiod=50),
+        'ROCR100_50': ta.ROCR100(df['close'], timeperiod=50),
+
+        'TRIX_50': ta.TRIX(df['close'], timeperiod=50),
+
+        ## 200
+        'ADXR_200': ta.ADX(df['high'], df['low'], df['close'], timeperiod=200),
+        'AROONOSC_200': ta.AROONOSC(df['high'], df['low'], timeperiod=200),
+
+        'CCI_hlc_200': ta.CCI(df['high'], df['low'], df['close'], timeperiod=200),
+        'CCI_200': ta.CCI(df, timeperiod=200),
+
+        'CMO_200': ta.CMO(df['close'], timeperiod=200),
+        'DX_200': ta.DX(df['high'], df['low'], df['close'], timeperiod=200),
+
+        'MFI_200': ta.MFI(df['high'], df['low'], df['close'], df['volume'], timeperiod=200),
+        'MINUS_DI_200': ta.MINUS_DI(df['high'], df['low'], df['close'], timeperiod=200),
+        'MINUS_DM_200': ta.MINUS_DM(df['high'], df['low'], timeperiod=200),
+        'MOM_200': ta.MOM(df['close'], timeperiod=200),
+        'PLUS_DI_200': ta.PLUS_DI(df, timeperiod=200),
+        'PLUS_DM_200': ta.PLUS_DM(df, timeperiod=200),
+        'PLUS_DI_25_200': ta.PLUS_DI(df, timeperiod=200),
+        'PLUS_DM_25_200': ta.PLUS_DM(df, timeperiod=200),
+
+        'ROC_200': ta.ROC(df['close'], timeperiod=200),
+        'ROCP_200': ta.ROCP(df['close'], timeperiod=200),
+        'ROCR_200': ta.ROCR(df['close'], timeperiod=200),
+        'ROCR100_200': ta.ROCR100(df['close'], timeperiod=200),
+
+        'TRIX_200': ta.TRIX(df['close'], timeperiod=200),
     }
 
     for key in df_momentum.keys():

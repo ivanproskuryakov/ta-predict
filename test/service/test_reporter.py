@@ -16,10 +16,11 @@ def test_report_prettify():
         assets=assets,
         interval='5m',
     )
+    width = 100
 
-    crate_ohlc_many(asset='BTC', market='USDT', interval='5m', price=10000, quantity=100)
+    crate_ohlc_many(asset='BTC', market='USDT', interval='5m', price=10000, quantity=width)
 
-    collection = builder.build_dataset_predict()
+    collection = builder.build_dataset_predict(width=width)
 
     data = []
     data.append((collection[0], collection[0]))
