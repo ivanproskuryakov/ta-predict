@@ -25,9 +25,10 @@ class DatasetBuilder:
 
         self.repository = OhlcRepository()
 
-    def build_dataset_train(self) -> [pd.DataFrame, pd.DataFrame]:
+    def build_dataset_train(self) -> [pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         train = []
         validate = []
+        test = []
 
         for asset in self.assets:
             df = self.repository.get_full_df(
@@ -49,16 +50,20 @@ class DatasetBuilder:
             # Data split
             # --------------------------------------------------------
             n = len(df)
-            df_train = df[0:int(n * 0.9)]
-            dv_validate = df[int(n * 0.9):]
+
+            df_train = df[0:int(n * 0.7)]
+            df_validate = df[int(n * 0.7):int(n * 0.9)]
+            df_test = df[int(n * 0.9):]
 
             train.append(df_train)
-            validate.append(dv_validate)
+            validate.append(df_validate)
+            test.append(df_test)
 
         train = pd.concat(train)
         validate = pd.concat(validate)
+        test = pd.concat(test)
 
-        return train, validate
+        return train, validate, test
 
     def build_dataset_predict(self, width: int):
         collection = []
