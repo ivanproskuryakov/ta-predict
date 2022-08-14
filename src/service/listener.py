@@ -98,7 +98,7 @@ class Listener:
 
                 if self.total == self.symbols_total:
                     self.total = 0
-                    self.predictor.predict()
+                    self.predictor.predict(tail_crop=0)
 
     def on_error(self, ws, message):
         print("on_error")

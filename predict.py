@@ -17,16 +17,16 @@ width = 1000
 
 # Data load
 # ------------------------------------------------------------------------
-#
-# loaderOHLC = LoaderOHLC()
-# loaderOHLC.flush()
-# loaderOHLC.load(
-#     assets=assets,
-#     market=market,
-#     end_at=end_at,
-#     interval=interval,
-#     width=width
-# )
+
+loaderOHLC = LoaderOHLC()
+loaderOHLC.flush()
+loaderOHLC.load(
+    assets=assets,
+    market=market,
+    end_at=end_at,
+    interval=interval,
+    width=width
+)
 
 # Prediction
 # ------------------------------------------------------------------------
@@ -39,4 +39,4 @@ predictor = Predictor(
     width=width
 )
 predictor.load_model()
-predictor.predict(tail_crop=3)
+predictor.predict(tail_crop=1)

@@ -10,9 +10,9 @@ from src.service.window_generator import WindowGenerator
 # ------------------------------------------------------------------------
 assets = [
     'BTCUSDT',
-    # 'BTCUSDC',
-    # 'BTCBUSD',
-    # 'BTCDAI',
+    'BTCUSDC',
+    'BTCBUSD',
+    'BTCDAI',
 ]
 market = 'USDT'
 width = 50

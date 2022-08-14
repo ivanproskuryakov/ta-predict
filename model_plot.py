@@ -7,10 +7,10 @@ from src.service.predictor import Predictor
 tail = 50
 width = 500
 assets = [
-    'BTC'
-    'ETH'
-    'BNB'
-    'ADA'
+    'BTC',
+    'ETH',
+    'BNB',
+    'ADA',
 ]
 interval = '1h'
 
@@ -33,10 +33,7 @@ dataset_builder = DatasetBuilder(
 
 collection = dataset_builder.build_dataset_predict(width=width)
 
-print(collection)
-
 for x_df in collection:
-    print(x_df)
     asset = x_df.iloc[-1]['asset']
     x_df_shifted = x_df[:-1]
 
