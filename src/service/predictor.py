@@ -44,7 +44,7 @@ class Predictor:
     def load_model(self):
         self.model = tf.keras.models.load_model(self.model_path, compile=False)
 
-    def predict(self, crop_last=False):
+    def predict(self, tail_crop: int = 0):
         now = datetime.now()
         data = []
 
@@ -55,9 +55,7 @@ class Predictor:
         self.load_model()
 
         for x_df in collection:
-
-            if crop_last:
-                x_df = x_df[:-1]
+            x_df = x_df[:-tail_crop]
 
             x_df_original = x_df.copy()
             x_df = x_df.drop(columns=['asset', 'time_close'])

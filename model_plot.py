@@ -8,8 +8,11 @@ tail = 50
 width = 500
 assets = [
     'BTC'
+    'ETH'
+    'BNB'
+    'ADA'
 ]
-interval = '1m'
+interval = '1h'
 
 predictor = Predictor(
     assets=assets,
@@ -29,44 +32,50 @@ dataset_builder = DatasetBuilder(
 # ------------------------------------------------------------------------
 
 collection = dataset_builder.build_dataset_predict(width=width)
-x_df = collection[0]
-x_df_shifted = x_df[:-1]
 
-predictor.load_model()
-y_df = predictor.make_prediction_ohlc_close(x_df=x_df_shifted)
+print(collection)
 
-# Plotting
-# ------------------------------------------------------------------------
+for x_df in collection:
+    print(x_df)
+    asset = x_df.iloc[-1]['asset']
+    x_df_shifted = x_df[:-1]
 
-plt.figure(figsize=(16, 8))
+    predictor.load_model()
+    y_df = predictor.make_prediction_ohlc_close(x_df=x_df_shifted)
 
-plt.xlim(left=0)
-plt.xlim(right=200)
+    # Plotting
+    # ------------------------------------------------------------------------
 
-plt.rcParams['axes.facecolor'] = 'white'
-plt.rcParams['axes.edgecolor'] = 'white'
-plt.rcParams['axes.grid'] = True
-plt.rcParams['grid.alpha'] = 1
-plt.rcParams['grid.color'] = "#cccccc"
-plt.grid(True)
-plt.grid(which='minor', alpha=0.2)
-plt.grid(which='major', alpha=0.5)
+    plt.figure(figsize=(16, 8))
 
-a = plt.subplot(2, 1, 1)
-a.plot(
-    x_df['open'].tail(tail).values,
-    color='blue',
-    label='real',
-    marker='.'
-)
+    plt.xlim(left=0)
+    plt.xlim(right=200)
 
-b = plt.subplot(2, 1, 2)
-plt.plot(
-    y_df['close'].tail(tail).values,
-    color='green',
-    label=f'predict {interval}',
-    marker='.'
-)
+    plt.rcParams['axes.facecolor'] = 'white'
+    plt.rcParams['axes.edgecolor'] = 'white'
+    plt.rcParams['axes.grid'] = True
+    plt.rcParams['grid.alpha'] = 1
+    plt.rcParams['grid.color'] = "#cccccc"
+    plt.grid(True)
+    plt.grid(which='minor', alpha=0.2)
+    plt.grid(which='major', alpha=0.5)
 
-plt.legend()
+    a = plt.subplot(2, 1, 1)
+    a.plot(
+        x_df['open'].tail(tail).values,
+        color='blue',
+        label='real',
+        marker='.'
+    )
+
+    b = plt.subplot(2, 1, 2)
+    plt.plot(
+        y_df['close'].tail(tail).values,
+        color='green',
+        label=f'predict {interval} {asset}',
+        marker='.'
+    )
+
+    plt.legend()
+
 plt.show()
