@@ -5,17 +5,17 @@ from src.service.dataset_builder import DatasetBuilder
 from src.service.predictor import Predictor
 
 tail = 50
-width = 1000
+width = 500
 assets = [
-    'ETC'
+    'BTC'
 ]
-interval = '5m'
+interval = '1m'
 
 predictor = Predictor(
     assets=assets,
     market=market,
     interval=interval,
-    model_path='/Users/ivan/code/ta/model/gru-g-50-5000-223-5m-BTC.keras',
+    model_path='/home/ivan/code/ta/data/gru-g-50-1000-11-1m-BTCUSDT.keras',
     width=width
 )
 dataset_builder = DatasetBuilder(

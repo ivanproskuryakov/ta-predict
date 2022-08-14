@@ -2,6 +2,7 @@ import os
 from binance import Client, enums
 
 from src.service.util import Utility
+from src.parameters import API_KEY, API_SECRET
 
 
 """
@@ -63,8 +64,8 @@ class KLines:
             end_at: float = None,
     ):
         client = Client(
-            api_key=os.environ['API_KEY'],
-            api_secret=os.environ['API_SECRET'],
+            api_key=API_KEY,
+            api_secret=API_SECRET,
         )
         symbol = asset + market
 

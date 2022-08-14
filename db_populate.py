@@ -6,18 +6,37 @@ from src.service.klines import KLines
 
 # Variables
 # ------------------------------------------------------------------------
-
 end_at = datetime.utcnow()
 start_at = end_at - timedelta(days=365 * 10)
 
 exchange = 'binance'
-interval = '5m'
+interval = '1h'
 groups = [
     {
         "market": 'USDT',
         "assets": [
             'BTC',
-            # 'ETH',
+        ],
+        "type": enums.HistoricalKlinesType.SPOT
+    },
+    {
+        "market": 'USDC',
+        "assets": [
+            'BTC',
+        ],
+        "type": enums.HistoricalKlinesType.SPOT
+    },
+    {
+        "market": 'BUSD',
+        "assets": [
+            'BTC',
+        ],
+        "type": enums.HistoricalKlinesType.SPOT
+    },
+    {
+        "market": 'DAI',
+        "assets": [
+            'BTC',
         ],
         "type": enums.HistoricalKlinesType.SPOT
     },
@@ -46,8 +65,8 @@ for group in groups:
 
         repository.create_many(
             exchange,
-            group["market"],
-            asset,
+            "USDT",
+            f'{asset}{group["market"]}',
             interval,
             collection
         )
