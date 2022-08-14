@@ -66,7 +66,7 @@ for group in groups:
         repository.create_many(
             exchange,
             "USDT",
-            f'{asset}{group["market"]}',
+            f'{asset}{group["market"]}',  # rename hack to get mode balanced data(BTC)
             interval,
             collection
         )

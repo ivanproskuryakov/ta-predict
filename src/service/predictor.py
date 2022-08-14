@@ -103,7 +103,7 @@ class Predictor:
             print('worst')
             print(report_worst)
 
-            webbrowser.open(df.iloc[-1]['url'], new=2)
+            # webbrowser.open(df.iloc[-1]['url'], new=2)
 
         else:
             print('--- no data ---')

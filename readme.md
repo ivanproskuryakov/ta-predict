@@ -14,8 +14,21 @@ pip install --force-reinstall -r requirements.txt
 
 ```
 
-### Training
+### Predicting
+Running application will require a database with the name `ta_dev` matching the one mentioned in `src/parameters.py`
+```
+psql -U postgres
+create database ta_dev;
+```
 
+Commands 
+```
+ENV=dev python db_flush_sync.py
+ENV=dev python predict.py 1m /Users/ivan/code/ta/model/gru-g-50-1000-293-1m-BTC.keras
+ENV=dev python listen.py 30m /Users/ivan/code/ta/model/gru-g-50-1000-293-1m-BTC.keras
+```
+
+### Training 
 ```
 psql -U postgres
 create database ta_train;
@@ -24,18 +37,6 @@ ENV=train python db_flush_sync.py
 ENV=train python db_populate.py
 ENV=train python model_plot.py
 
-```
-
-### Predicting
-
-```
-psql -U postgres
-create database ta_dev;
-
-
-ENV=dev python db_flush_sync.py
-ENV=dev python predict.py 1m /Users/ivan/code/ta/model/gru-g-50-1000-293-1m-BTC.keras
-ENV=dev python listen.py 30m /Users/ivan/code/ta/model/gru-g-50-1000-293-1m-BTC.keras
 ```
 
 ### Testing
