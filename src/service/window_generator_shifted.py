@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 
 
-class WindowGenerator:
+class WindowGeneratorShifted:
     @property
     def train(self):
         return self.make_dataset(self.train_df)
@@ -64,8 +64,7 @@ class WindowGenerator:
             targets=None,
             sequence_length=self.total_window_size,
             sequence_stride=1,
-            shuffle=True,
-            # shuffle=False,
+            shuffle=False,
             batch_size=self.batch_size,
         )
 
