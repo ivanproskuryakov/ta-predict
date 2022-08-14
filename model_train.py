@@ -9,12 +9,15 @@ from src.service.window_generator import WindowGenerator
 # Variables
 # ------------------------------------------------------------------------
 assets = [
-    'BTC'
+    'BTCUSDT',
+    'BTCUSDC',
+    'BTCBUSD',
+    'BTCDAI',
 ]
 market = 'USDT'
 width = 50
 units = 1000
-interval = '5m'
+interval = '1m'
 
 # Data load & train
 # ------------------------------------------------------------------------
@@ -42,7 +45,7 @@ print(f'training: {interval} {assets} {df_num_signals} {name}')
 callback_early_stopping = EarlyStopping(
     monitor='val_loss',
     # monitor='mean_absolute_error',
-    patience=100,
+    patience=10,
     mode='min',
     verbose=1
 )
@@ -119,12 +122,12 @@ window = WindowGenerator(
     val_df=validate_df,
 )
 
-# latest = tf.train.latest_checkpoint(data_dir)
-# model.load_weights(latest)
+latest = tf.train.latest_checkpoint(data_dir)
+model.load_weights(latest)
 
 model.fit(
     window.train,
-    epochs=100,
+    epochs=1,
     validation_data=window.val,
     callbacks=[
         callback_early_stopping,

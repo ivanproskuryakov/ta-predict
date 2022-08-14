@@ -12,7 +12,7 @@ from src.service.loader_ohlc import LoaderOHLC
 interval = sys.argv[1]  # 5m, 15m, 30m ...
 model_path = sys.argv[2]  # /Users/ivan/code/ta/model/gru-g-50-5000-223-5m-BTC.keras
 end_at = datetime.utcnow()
-width = 500
+width = 1000
 
 # Data load
 # ------------------------------------------------------------------------
@@ -38,4 +38,4 @@ predictor = Predictor(
     width=width
 )
 predictor.load_model()
-predictor.predict()
+predictor.predict(tail_crop=1)

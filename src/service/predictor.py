@@ -18,6 +18,7 @@ class Predictor:
     width: int
 
     model = None
+    collection = None
 
     reporter: Reporter
     trade_finder: TradeFinder
@@ -43,7 +44,7 @@ class Predictor:
     def load_model(self):
         self.model = tf.keras.models.load_model(self.model_path, compile=False)
 
-    def predict(self):
+    def predict(self, tail_crop: int = 0):
         now = datetime.now()
         data = []
 
@@ -54,6 +55,8 @@ class Predictor:
         self.load_model()
 
         for x_df in collection:
+            x_df = x_df[:-tail_crop]
+
             x_df_original = x_df.copy()
             x_df = x_df.drop(columns=['asset', 'time_close'])
 
@@ -101,9 +104,6 @@ class Predictor:
             print(report_worst)
 
             webbrowser.open(df.iloc[-1]['url'], new=2)
-
-            # if len(df_best):
-            #     webbrowser.open(df_best.iloc[-1]['url'], new=2)
 
         else:
             print('--- no data ---')

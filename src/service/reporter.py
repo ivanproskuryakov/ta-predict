@@ -35,7 +35,6 @@ class Reporter:
             "volume",
 
             "rsi",
-            "macd",
 
             "y_time_open",
             "url",
@@ -63,8 +62,7 @@ class Reporter:
                 x_last["trades"],
                 x_last["volume"],
 
-                x_last["rsi"],
-                x_last["macd"],
+                x_last["RSI_50"],
 
                 y_time_open,
                 f'https://www.binance.com/en/trade/{x_last["asset"]}_USDT',
