@@ -120,6 +120,7 @@ window = WindowGenerator(
     ],
     train_df=train_df,
     val_df=validate_df,
+    test_df=test_df,
 )
 
 latest = tf.train.latest_checkpoint(data_dir)
