@@ -11,6 +11,10 @@ class WindowGenerator:
     def val(self):
         return self.make_dataset(self.val_df)
 
+    @property
+    def test(self):
+        return self.make_dataset(self.test_df)
+
     def __init__(
             self,
             input_width,
@@ -19,11 +23,13 @@ class WindowGenerator:
             batch_size,
             train_df,
             val_df,
+            test_df,
             label_columns=None
     ):
         # Store the raw data.
         self.train_df = train_df
         self.val_df = val_df
+        self.test_df = test_df
         self.batch_size = batch_size
 
         # Work out the label column indices.

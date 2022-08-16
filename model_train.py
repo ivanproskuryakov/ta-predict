@@ -27,7 +27,7 @@ dataset_builder = DatasetBuilder(
     interval=interval
 )
 
-train_df, validate_df = dataset_builder.build_dataset_train()
+train_df, validate_df, test_df = dataset_builder.build_dataset_train()
 
 df_num_signals = train_df.shape[1]
 data_dir = 'data'
@@ -120,6 +120,7 @@ window = WindowGenerator(
     ],
     train_df=train_df,
     val_df=validate_df,
+    test_df=test_df,
 )
 
 latest = tf.train.latest_checkpoint(data_dir)
@@ -137,3 +138,5 @@ model.fit(
 )
 
 model.save(filepath_model)
+
+model.evaluate(test_df)
