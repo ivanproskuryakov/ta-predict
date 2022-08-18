@@ -24,8 +24,8 @@ create database ta_dev;
 Commands 
 ```
 ENV=dev python db_flush_sync.py
-ENV=dev python predict.py 1m /Users/ivan/code/ta/model/gru-g-50-1000-293-1m-BTC.keras
-ENV=dev python listen.py 30m /Users/ivan/code/ta/model/gru-g-50-1000-293-1m-BTC.keras
+ENV=dev python predict.py 1m model/gru-g-50-1000-11-1m-BTCUSDT.keras
+ENV=dev python listen.py 30m model/gru-g-50-1000-11-1m-BTCUSDT.keras
 ```
 
 ### Training 

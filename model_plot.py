@@ -19,7 +19,7 @@ predictor = Predictor(
     assets=assets,
     market=market,
     interval=interval,
-    model_path='/home/ivan/code/ta/data/gru-g-50-1000-11-1m-BTCUSDT.keras',
+    model_path='model/gru-g-50-1000-11-1m-BTCUSDT.keras',
     width=width
 )
 dataset_builder = DatasetBuilder(
