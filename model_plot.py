@@ -1,19 +1,27 @@
+import sys
 import matplotlib.pyplot as plt
 
 from src.parameters import market
 from src.service.dataset_builder import DatasetBuilder
 from src.service.predictor import Predictor
 
+# Variables
+# ------------------------------------------------------------------------
 
-tail = 50
-width = 500
+interval = sys.argv[1]  # 5m, 15m, 30m ...
+model_path = sys.argv[2]  # /Users/ivan/code/ta/model/gru-g-50-5000-223-5m-BTC.keras
+
 assets = [
     'BTC',
     'ETH',
     'BNB',
     'ADA',
 ]
-interval = '1h'
+tail = 50
+width = 500
+
+# Services
+# ------------------------------------------------------------------------
 
 predictor = Predictor(
     assets=assets,
@@ -28,7 +36,7 @@ dataset_builder = DatasetBuilder(
     market,
 )
 
-# Loading data
+# Data load
 # Predicting close price on the next time interval
 # ------------------------------------------------------------------------
 
