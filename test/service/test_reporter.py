@@ -1,4 +1,4 @@
-from fixture.ohlc import crate_ohlc_many
+from fixture.ohlc import crate_ohlc_many_bullish
 
 from src.service.dataset_builder import DatasetBuilder
 from src.service.reporter import Reporter
@@ -18,7 +18,7 @@ def test_report_prettify():
     )
     width = 100
 
-    crate_ohlc_many(asset='BTC', market='USDT', interval='5m', price=10000, quantity=width)
+    crate_ohlc_many_bullish(asset='BTC', market='USDT', interval='5m', price=10000, quantity=width)
 
     collection = builder.build_dataset_predict(width=width)
 

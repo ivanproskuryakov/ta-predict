@@ -33,7 +33,7 @@ In the current state of development models are trained to predict the closing pr
 ### Predicting single shot
 
 By running `model_predict.py` application fetches time data for 1000 passed intervals, and guesses the only single value
-- the price closed on the current interval. Available intervals: `5m, 15m, 30m, 1h, 2h, 4h, 8h, 12h, 1d, 2d, 3d`.
+for next price . Available intervals: `5m, 15m, 30m, 1h, 2h, 4h, 8h, 12h, 1d, 2d, 3d`.
 Smaller intervals are not well picked up by this type of prediction, `listen.py` to be used instead.
 
 ```

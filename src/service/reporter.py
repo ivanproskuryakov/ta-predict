@@ -13,7 +13,10 @@ class Reporter:
         self.utility = Utility()
 
     def report_prettify(self, df):
-        df['diff'] = df['diff'].apply(lambda x: chalk.green(x) if x > 0.1 else x)
+        df['diff'] = df['diff'].apply(lambda x:
+                                      chalk.green(x) if x > 0.1 else
+                                      chalk.red(x) if x < -0.1 else x
+                                      )
 
         table = tabulate(
             tabular_data=df.values,

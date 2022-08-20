@@ -1,4 +1,3 @@
-import webbrowser
 import tensorflow as tf
 
 import numpy as np
@@ -89,21 +88,19 @@ class Predictor:
 
         if total:
             df = self.reporter.report_build(data=data)
-            df_best = self.trade_finder.pick_best_options(df, diff=2, rsi=60, trades=50)
-            df_worst = self.trade_finder.pick_worst_options(df, diff=-3, rsi=-40)
+            df_bullish = self.trade_finder.find_bullish(df, diff=0, rsi=0, trades=50, limit=10)
+            df_bearish = self.trade_finder.find_bearish(df, diff=0, rsi=100, trades=50, limit=10)
 
             report = self.reporter.report_prettify(df)
-            report_best = self.reporter.report_prettify(df_best)
-            report_worst = self.reporter.report_prettify(df_worst)
+            report_bullish = self.reporter.report_prettify(df_bullish)
+            report_bearish = self.reporter.report_prettify(df_bearish)
 
             print('all')
             print(report)
-            print('best')
-            print(report_best)
-            print('worst')
-            print(report_worst)
-
-            # webbrowser.open(df.iloc[-1]['url'], new=2)
+            print('bullish top 10')
+            print(report_bullish)
+            print('bearish top 10')
+            print(report_bearish)
 
         else:
             print('--- no data ---')

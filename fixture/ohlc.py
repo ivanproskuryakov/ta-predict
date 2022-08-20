@@ -5,7 +5,34 @@ from src.repository.ohlc_repository import OhlcRepository
 from src.service.util import Utility
 
 
-def crate_ohlc_many(asset: str, market: str, interval: str, price: float, quantity: int) -> pd.DataFrame:
+def crate_ohlc_many_bullish(asset: str, market: str, interval: str, price: float, quantity: int) -> pd.DataFrame:
+    return crate_ohlc_many(
+        asset=asset,
+        market=market,
+        interval=interval,
+        price=price,
+        quantity=quantity,
+        multiplier=2,
+    )
+
+
+def crate_ohlc_many_bearish(asset: str, market: str, interval: str, price: float, quantity: int) -> pd.DataFrame:
+    return crate_ohlc_many(
+        asset=asset,
+        market=market,
+        interval=interval,
+        price=price,
+        quantity=quantity,
+        multiplier=-2,
+    )
+
+
+def crate_ohlc_many(asset: str,
+                    market: str,
+                    interval: str,
+                    price: float,
+                    quantity: int,
+                    multiplier: int) -> pd.DataFrame:
     ohlc_repository = OhlcRepository()
     utility = Utility()
 
@@ -14,10 +41,10 @@ def crate_ohlc_many(asset: str, market: str, interval: str, price: float, quanti
     time_close = 1650011400
 
     for i in range(quantity):
-        price_open = price + i
-        price_high = price + i
-        price_low = price + i
-        price_close = price + i
+        price_open = price + i * multiplier
+        price_high = price + i * multiplier
+        price_low = price + i * multiplier
+        price_close = price + i * multiplier
 
         volume = 1 + i
         quote_asset_volume = 1
