@@ -35,7 +35,7 @@ predictor = Predictor(
     market=market,
     interval=interval,
     model_path=model_path,
-    width=width
+    width=100  # window width used in model training
 )
 predictor.load_model()
 predictor.predict(tail_crop=1)

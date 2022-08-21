@@ -61,7 +61,7 @@ class KLines:
             start_at: float,
             end_at: float = None,
     ):
-        if os.environ['API_KEY']:
+        if 'API_KEY' in os.environ:
             client = Client(
                 api_key=os.environ['API_KEY'],
                 api_secret=os.environ['API_SECRET'],
