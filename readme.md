@@ -1,4 +1,5 @@
 ## Description
+![CI](https://github.com/ivanproskuryakov/ta-predict/workflows/CI/badge.svg)
 
 ohlc time series training and forecasting of close price with keras & tf2
 
